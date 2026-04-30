@@ -1,0 +1,7 @@
+[project]
+name = "rapido"
+version = "0.1.0"
+description = "A scalable, Django-powered POS and ERP system designed to streamline complex orders, granular inventory, and operations for quick-service restaurants."
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = []
