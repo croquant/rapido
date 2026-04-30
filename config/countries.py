@@ -1,0 +1,1 @@
+SUPPORTED_COUNTRIES = ["BE", "NL", "LU", "DE", "FR"]
