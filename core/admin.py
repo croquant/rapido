@@ -6,12 +6,13 @@ from django.contrib.auth.forms import (
 )
 from django.utils.translation import gettext_lazy as _
 
-from .models import Organization, User
+from .models import Organization, OrganizationMembership, User
 
 
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}  # noqa: RUF012
+    search_fields = ("name", "slug")
 
 
 class UserCreationForm(DjangoUserCreationForm):
@@ -79,3 +80,22 @@ class UserAdmin(DjangoUserAdmin):
     search_fields = ("email", "first_name", "last_name")
     ordering = ("email",)
     readonly_fields = ("last_login", "created_at", "updated_at")
+
+
+@admin.register(OrganizationMembership)
+class OrganizationMembershipAdmin(admin.ModelAdmin):
+    list_display = (
+        "user",
+        "organization",
+        "role",
+        "is_active",
+        "created_at",
+    )
+    list_filter = ("role", "is_active", "organization")
+    search_fields = (
+        "user__email",
+        "organization__name",
+        "organization__slug",
+    )
+    autocomplete_fields = ("user", "organization", "created_by")
+    readonly_fields = ("created_at", "updated_at")
