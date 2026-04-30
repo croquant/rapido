@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.python-version
+
+# uv
+.uv-cache/
+
+# Django
+*.sqlite3
+*.sqlite3-journal
+db.sqlite3
+staticfiles/
+media/
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Tests / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Tooling
+.ruff_cache/
+.mypy_cache/
+.pyright/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store

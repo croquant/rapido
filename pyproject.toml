@@ -4,4 +4,45 @@ version = "0.1.0"
 description = "A scalable, Django-powered POS and ERP system designed to streamline complex orders, granular inventory, and operations for quick-service restaurants."
 readme = "README.md"
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "django>=6.0.4",
+    "django-environ>=0.13.0",
+    "django-htmx>=1.27.0",
+    "djangorestframework>=3.17.1",
+    "gunicorn>=25.3.0",
+    "whitenoise[brotli]>=6.12.0",
+]
+
+[dependency-groups]
+dev = [
+    "django-types>=0.24.0",
+    "djangorestframework-types>=0.9.0",
+    "factory-boy>=3.3.3",
+    "pre-commit>=4.6.0",
+    "pyright>=1.1.409",
+    "pytest>=9.0.3",
+    "pytest-cov>=7.1.0",
+    "pytest-django>=4.12.0",
+    "ruff>=0.15.12",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+extend-exclude = ["migrations"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "DJ", "SIM", "RUF"]
+
+[tool.pyright]
+pythonVersion = "3.14"
+typeCheckingMode = "standard"
+include = ["core", "config"]
+exclude = ["**/migrations", "**/__pycache__", ".venv"]
+reportMissingTypeStubs = false
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.dev"
+python_files = ["test_*.py"]
+addopts = "--strict-markers --reuse-db"
+
