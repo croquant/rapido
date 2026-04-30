@@ -69,6 +69,8 @@ DATABASES = {
     ),
 }
 
+AUTH_USER_MODEL = "core.User"
+
 _AUTH_VALIDATOR = "django.contrib.auth.password_validation"
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": f"{_AUTH_VALIDATOR}.UserAttributeSimilarityValidator"},
