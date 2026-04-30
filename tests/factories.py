@@ -2,7 +2,14 @@
 import factory
 from factory.django import DjangoModelFactory
 
-from core.models import Organization, OrganizationMembership, Role, User
+from core.models import (
+    Location,
+    LocationMembership,
+    Organization,
+    OrganizationMembership,
+    Role,
+    User,
+)
 
 
 class UserFactory(DjangoModelFactory):
@@ -30,3 +37,23 @@ class OrganizationMembershipFactory(DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     organization = factory.SubFactory(OrganizationFactory)
     role = Role.ADMIN
+
+
+class LocationFactory(DjangoModelFactory):
+    class Meta:
+        model = Location
+
+    organization = factory.SubFactory(OrganizationFactory)
+    name = factory.Sequence(lambda n: f"Location {n}")
+    slug = factory.Sequence(lambda n: f"location-{n}")
+    street = "Rue de la Loi 16"
+    postal_code = "1000"
+    city = "Brussels"
+
+
+class LocationMembershipFactory(DjangoModelFactory):
+    class Meta:
+        model = LocationMembership
+
+    user = factory.SubFactory(UserFactory)
+    location = factory.SubFactory(LocationFactory)

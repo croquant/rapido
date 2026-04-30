@@ -6,7 +6,13 @@ from django.contrib.auth.forms import (
 )
 from django.utils.translation import gettext_lazy as _
 
-from .models import Organization, OrganizationMembership, User
+from .models import (
+    Location,
+    LocationMembership,
+    Organization,
+    OrganizationMembership,
+    User,
+)
 
 
 @admin.register(Organization)
@@ -99,3 +105,39 @@ class OrganizationMembershipAdmin(admin.ModelAdmin):
     )
     autocomplete_fields = ("user", "organization", "created_by")
     readonly_fields = ("created_at", "updated_at")
+
+
+@admin.register(Location)
+class LocationAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("name",)}  # noqa: RUF012
+    list_display = (
+        "name",
+        "organization",
+        "city",
+        "is_active",
+        "created_at",
+    )
+    list_filter = ("is_active", "organization")
+    search_fields = (
+        "name",
+        "slug",
+        "city",
+        "organization__name",
+        "organization__slug",
+    )
+    autocomplete_fields = ("organization",)
+    readonly_fields = ("created_at", "updated_at", "public_id")
+
+
+@admin.register(LocationMembership)
+class LocationMembershipAdmin(admin.ModelAdmin):
+    list_display = ("user", "location", "is_active", "created_at")
+    list_filter = ("is_active", "location__organization")
+    search_fields = (
+        "user__email",
+        "location__name",
+        "location__slug",
+    )
+    autocomplete_fields = ("user", "location", "created_by")
+    readonly_fields = ("created_at", "updated_at")
+    exclude = ("pin",)

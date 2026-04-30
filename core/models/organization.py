@@ -21,7 +21,7 @@ from core.models.base import TimestampedModel
 from core.utils.ids import uuid7
 from core.validators import (
     validate_currency,
-    validate_org_slug,
+    validate_slug,
     validate_vat,
 )
 
@@ -35,7 +35,7 @@ class Organization(TimestampedModel):
     )
     slug: SlugField[str] = models.SlugField(
         unique=True,
-        validators=[validate_org_slug],
+        validators=[validate_slug],
         verbose_name=_("slug"),
     )
     country = CountryField(

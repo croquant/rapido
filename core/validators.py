@@ -40,7 +40,7 @@ def validate_currency(value: str) -> None:
         )
 
 
-validate_org_slug = RegexValidator(
+validate_slug = RegexValidator(
     regex=r"^[a-z0-9-]+$",
     message=_(
         message="Slug must contain only lowercase letters, digits, and hyphens."
