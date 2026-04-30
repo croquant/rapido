@@ -32,7 +32,7 @@ target-version = "py314"
 extend-exclude = ["migrations"]
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "UP", "B", "DJ", "SIM", "RUF", "ANN", "FBT"]
+select = ["E", "F", "I", "UP", "B", "DJ", "SIM", "RUF", "ANN", "FBT", "ARG"]
 
 [tool.pyright]
 pythonVersion = "3.14"
@@ -45,4 +45,3 @@ reportMissingTypeStubs = false
 DJANGO_SETTINGS_MODULE = "config.settings.dev"
 python_files = ["test_*.py"]
 addopts = "--strict-markers --reuse-db"
-
