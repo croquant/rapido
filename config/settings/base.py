@@ -2,6 +2,10 @@ from pathlib import Path
 
 import environ
 
+from config.countries import SUPPORTED_COUNTRIES
+from config.currencies import SUPPORTED_CURRENCIES
+from config.languages import DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES
+
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 env = environ.Env()
@@ -20,6 +24,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "django_htmx",
+    "django_countries",
+    "djmoney",
     "core",
 ]
 
@@ -27,6 +33,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -70,10 +77,12 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": f"{_AUTH_VALIDATOR}.NumericPasswordValidator"},
 ]
 
-LANGUAGE_CODE = "en-us"
+
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
+
+LOCALE_PATHS = [BASE_DIR / "locale"]
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -125,3 +134,9 @@ LOGGING = {
         },
     },
 }
+
+COUNTRIES_ONLY = SUPPORTED_COUNTRIES
+LANGUAGE_CODE = DEFAULT_LANGUAGE
+LANGUAGES = SUPPORTED_LANGUAGES
+CURRENCIES = [code for code, _ in SUPPORTED_CURRENCIES]
+CURRENCY_CHOICES = SUPPORTED_CURRENCIES
