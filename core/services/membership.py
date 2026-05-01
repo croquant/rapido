@@ -4,7 +4,7 @@ from core.models import Organization, OrganizationMembership, Role, User
 from core.services.exceptions import LastActiveAdminError
 
 
-def _other_qualifying_admin_exists(
+def other_qualifying_admin_exists(
     organization: Organization,
     *,
     exclude_membership: OrganizationMembership | None = None,
@@ -41,7 +41,7 @@ def deactivate_membership(membership: OrganizationMembership) -> None:
         if not locked.is_active:
             return
         is_qualifying = locked.role == Role.ADMIN and locked.user.is_active
-        if is_qualifying and not _other_qualifying_admin_exists(
+        if is_qualifying and not other_qualifying_admin_exists(
             locked.organization, exclude_membership=locked
         ):
             raise LastActiveAdminError([locked.organization])
@@ -75,7 +75,7 @@ def change_role(
             and locked.is_active
             and locked.user.is_active
         )
-        if demoting_qualifier and not _other_qualifying_admin_exists(
+        if demoting_qualifier and not other_qualifying_admin_exists(
             locked.organization, exclude_membership=locked
         ):
             raise LastActiveAdminError([locked.organization])
@@ -110,7 +110,7 @@ def deactivate_user(user: User) -> None:
                 (
                     m.organization
                     for m in admin_memberships
-                    if not _other_qualifying_admin_exists(
+                    if not other_qualifying_admin_exists(
                         m.organization, exclude_user=locked_user
                     )
                 ),
