@@ -19,6 +19,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "django-browser-reload>=1.18",
     "django-types>=0.24.0",
     "djangorestframework-types>=0.9.0",
     "factory-boy>=3.3.3",

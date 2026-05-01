@@ -8,7 +8,7 @@ Lock the CSS, template, layout, HTMX, a11y, and i18n primitives that 2b (onboard
 | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | CSS framework             | **Pico CSS v2** (class-light flavor), vendored at `static/css/pico.min.css` from the official GitHub release; brand overrides in `static/css/brand.css` (loaded after Pico)                                                  | Semantic-HTML defaults (button / form / table / `<dialog>`) cut ~80% of CSS we'd otherwise author; agents stay focused on layout + brand + interactions |
 | Design tokens             | Brand vars in `static/css/brand.css` `:root` override Pico's `--pico-*` defaults (palette, brand radii, shadow, type scale). Spacing / typography inherits from Pico unless explicitly overridden                            | Native cascade; dark mode = Pico's `[data-theme=dark]` block; zero toolchain                                                                         |
-| Component templating      | `django-template-partials`                                                                                                                                                                                                   | Addressable HTMX swap targets without a second templating dialect; skip `django-cotton` (slot DX not worth it at this scale), skip include-only (no swap targets) |
+| Component templating      | Django 6.0 built-in `{% partialdef %}` / `{% partial %}` (no third-party package; `django-template-partials` was absorbed into core)                                                                                         | Addressable HTMX swap targets without a second templating dialect; skip `django-cotton` (slot DX not worth it at this scale), skip include-only (no swap targets) |
 | Form rendering            | `{% field form.x %}` template tag (in `core/templatetags/forms.py`) renders semantic `<label for>` + control + `<small>` (hint) + Pico's `aria-invalid` + helper text on error                                              | Skip `django-crispy-forms` (Bootstrap/Tailwind-shaped); Pico styles fields automatically; partial just wires Django form errors into Pico's helper-text + `aria-invalid` convention |
 | Layout shells             | Three: `base_public.html` (centered single column), `base_picker.html` (org picker), `base_org.html` (top-bar always, left rail only on `/settings/*`); all extend a thin `_base.html`                                       | Top-bar matches POS operator mental model; left rail only where management depth justifies it                                                        |
 | HTMX usage                | Inline form validation, modal open/close, row-level row actions, dashboard table refresh. Full page loads for navigation between sections                                                                                    | HTMX earns its keep on local mutations; URL state stays real                                                                                          |
@@ -22,11 +22,11 @@ Lock the CSS, template, layout, HTMX, a11y, and i18n primitives that 2b (onboard
 | Pico starting flavor      | `pico.min.css` (default) + brand overrides; no bundled color variant                                                                                                                                                         | Maximum control over palette via `brand.css`                                                                                                          |
 | Dark mode                 | Tokens / `[data-theme=dark]` ready; no toggle UI at launch                                                                                                                                                                   | Defer UI work; CSS plumbing is free                                                                                                                   |
 
-Library choices locked: skip Tailwind, Alpine, Node toolchain, `django-crispy-forms`, `django-cotton`, Google Fonts CDN, `django-htmx-modal` (Pico styles `<dialog>`). Add `django-template-partials`, `django-browser-reload`. Vendor Pico CSS v2 (not a Python dep).
+Library choices locked: skip Tailwind, Alpine, Node toolchain, `django-crispy-forms`, `django-cotton`, Google Fonts CDN, `django-htmx-modal` (Pico styles `<dialog>`). Add `django-browser-reload` (dev dep group only). Vendor Pico CSS v2, HTMX, and Inter (not Python deps; self-hosted under `static/`). Template partials use Django 6.0's built-in tags - no `django-template-partials` package needed.
 
 ## 2. Layout shells & shared partials
 
-All shells extend `templates/_base.html`, which owns `<head>` (lang attribute via `{% get_current_language %}`, viewport, CSS link tags in order: `pico.min.css` then `brand.css`, HTMX include from CDN), and exposes blocks `title`, `extra_head`, `body_class`, `content`.
+All shells extend `templates/_base.html`, which owns `<head>` (lang attribute via `{% get_current_language %}`, viewport, CSS link tags in order: `pico.min.css` then `brand.css`, self-hosted HTMX from `/static/js/htmx.min.js`), and exposes blocks `title`, `extra_head`, `body_class`, `content`.
 
 `base_public.html` - centered single-column shell for `/`, `/signup/`, `/login/`, `/verify/...`, `/password/reset/...`. No nav. Skip-link to `<main>`. Used by 2b.
 
@@ -67,16 +67,17 @@ Form partials under `templates/forms/`:
 
 ## Implementation order
 
-- [ ] `pyproject.toml`: add `django-template-partials` and `django-browser-reload`.
-- [ ] `config/settings/base.py`: switch `TEMPLATES.OPTIONS.loaders` to `template_partials.loader.Loader`.
-- [ ] `config/settings/dev.py`: append `django_browser_reload.middleware.BrowserReloadMiddleware`; include `django_browser_reload.urls` under `__reload__/`.
-- [ ] Vendor Pico CSS v2: download `pico.min.css` from latest GitHub release into `static/css/pico.min.css`; pin version in a header comment.
-- [ ] Author `static/css/brand.css`: override `--pico-*` palette, radii, font-family; declare `@font-face` for self-hosted Inter; brand-specific component overrides (~100 lines target).
-- [ ] Self-host Inter: `static/fonts/inter-regular.woff2`, `inter-semibold.woff2` from rsms.me/inter (OFL).
-- [ ] SVG sprite: `static/icons/sprite.svg` seeded with ~25 Lucide icons (menu, x, plus, edit, trash, check, alert, chevron-down, search, user, building, map-pin, settings, log-out, eye, eye-off, mail, lock, calendar, copy, refresh, more-vertical, arrow-left, arrow-right, info).
-- [ ] `core/templatetags/__init__.py` (empty), `core/templatetags/icons.py` (`{% icon "name" [class] %}`), `core/templatetags/forms.py` (`{% field form.x [hint] %}`).
-- [ ] `templates/_base.html`, `templates/base_public.html`, `templates/base_picker.html`, `templates/base_org.html`. Replace the old 12-line `templates/base.html` (delete it).
-- [ ] Partials: `_partials/{nav_top,user_menu,lang_switcher,flash,modal,icon}.html`.
+- [x] `pyproject.toml`: add `django-browser-reload` (dev dep group). Template partials are built into Django 6.0 - no extra package.
+- [x] `config/settings/dev.py`: append `django_browser_reload.middleware.BrowserReloadMiddleware`; add `django_browser_reload` to `INSTALLED_APPS`; include `django_browser_reload.urls` under `__reload__/` in `config/urls.py`, gated by `settings.DEBUG`.
+- [x] Vendor Pico CSS v2.1.1: `static/css/pico.min.css` is byte-identical to the upstream release (upstream's own header comment names the version).
+- [x] Author `static/css/brand.css`: override `--pico-*` palette (brand teal `#0d6e63`, AA-pass 6.1:1 vs white), radii, font-family; declare `@font-face` for self-hosted Inter; `[data-theme=dark]` token block; focus ring; skip-link styling; icon defaults.
+- [x] Self-host Inter v4.1: `static/fonts/inter-regular.woff2` (400), `inter-semibold.woff2` (600) from rsms.me/inter (OFL).
+- [x] Self-host HTMX 2.0.4: `static/js/htmx.min.js` (file vendored; `<script>` `src` swap lands when `_base.html` is built).
+- [x] SVG sprite: `static/icons/sprite.svg` seeded with the 25 Lucide v0.265.0 icons (menu, x, plus, edit, trash, check, alert, chevron-down, search, user, building, map-pin, settings, log-out, eye, eye-off, mail, lock, calendar, copy, refresh, more-vertical, arrow-left, arrow-right, info). Note: "edit" sourced from Lucide `pencil.svg` (no `edit.svg` in this release).
+- [x] `core/templatetags/__init__.py` (empty), `core/templatetags/icons.py` (`{% icon "name" [class] %}` - renders `_partials/icon.html`).
+- [ ] `core/templatetags/forms.py` (`{% field form.x [hint] %}`).
+- [ ] `templates/_base.html`, `templates/base_public.html`, `templates/base_picker.html`, `templates/base_org.html`. Replace the old 12-line `templates/base.html` (delete it). Wire `<script src="{% static 'js/htmx.min.js' %}">` here.
+- [x] Partials: `_partials/icon.html`. Remaining: `_partials/{nav_top,user_menu,lang_switcher,flash,modal}.html`.
 - [ ] Form partials: `forms/{_field,_errors,_submit}.html`.
 - [ ] `core/views/__init__.py:design_kitchen_sink` (DEBUG-only); URL `path("__design__/", views.design_kitchen_sink, name="design_kitchen_sink")`. Renders every component state on one page (buttons, forms in valid/invalid/disabled state, tables, dialogs, toasts, empty states).
 - [ ] `tests/test_design_shells.py`: render each shell with a stub view; assert `lang="en-US"`, single `<main>`, skip-link present (public + org shells), Pico + brand stylesheets included in correct order.
