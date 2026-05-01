@@ -3,6 +3,7 @@ from pathlib import Path
 import pytest
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
+from django.template import TemplateDoesNotExist
 from django.test import override_settings
 
 from core.services.mail import send_templated
@@ -94,6 +95,28 @@ def test_subject_is_rendered_and_stripped(mailoutbox: list) -> None:
     user = UserFactory()
     send_templated("email/_fixture_full", to=user, context={})
     assert mailoutbox[0].subject == "fixture-subject"
+
+
+@pytest.mark.django_db
+@override_settings(**_override_template_dirs())
+def test_subject_collapses_embedded_newlines(mailoutbox: list) -> None:
+    """Embedded newlines in subject must collapse to a single header line."""
+    user = UserFactory()
+    send_templated("email/_fixture_multiline", to=user, context={})
+    subject = mailoutbox[0].subject
+    assert "\n" not in subject
+    assert "\r" not in subject
+    assert subject == "Hello world"
+
+
+@pytest.mark.django_db
+@override_settings(**_override_template_dirs())
+def test_missing_html_parent_propagates() -> None:
+    """A broken HTML template (missing parent) must raise, not silently
+    fall back to text-only."""
+    user = UserFactory()
+    with pytest.raises(TemplateDoesNotExist):
+        send_templated("email/_fixture_broken_html", to=user, context={})
 
 
 @pytest.mark.django_db
