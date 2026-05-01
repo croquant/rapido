@@ -169,6 +169,17 @@ def test_lang_switcher_next_field_equals_request_path() -> None:
     assert 'value="/o/acme/dashboard/"' in out
 
 
+def test_lang_switcher_next_field_preserves_query_string() -> None:
+    out = _render_include(
+        "_partials/lang_switcher.html",
+        request=_request(
+            path="/o/acme/orders/?status=paid&page=2",
+            user=AnonymousUser(),
+        ),
+    )
+    assert 'value="/o/acme/orders/?status=paid&amp;page=2"' in out
+
+
 def test_lang_switcher_lists_all_supported_languages() -> None:
     out = _render_include(
         "_partials/lang_switcher.html",

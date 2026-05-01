@@ -12,8 +12,14 @@
     {% block content %}{% endblock %}
     {% include "_partials/modal.html" %}
     <script>
-      document.body.addEventListener('modal:open', () => document.getElementById('modal')?.showModal());
-      document.body.addEventListener('modal:close', () => document.getElementById('modal')?.close());
+      document.body.addEventListener('modal:open', () => {
+        const m = document.getElementById('modal');
+        if (m && !m.open) m.showModal();
+      });
+      document.body.addEventListener('modal:close', () => {
+        const m = document.getElementById('modal');
+        if (m && m.open) m.close();
+      });
     </script>
     <script src="{% static 'js/htmx.min.js' %}" defer></script>
   </body>
