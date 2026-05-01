@@ -29,9 +29,7 @@ def test_operator_with_locations_shape(
     assert org_memberships[0].role == Role.OPERATOR
     assert org_memberships[0].is_active is True
 
-    loc_memberships = list(
-        operator_with_locations.location_memberships.all()
-    )
+    loc_memberships = list(operator_with_locations.location_memberships.all())
     assert len(loc_memberships) == 2
     org_id = org_memberships[0].organization_id
     for lm in loc_memberships:
