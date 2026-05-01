@@ -36,7 +36,8 @@ class Organization(TimestampedModel):
     slug: SlugField[str] = models.SlugField(
         unique=True,
         validators=[validate_slug],
-        verbose_name=_("slug"),
+        verbose_name=_("URL"),
+        help_text=_("Used in web addresses, e.g. /o/your-url/."),
     )
     country = CountryField(
         default="BE",
