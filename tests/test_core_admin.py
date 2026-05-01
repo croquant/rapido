@@ -277,6 +277,83 @@ def test_org_inline_blocks_deactivating_last_admin(
     assert b"would have no active ADMIN" in response.content
 
 
+@pytest.mark.django_db
+def test_org_inline_blocks_deactivating_two_admins_in_one_submit(
+    admin_client: Client,
+) -> None:
+    """Per-row clean would let this through: each form sees the *other*
+    ADMIN still active in the DB. Formset-level clean catches it."""
+    org = OrganizationFactory()
+    m1 = OrganizationMembershipFactory(organization=org, role=Role.ADMIN)
+    m2 = OrganizationMembershipFactory(organization=org, role=Role.ADMIN)
+    response = admin_client.post(
+        reverse("admin:core_organization_change", args=[org.pk]),
+        data=_org_payload_with_inline(
+            org,
+            [m1, m2],
+            inline_overrides={0: {"is_active": ""}, 1: {"is_active": ""}},
+        ),
+    )
+    assert response.status_code == 200
+    m1.refresh_from_db()
+    m2.refresh_from_db()
+    assert m1.is_active is True
+    assert m2.is_active is True
+    assert b"would have no active ADMIN" in response.content
+
+
+@pytest.mark.django_db
+def test_org_inline_blocks_demoting_two_admins_in_one_submit(
+    admin_client: Client,
+) -> None:
+    org = OrganizationFactory()
+    m1 = OrganizationMembershipFactory(organization=org, role=Role.ADMIN)
+    m2 = OrganizationMembershipFactory(organization=org, role=Role.ADMIN)
+    response = admin_client.post(
+        reverse("admin:core_organization_change", args=[org.pk]),
+        data=_org_payload_with_inline(
+            org,
+            [m1, m2],
+            inline_overrides={
+                0: {"role": Role.OPERATOR},
+                1: {"role": Role.OPERATOR},
+            },
+        ),
+    )
+    assert response.status_code == 200
+    m1.refresh_from_db()
+    m2.refresh_from_db()
+    assert m1.role == Role.ADMIN
+    assert m2.role == Role.ADMIN
+    assert b"would have no active ADMIN" in response.content
+
+
+@pytest.mark.django_db
+def test_org_inline_allows_admin_swap(admin_client: Client) -> None:
+    """Demote A and promote B in one submit. Per-row clean would falsely
+    block this (sees A as sole admin in the DB); formset clean lets it
+    through because the post-batch state has one active ADMIN."""
+    org = OrganizationFactory()
+    a = OrganizationMembershipFactory(organization=org, role=Role.ADMIN)
+    b = OrganizationMembershipFactory(organization=org, role=Role.OPERATOR)
+    response = admin_client.post(
+        reverse("admin:core_organization_change", args=[org.pk]),
+        data=_org_payload_with_inline(
+            org,
+            [a, b],
+            inline_overrides={
+                0: {"role": Role.OPERATOR},
+                1: {"role": Role.ADMIN},
+            },
+        ),
+    )
+    assert response.status_code == 302
+    a.refresh_from_db()
+    b.refresh_from_db()
+    assert a.role == Role.OPERATOR
+    assert b.role == Role.ADMIN
+
+
 # ---- Symmetry checks: registered models ---------------------------------
 
 

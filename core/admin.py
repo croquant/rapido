@@ -11,6 +11,7 @@ from django.contrib.auth.forms import (
 )
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.forms.models import BaseInlineFormSet
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
@@ -131,9 +132,47 @@ def _save_org_membership(obj: OrganizationMembership) -> None:
 # ---- inlines -------------------------------------------------------------
 
 
+class OrganizationMembershipInlineFormSet(BaseInlineFormSet):
+    """Validates the org's post-save active-ADMIN count across the whole
+    batch. Per-row clean (`OrganizationMembershipAdminForm.clean`) only sees
+    DB state and would let two concurrent demotions in the same submit slip
+    through (each sees the other ADMIN still active). It would also produce
+    false positives on legitimate batch swaps (demote A + promote B), so
+    the inline drops the per-row form and relies on this formset-level check
+    instead."""
+
+    def clean(self) -> None:
+        super().clean()
+        if any(self.errors):
+            return
+        if not (self.instance and self.instance.pk):
+            return
+        active_admins = 0
+        for form in self.forms:
+            if not form.is_valid() or not form.cleaned_data:
+                continue
+            cd = form.cleaned_data
+            if cd.get("DELETE"):
+                continue
+            user = cd.get("user")
+            role = cd.get("role")
+            is_active = cd.get("is_active", False)
+            if (
+                role == Role.ADMIN
+                and is_active
+                and user is not None
+                and user.is_active
+            ):
+                active_admins += 1
+        if active_admins == 0:
+            raise ValidationError(
+                _("Organization would have no active ADMIN after this change.")
+            )
+
+
 class OrganizationMembershipInline(admin.TabularInline):
     model = OrganizationMembership
-    form = OrganizationMembershipAdminForm
+    formset = OrganizationMembershipInlineFormSet
     extra = 0
     fields = ("user", "role", "is_active", "created_by")
     autocomplete_fields = ("user", "created_by")
