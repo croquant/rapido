@@ -223,7 +223,7 @@ Same shape as invite, `salt="password-reset"`. Different salt prevents token reu
 - [x] `core.User` (custom, no `organization`, no `role`) and `Organization`. `AUTH_USER_MODEL = "core.User"` set in `config/settings/base.py`. *Organization in issue #3; `User` + `UserManager` (`create_user` / `create_superuser`) + `AUTH_USER_MODEL` in issue #4.*
 - [x] `makemigrations core`. *`0001_initial.py` covers `Organization` + `User` (with `Lower("email")` unique constraint, references `auth.0012` for `PermissionsMixin` M2Ms). `0002_organizationmembership.py` adds `OrganizationMembership` (issue #5). `0003_location_locationmembership.py` adds `Location` + `LocationMembership` (issues #6 / #7).*
 - [x] Add `Role` enum, `OrganizationMembership`, `Location`, `LocationMembership`. *`Role` + `OrganizationMembership` done in issue #5. `Location` + `LocationMembership` done in issues #6 / #7 (rename: was `Restaurant` / `RestaurantMembership`).*
-- [ ] `core/services/membership.py`: `deactivate_membership`, `change_role`, `deactivate_user` (each enforces the "last active ADMIN" invariant).
+- [x] `core/services/membership.py`: `deactivate_membership`, `change_role`, `deactivate_user` (each enforces the "last active ADMIN" invariant). *Issues #11/#12/#13. Also adds `core/services/signup.py:create_organization_with_admin` (issue #14) and `core/services/exceptions.py:LastActiveAdminError`.*
 - [ ] `core/managers.py`: `TenantOwnedManager` with `for_organization` and `for_request`.
 - [ ] Tenant middleware: resolves `request.organization` from `/o/<slug>/`, checks `OrganizationMembership` or `is_superuser`.
 - [x] `config/settings/base.py`: `LANGUAGES`, `LocaleMiddleware`, `locale/` folder, `USE_I18N=True`.
