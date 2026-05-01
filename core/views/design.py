@@ -42,10 +42,6 @@ class KitchenSinkForm(forms.Form):
     accept = forms.BooleanField(label=_("Accept terms"))
 
 
-def index(request: HttpRequest) -> HttpResponse:
-    return render(request, template_name="index.html")
-
-
 def design_kitchen_sink(request: HttpRequest) -> HttpResponse:
     invalid_form = KitchenSinkForm(
         data={"name": "", "email": "not-an-email", "role": ""},
