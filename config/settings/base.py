@@ -138,6 +138,19 @@ LOGGING = {
     },
 }
 
+EMAIL_BACKEND = env(
+    "EMAIL_BACKEND",
+    default="django.core.mail.backends.console.EmailBackend",  # type: ignore[arg-type]
+)
+DEFAULT_FROM_EMAIL = env(
+    "DEFAULT_FROM_EMAIL",
+    default="noreply@localhost",  # type: ignore[arg-type]
+)
+
+LOGIN_URL = "/login/"
+LOGIN_REDIRECT_URL = "/orgs/"
+LOGOUT_REDIRECT_URL = "/"
+
 COUNTRIES_ONLY = SUPPORTED_COUNTRIES
 LANGUAGE_CODE = DEFAULT_LANGUAGE
 LANGUAGES = SUPPORTED_LANGUAGES

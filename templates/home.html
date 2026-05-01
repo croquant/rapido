@@ -1,0 +1,13 @@
+{% extends "base_public.html" %}
+{% load i18n %}
+
+{% block main %}
+  <section class="hero">
+    <h1>rapido</h1>
+    <p>{% trans "Streamlined POS and ERP for quick-service restaurants." %}</p>
+    <p class="hero-actions">
+      <a href="/signup/">{% trans "Sign up" %}</a>
+      <a href="/login/">{% trans "Log in" %}</a>
+    </p>
+  </section>
+{% endblock %}
