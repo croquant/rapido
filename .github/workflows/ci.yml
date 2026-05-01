@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: "3.14"
+
+      - name: Sync deps
+        run: uv sync --all-extras --dev
+
+      - name: ruff check
+        run: uv run ruff check .
+
+      - name: ruff format
+        run: uv run ruff format --check .
+
+      - name: pyright
+        run: uv run pyright
+
+      - name: tenant-lint
+        run: uv run python scripts/tenant_lint.py
+
+      - name: pytest
+        env:
+          DJANGO_SECRET_KEY: ci-not-a-secret
+        run: uv run pytest

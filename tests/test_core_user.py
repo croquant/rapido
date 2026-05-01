@@ -87,9 +87,7 @@ def test_user_inherits_timestamps() -> None:
 
 @pytest.mark.django_db
 def test_create_superuser_sets_flags() -> None:
-    user = User.objects.create_superuser(
-        email="a@example.be", password="pw"
-    )
+    user = User.objects.create_superuser(email="a@example.be", password="pw")
     assert user.is_staff is True
     assert user.is_superuser is True
     assert user.is_active is True
