@@ -1,0 +1,1 @@
+{% load i18n %}{% blocktrans %}Verify your {{ brand }} account{% endblocktrans %}

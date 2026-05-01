@@ -1,0 +1,4 @@
+{% load i18n %}{{ brand }}
+{% block body %}{% endblock %}
+--
+{% block footer_extra %}{% endblock %}{% blocktrans %}Sent by {{ brand }}.{% endblocktrans %}
