@@ -1,1 +1,5 @@
-<dialog id="modal"><article>{% block modal_body %}{% endblock %}</article></dialog>
+<dialog id="modal"
+  x-data
+  @modal:open.window="if (!$el.open) $el.showModal()"
+  @modal:close.window="if ($el.open) $el.close()"
+><article>{% block modal_body %}{% endblock %}</article></dialog>

@@ -1,0 +1,168 @@
+{% extends "base_public.html" %}
+{% load i18n icons forms %}
+
+{% block title %}Design kitchen sink{% endblock %}
+
+{% block extra_head %}
+<style>
+  .kitchen-sink section { margin-block: 3rem; padding-block-start: 1.5rem; border-block-start: 1px solid var(--pico-muted-border-color); }
+  .kitchen-sink section:first-of-type { border-block-start: 0; }
+  .kitchen-sink h2 { margin-block-end: 1rem; }
+  .ks-row { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+  .ks-grid-forms { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .ks-icons { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
+  .ks-icons figure { display: flex; flex-direction: column; align-items: center; gap: .25rem; padding: .75rem; border: 1px solid var(--pico-muted-border-color); border-radius: var(--pico-border-radius); margin: 0; }
+  .ks-icons svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .ks-icons figcaption { font-size: .75rem; color: var(--pico-muted-color); }
+  .ks-empty { text-align: center; padding: 2rem 1rem; }
+  .ks-empty svg { width: 48px; height: 48px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; opacity: .5; }
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="kitchen-sink">
+  <hgroup>
+    <h1>Design kitchen sink</h1>
+    <p>Every component, every state. DEBUG-only.</p>
+  </hgroup>
+
+  <section>
+    <h2>Buttons</h2>
+    <div class="ks-row">
+      <button>Primary</button>
+      <button class="secondary">Secondary</button>
+      <button class="contrast">Contrast</button>
+      <button class="outline">Outline</button>
+      <button class="outline secondary">Outline secondary</button>
+      <button disabled>Disabled</button>
+      <button aria-busy="true">Loading</button>
+      <a href="#" role="button">Link as button</a>
+    </div>
+    <h3>Button group</h3>
+    <div role="group">
+      <button>Save</button>
+      <button class="secondary">Cancel</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Forms</h2>
+    <div class="ks-grid-forms">
+      <form>
+        <h3>Clean (unbound)</h3>
+        {% include "forms/_errors.html" with form=clean_form %}
+        {% field clean_form.name %}
+        {% field clean_form.email %}
+        {% field clean_form.role %}
+        {% field clean_form.accept %}
+        {% submit "Submit" %}
+      </form>
+      <form>
+        <h3>Invalid (bound)</h3>
+        {% include "forms/_errors.html" with form=invalid_form %}
+        {% field invalid_form.name %}
+        {% field invalid_form.email %}
+        {% field invalid_form.role %}
+        {% field invalid_form.accept %}
+        {% submit "Submit" "Cancel" "#" %}
+      </form>
+      <form>
+        <h3>Disabled</h3>
+        {% field disabled_form.name %}
+        {% field disabled_form.email %}
+        {% field disabled_form.role %}
+        {% field disabled_form.accept %}
+        <button type="submit" disabled>Submit</button>
+      </form>
+    </div>
+  </section>
+
+  <section>
+    <h2>Tables</h2>
+    <figure>
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Role</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Alice</td><td>Owner</td><td>Active</td></tr>
+          <tr><td>Bob</td><td>Staff</td><td>Pending</td></tr>
+          <tr><td>Carol</td><td>Staff</td><td>Active</td></tr>
+        </tbody>
+        <tfoot>
+          <tr><td colspan="3">3 members</td></tr>
+        </tfoot>
+      </table>
+    </figure>
+    <h3>Striped</h3>
+    <figure>
+      <table class="striped">
+        <thead><tr><th>SKU</th><th>Item</th><th>Price</th></tr></thead>
+        <tbody>
+          <tr><td>A001</td><td>Espresso</td><td>2.50</td></tr>
+          <tr><td>A002</td><td>Latte</td><td>3.50</td></tr>
+        </tbody>
+      </table>
+    </figure>
+    <h3>Empty</h3>
+    <figure>
+      <table>
+        <thead><tr><th>Name</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td colspan="2"><em>No results.</em></td></tr>
+        </tbody>
+      </table>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Dialog</h2>
+    <div x-data>
+      <button @click="$refs.demo.showModal()">Open modal</button>
+      <dialog x-ref="demo">
+        <article>
+          <header>
+            <button aria-label="Close" rel="prev" @click="$refs.demo.close()"></button>
+            <p><strong>Confirm action</strong></p>
+          </header>
+          <p>Are you sure you want to proceed?</p>
+          <footer>
+            <button class="secondary" @click="$refs.demo.close()">Cancel</button>
+            <button @click="$refs.demo.close()">Confirm</button>
+          </footer>
+        </article>
+      </dialog>
+    </div>
+  </section>
+
+  <section>
+    <h2>Toasts / flash</h2>
+    <article class="message message-info" role="status">Info: settings saved.</article>
+    <article class="message message-success" role="status">Success: location created.</article>
+    <article class="message message-warning" role="alert">Warning: payment is overdue.</article>
+    <article class="message message-error" role="alert">Error: could not connect to printer.</article>
+  </section>
+
+  <section>
+    <h2>Empty states</h2>
+    <article class="ks-empty">
+      {% icon "building" %}
+      <h3>No locations yet</h3>
+      <p>Add your first location to start taking orders.</p>
+      <button>Add location</button>
+    </article>
+  </section>
+
+  <section>
+    <h2>Icons</h2>
+    <div class="ks-icons">
+      {% for name in icon_names %}
+        <figure>
+          {% icon name %}
+          <figcaption>{{ name }}</figcaption>
+        </figure>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock %}
