@@ -16,7 +16,13 @@ class UserFactory(DjangoModelFactory):
     class Meta:
         model = User
 
+    class Params:
+        staff = factory.Trait(is_staff=True)
+        superuser = factory.Trait(is_staff=True, is_superuser=True)
+
     email = factory.Sequence(lambda n: f"user{n}@example.be")
+    is_active = True
+    password = factory.PostGenerationMethodCall("set_password", "password")
 
 
 class OrganizationFactory(DjangoModelFactory):
