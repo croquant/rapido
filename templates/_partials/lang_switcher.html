@@ -1,0 +1,4 @@
+{% load i18n %}{% if request.user.is_anonymous or not request.user.preferred_language %}{% get_available_languages as LANGUAGES %}{% get_current_language as CURRENT_LANG %}<form action="{% url 'set_language' %}" method="post" class="lang-switcher">{% csrf_token %}<input type="hidden" name="next" value="{{ request.path }}">
+<select name="language" aria-label="{% trans 'Change language' %}">{% for code, name in LANGUAGES %}<option value="{{ code }}"{% if code == CURRENT_LANG %} selected{% endif %}>{{ name }}</option>{% endfor %}</select>
+<button type="submit" class="secondary">{% trans "Change language" %}</button>
+</form>{% endif %}

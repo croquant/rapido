@@ -5,8 +5,9 @@
 
 {% block content %}
   <a class="skip-link" href="#main">{% trans "Skip to content" %}</a>
-  {% block topbar %}{% endblock %}
+  {% block topbar %}{% include "_partials/nav_top.html" %}{% endblock %}
   <main id="main" class="container">
+    {% include "_partials/flash.html" %}
     {% block main %}{% endblock %}
   </main>
 {% endblock %}

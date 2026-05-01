@@ -10,6 +10,11 @@
   </head>
   <body class="{% block body_class %}{% endblock %}">
     {% block content %}{% endblock %}
+    {% include "_partials/modal.html" %}
+    <script>
+      document.body.addEventListener('modal:open', () => document.getElementById('modal')?.showModal());
+      document.body.addEventListener('modal:close', () => document.getElementById('modal')?.close());
+    </script>
     <script src="{% static 'js/htmx.min.js' %}" defer></script>
   </body>
 </html>

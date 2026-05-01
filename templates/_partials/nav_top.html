@@ -1,0 +1,12 @@
+{% load i18n %}<header class="nav-top container-fluid">
+<nav>
+<ul>
+<li><strong><a href="/" class="contrast">rapido</a></strong></li>
+{% if request.organization %}<li>{{ request.organization.name }}</li>{% endif %}
+</ul>
+<ul>
+<li>{% include "_partials/lang_switcher.html" %}</li>
+<li>{% include "_partials/user_menu.html" %}</li>
+</ul>
+</nav>
+</header>
