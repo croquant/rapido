@@ -1,0 +1,11 @@
+{% extends "email/_base.txt" %}{% load i18n %}
+{% block body %}
+{% blocktrans with name=recipient.first_name|default:recipient.email %}Hi {{ name }},{% endblocktrans %}
+
+{% trans "Confirm your email address to activate your account:" %}
+
+{{ verify_url }}
+
+{% blocktrans count days=7 %}This link expires in {{ days }} day.{% plural %}This link expires in {{ days }} days.{% endblocktrans %}
+{% endblock %}
+{% block footer_extra %}{% if org_name %}{% blocktrans %}Sent for {{ org_name }}. {% endblocktrans %}{% endif %}{% endblock %}

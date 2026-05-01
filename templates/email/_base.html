@@ -1,0 +1,19 @@
+{% load i18n %}{% get_current_language as LANGUAGE_CODE %}<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="utf-8">
+  <title>{{ brand }}</title>
+</head>
+<body style="margin:0;padding:0;background:#f6f6f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#222;">
+  <div style="max-width:560px;margin:0 auto;padding:24px;background:#ffffff;">
+    <h1 style="margin:0 0 24px 0;font-size:20px;font-weight:600;">{{ brand }}</h1>
+    <div style="font-size:15px;line-height:1.5;">
+      {% block body %}{% endblock %}
+    </div>
+    <hr style="border:none;border-top:1px solid #e5e5e5;margin:32px 0 16px 0;">
+    <p style="font-size:12px;color:#666;margin:0;">
+      {% block footer_extra %}{% endblock %}{% blocktrans %}Sent by {{ brand }}.{% endblocktrans %}
+    </p>
+  </div>
+</body>
+</html>

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rapido\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-01 11:27+0000\n"
+"POT-Creation-Date: 2026-05-01 23:26+0000\n"
 "PO-Revision-Date: 2026-05-01 11:19+0000\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -11,17 +11,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: core/admin.py:43
+#: core/admin.py:59
+#, python-format
+msgid "Cannot change: %(org)s would have no active ADMIN."
+msgstr ""
+
+#: core/admin.py:100
+#, python-format
+msgid "Cannot deactivate: user is the last active ADMIN of %(orgs)s."
+msgstr ""
+
+#: core/admin.py:169
+msgid "Organization would have no active ADMIN after this change."
+msgstr ""
+
+#: core/admin.py:215
+#, fuzzy
+#| msgid "location"
+msgid "Localisation"
+msgstr "Standort"
+
+#: core/admin.py:225
+#, fuzzy
+#| msgid "billing email"
+msgid "Billing"
+msgstr "Rechnungs-E-Mail"
+
+#: core/admin.py:227 core/admin.py:262
+msgid "Identifiers"
+msgstr ""
+
+#: core/admin.py:240
 msgid "Personal info"
 msgstr "Persönliche Informationen"
 
-#: core/admin.py:53
+#: core/admin.py:250
 msgid "Permissions"
 msgstr "Berechtigungen"
-
-#: core/admin.py:65
-msgid "Important dates"
-msgstr "Wichtige Daten"
 
 #: core/models/location.py:27 core/models/membership.py:29
 #: core/models/organization.py:76
@@ -197,3 +223,131 @@ msgstr "Ungültiger Währungscode. Unterstützte Währungen: %(currencies)s."
 #: core/validators.py:46
 msgid "URL must contain only lowercase letters, digits, and hyphens."
 msgstr "URL darf nur Kleinbuchstaben, Ziffern und Bindestriche enthalten."
+
+#: core/views/design.py:36
+msgid "Name"
+msgstr ""
+
+#: core/views/design.py:36
+msgid "Your full name."
+msgstr ""
+
+#: core/views/design.py:37
+#, fuzzy
+#| msgid "email"
+msgid "Email"
+msgstr "E-Mail"
+
+#: core/views/design.py:39
+msgid "Role"
+msgstr ""
+
+#: core/views/design.py:40
+msgid "Owner"
+msgstr ""
+
+#: core/views/design.py:40
+msgid "Staff"
+msgstr ""
+
+#: core/views/design.py:42
+msgid "Accept terms"
+msgstr ""
+
+#: templates/_partials/lang_switcher.html:2
+#: templates/_partials/lang_switcher.html:3
+#, fuzzy
+#| msgid "default language"
+msgid "Change language"
+msgstr "Standardsprache"
+
+#: templates/_partials/user_menu.html:3
+msgid "Profile"
+msgstr ""
+
+#: templates/_partials/user_menu.html:3
+msgid "Sign out"
+msgstr ""
+
+#: templates/base_org.html:7 templates/base_picker.html:7
+#: templates/base_public.html:7
+msgid "Skip to content"
+msgstr ""
+
+#: templates/email/_base.html:15 templates/email/_base.txt:4
+#, python-format
+msgid "Sent by %(brand)s."
+msgstr ""
+
+#: templates/email/password_reset.html:3 templates/email/password_reset.txt:3
+#: templates/email/verify.html:3 templates/email/verify.txt:3
+#, python-format
+msgid "Hi %(name)s,"
+msgstr ""
+
+#: templates/email/password_reset.html:4
+msgid ""
+"We received a request to reset your password. Use the button below to choose "
+"a new one:"
+msgstr ""
+
+#: templates/email/password_reset.html:7
+msgid "Reset password"
+msgstr ""
+
+#: templates/email/password_reset.html:10 templates/email/password_reset.txt:9
+msgid ""
+"This link expires in 1 hour. If you did not request a password reset, you "
+"can ignore this email."
+msgstr ""
+
+#: templates/email/password_reset.txt:5
+msgid ""
+"We received a request to reset your password. Use the link below to choose a "
+"new one:"
+msgstr ""
+
+#: templates/email/password_reset_subject.txt:1
+#, python-format
+msgid "Reset your %(brand)s password"
+msgstr ""
+
+#: templates/email/verify.html:4 templates/email/verify.txt:5
+msgid "Confirm your email address to activate your account:"
+msgstr ""
+
+#: templates/email/verify.html:7
+msgid "Verify email"
+msgstr ""
+
+#: templates/email/verify.html:10 templates/email/verify.txt:9
+#, python-format
+msgid "This link expires in %(days)s day."
+msgid_plural "This link expires in %(days)s days."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/email/verify.html:13 templates/email/verify.txt:11
+#, python-format
+msgid "Sent for %(org_name)s. "
+msgstr ""
+
+#: templates/email/verify_subject.txt:1
+#, python-format
+msgid "Verify your %(brand)s account"
+msgstr ""
+
+#: templates/home.html:7
+msgid "Streamlined POS and ERP for quick-service restaurants."
+msgstr ""
+
+#: templates/home.html:9
+msgid "Sign up"
+msgstr ""
+
+#: templates/home.html:10
+msgid "Log in"
+msgstr ""
+
+#~ msgid "Important dates"
+#~ msgstr "Wichtige Daten"

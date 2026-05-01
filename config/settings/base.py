@@ -146,6 +146,7 @@ DEFAULT_FROM_EMAIL = env(
     "DEFAULT_FROM_EMAIL",
     default="noreply@localhost",  # type: ignore[arg-type]
 )
+SITE_BRAND = env("SITE_BRAND", default="Rapido")  # type: ignore[arg-type]
 
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/orgs/"
