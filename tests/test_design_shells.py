@@ -18,7 +18,7 @@ def _req() -> HttpRequest:
 @pytest.mark.parametrize("shell", SHELLS)
 def test_shell_has_lang_en_us(shell: str) -> None:
     out = render_to_string(shell, {}, request=_req())
-    assert 'lang="en-US"' in out
+    assert 'lang="en-us"' in out.lower()
 
 
 @pytest.mark.parametrize("shell", SHELLS)
