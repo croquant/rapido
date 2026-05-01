@@ -12,5 +12,9 @@ urlpatterns: list[URLPattern] = [
 
 if settings.DEBUG:
     urlpatterns += [
-        path("__design__/", views.design_kitchen_sink, name="design_kitchen_sink"),
+        path(
+            "__design__/",
+            views.design_kitchen_sink,
+            name="design_kitchen_sink",
+        ),
     ]

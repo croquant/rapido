@@ -26,10 +26,14 @@ def index(request: HttpRequest) -> HttpResponse:
 
 
 def design_kitchen_sink(request: HttpRequest) -> HttpResponse:
-    invalid_form = KitchenSinkForm(data={"name": "", "email": "not-an-email", "role": ""})
+    invalid_form = KitchenSinkForm(
+        data={"name": "", "email": "not-an-email", "role": ""},
+    )
     invalid_form.is_valid()
 
-    disabled_form = KitchenSinkForm(initial={"name": "Locked", "email": "locked@example.com"})
+    disabled_form = KitchenSinkForm(
+        initial={"name": "Locked", "email": "locked@example.com"},
+    )
     for f in disabled_form.fields.values():
         f.disabled = True
 
