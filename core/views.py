@@ -4,10 +4,31 @@ from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
 ICON_NAMES = [
-    "menu", "x", "plus", "edit", "trash", "check", "alert", "chevron-down",
-    "search", "user", "building", "map-pin", "settings", "log-out", "eye",
-    "eye-off", "mail", "lock", "calendar", "copy", "refresh", "more-vertical",
-    "arrow-left", "arrow-right", "info",
+    "menu",
+    "x",
+    "plus",
+    "edit",
+    "trash",
+    "check",
+    "alert",
+    "chevron-down",
+    "search",
+    "user",
+    "building",
+    "map-pin",
+    "settings",
+    "log-out",
+    "eye",
+    "eye-off",
+    "mail",
+    "lock",
+    "calendar",
+    "copy",
+    "refresh",
+    "more-vertical",
+    "arrow-left",
+    "arrow-right",
+    "info",
 ]
 
 
