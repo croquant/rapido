@@ -31,7 +31,8 @@ class Location(TimestampedModel):
     )
     slug: SlugField[str] = models.SlugField(
         validators=[validate_slug],
-        verbose_name=_("slug"),
+        verbose_name=_("URL"),
+        help_text=_("Used in web addresses for this location."),
     )
     street: CharField[str] = models.CharField(
         max_length=200, verbose_name=_("street")

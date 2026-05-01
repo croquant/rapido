@@ -1,0 +1,199 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: rapido\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-01 11:27+0000\n"
+"PO-Revision-Date: 2026-05-01 11:19+0000\n"
+"Language-Team: German\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: core/admin.py:43
+msgid "Personal info"
+msgstr "Persönliche Informationen"
+
+#: core/admin.py:53
+msgid "Permissions"
+msgstr "Berechtigungen"
+
+#: core/admin.py:65
+msgid "Important dates"
+msgstr "Wichtige Daten"
+
+#: core/models/location.py:27 core/models/membership.py:29
+#: core/models/organization.py:76
+msgid "organization"
+msgstr "Organisation"
+
+#: core/models/location.py:30 core/models/organization.py:34
+msgid "name"
+msgstr "Name"
+
+#: core/models/location.py:34 core/models/organization.py:39
+msgid "URL"
+msgstr "URL"
+
+#: core/models/location.py:35
+msgid "Used in web addresses for this location."
+msgstr "Wird in Webadressen für diesen Standort verwendet."
+
+#: core/models/location.py:38
+msgid "street"
+msgstr "Straße"
+
+#: core/models/location.py:41
+msgid "postal code"
+msgstr "Postleitzahl"
+
+#: core/models/location.py:44
+msgid "city"
+msgstr "Stadt"
+
+#: core/models/location.py:47
+msgid "phone"
+msgstr "Telefon"
+
+#: core/models/location.py:50 core/models/membership.py:37
+#: core/models/membership.py:83 core/models/organization.py:70
+#: core/models/user.py:72
+msgid "active"
+msgstr "aktiv"
+
+#: core/models/location.py:56 core/models/membership.py:75
+msgid "location"
+msgstr "Standort"
+
+#: core/models/location.py:57
+msgid "locations"
+msgstr "Standorte"
+
+#: core/models/membership.py:14
+msgid "Admin"
+msgstr "Administrator"
+
+#: core/models/membership.py:15
+msgid "Operator"
+msgstr "Operator"
+
+#: core/models/membership.py:23 core/models/membership.py:69
+#: core/models/user.py:87
+msgid "user"
+msgstr "Benutzer"
+
+#: core/models/membership.py:34
+msgid "role"
+msgstr "Rolle"
+
+#: core/models/membership.py:45 core/models/membership.py:91
+msgid "created by"
+msgstr "erstellt von"
+
+#: core/models/membership.py:51
+msgid "organization membership"
+msgstr "Organisationsmitgliedschaft"
+
+#: core/models/membership.py:52
+msgid "organization memberships"
+msgstr "Organisationsmitgliedschaften"
+
+#: core/models/membership.py:80
+msgid "PIN"
+msgstr "PIN"
+
+#: core/models/membership.py:97
+msgid "location membership"
+msgstr "Standortmitgliedschaft"
+
+#: core/models/membership.py:98
+msgid "location memberships"
+msgstr "Standortmitgliedschaften"
+
+#: core/models/organization.py:40
+msgid "Used in web addresses, e.g. /o/your-url/."
+msgstr "Wird in Webadressen verwendet, z. B. /o/ihre-url/."
+
+#: core/models/organization.py:44
+msgid "country"
+msgstr "Land"
+
+#: core/models/organization.py:48
+msgid "default timezone"
+msgstr "Standardzeitzone"
+
+#: core/models/organization.py:54
+msgid "default currency"
+msgstr "Standardwährung"
+
+#: core/models/organization.py:60
+msgid "default language"
+msgstr "Standardsprache"
+
+#: core/models/organization.py:64
+msgid "VAT number"
+msgstr "USt-IdNr."
+
+#: core/models/organization.py:67
+msgid "billing email"
+msgstr "Rechnungs-E-Mail"
+
+#: core/models/organization.py:77
+msgid "organizations"
+msgstr "Organisationen"
+
+#: core/models/user.py:30
+msgid "Users must have an email address."
+msgstr "Benutzer müssen eine E-Mail-Adresse haben."
+
+#: core/models/user.py:46
+msgid "Superuser must have is_staff=True."
+msgstr "Superuser muss is_staff=True haben."
+
+#: core/models/user.py:48
+msgid "Superuser must have is_superuser=True."
+msgstr "Superuser muss is_superuser=True haben."
+
+#: core/models/user.py:57
+msgid "email"
+msgstr "E-Mail"
+
+#: core/models/user.py:60
+msgid "first name"
+msgstr "Vorname"
+
+#: core/models/user.py:63
+msgid "last name"
+msgstr "Nachname"
+
+#: core/models/user.py:69
+msgid "preferred language"
+msgstr "bevorzugte Sprache"
+
+#: core/models/user.py:75
+msgid "staff status"
+msgstr "Mitarbeiter-Status"
+
+#: core/models/user.py:88
+msgid "users"
+msgstr "Benutzer"
+
+#: core/validators.py:15
+#, python-format
+msgid "VAT number must start with the country code %(country)s."
+msgstr "USt-IdNr. muss mit dem Ländercode %(country)s beginnen."
+
+#: core/validators.py:25
+#, python-format
+msgid "Invalid %(country)s VAT number."
+msgstr "Ungültige %(country)s USt-IdNr."
+
+#: core/validators.py:35
+#, python-format
+msgid "Invalid currency code. Supported currencies are: %(currencies)s."
+msgstr "Ungültiger Währungscode. Unterstützte Währungen: %(currencies)s."
+
+#: core/validators.py:46
+msgid "URL must contain only lowercase letters, digits, and hyphens."
+msgstr "URL darf nur Kleinbuchstaben, Ziffern und Bindestriche enthalten."
