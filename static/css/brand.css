@@ -1,0 +1,98 @@
+/*!
+ * rapido brand overrides
+ * Loaded after Pico CSS v2.1.1 (https://github.com/picocss/pico/releases/tag/v2.1.1).
+ * Self-hosted Inter v4.1 (OFL, https://github.com/rsms/inter/releases/tag/v4.1).
+ */
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/static/fonts/inter-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/static/fonts/inter-semibold.woff2") format("woff2");
+}
+
+:root {
+  --pico-font-family-sans-serif: "Inter", system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --pico-font-family: var(--pico-font-family-sans-serif);
+
+  --pico-border-radius: 0.375rem;
+
+  /* Brand primary: teal #0d6e63. Contrast vs #fff = 6.1:1 (AA pass). */
+  --pico-primary: #0d6e63;
+  --pico-primary-background: #0d6e63;
+  --pico-primary-border: #0d6e63;
+  --pico-primary-hover: #0a584f;
+  --pico-primary-hover-background: #0a584f;
+  --pico-primary-hover-border: #0a584f;
+  --pico-primary-focus: rgba(13, 110, 99, 0.25);
+  --pico-primary-inverse: #fff;
+}
+
+[data-theme="dark"] {
+  /* Lighter teal for dark backgrounds. Contrast of #2dd4bf vs #11191f = 9.5:1. */
+  --pico-primary: #2dd4bf;
+  --pico-primary-background: #14b8a6;
+  --pico-primary-border: #14b8a6;
+  --pico-primary-hover: #5eead4;
+  --pico-primary-hover-background: #2dd4bf;
+  --pico-primary-hover-border: #2dd4bf;
+  --pico-primary-focus: rgba(45, 212, 191, 0.3);
+  --pico-primary-inverse: #042f2e;
+}
+
+@media only screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --pico-primary: #2dd4bf;
+    --pico-primary-background: #14b8a6;
+    --pico-primary-border: #14b8a6;
+    --pico-primary-hover: #5eead4;
+    --pico-primary-hover-background: #2dd4bf;
+    --pico-primary-hover-border: #2dd4bf;
+    --pico-primary-focus: rgba(45, 212, 191, 0.3);
+    --pico-primary-inverse: #042f2e;
+  }
+}
+
+/* Distinct focus ring (a11y - WCAG 2.4.7). */
+:focus-visible {
+  outline: 2px solid var(--pico-primary);
+  outline-offset: 2px;
+}
+
+/* Skip link is rendered by layout shells; style it here so they stay markup-only. */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  padding: 0.5rem 1rem;
+  background: var(--pico-primary-background);
+  color: var(--pico-primary-inverse);
+  z-index: 1000;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* Icon sizing helpers - paired with {% icon %}. */
+svg[aria-hidden] {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.icon-lg { width: 1.5em; height: 1.5em; }
+.icon-xl { width: 2em; height: 2em; }
