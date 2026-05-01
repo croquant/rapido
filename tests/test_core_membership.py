@@ -89,6 +89,4 @@ def test_created_by_protect() -> None:
 def test_related_names() -> None:
     m = OrganizationMembershipFactory()
     assert m.user.organization_memberships.filter(pk=m.pk).exists()
-    assert m.organization.organization_memberships.filter(
-        pk=m.pk
-    ).exists()
+    assert m.organization.organization_memberships.filter(pk=m.pk).exists()

@@ -227,5 +227,3 @@ def test_vat_validator_rejects_nl_for_be_org() -> None:
     )
     with pytest.raises(ValidationError):
         org.full_clean()
-
-

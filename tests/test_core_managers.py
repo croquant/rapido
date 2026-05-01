@@ -4,7 +4,6 @@ import pytest
 
 from core.managers import TenantOwnedManager
 from core.models import Location, LocationMembership
-
 from tests.factories import (
     LocationFactory,
     LocationMembershipFactory,

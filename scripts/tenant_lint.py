@@ -48,10 +48,7 @@ def check(paths: list[Path]) -> list[tuple[Path, int, str]]:
 
 
 def main(argv: list[str]) -> int:
-    if argv:
-        paths = [Path(a) for a in argv]
-    else:
-        paths = iter_default_files()
+    paths = [Path(a) for a in argv] if argv else iter_default_files()
     hits = check(paths)
     if not hits:
         return 0

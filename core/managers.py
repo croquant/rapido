@@ -27,9 +27,7 @@ from core.models import Organization
 class TenantOwnedManager(models.Manager):
     organization_lookup: str = "organization"
 
-    def for_organization(
-        self, organization: Organization
-    ) -> models.QuerySet:
+    def for_organization(self, organization: Organization) -> models.QuerySet:
         return self.get_queryset().filter(
             **{self.organization_lookup: organization}
         )
