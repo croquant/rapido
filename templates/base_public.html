@@ -1,0 +1,11 @@
+{% extends "_base.html" %}
+{% load i18n %}
+
+{% block body_class %}public{% endblock %}
+
+{% block content %}
+  <a class="skip-link" href="#main">{% trans "Skip to content" %}</a>
+  <main id="main" class="container">
+    {% block main %}{% endblock %}
+  </main>
+{% endblock %}

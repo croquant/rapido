@@ -83,6 +83,15 @@
   top: 0;
 }
 
+/* base_org layout: left rail visible only when body carries .with-rail. */
+.org-layout > .rail { display: none; }
+body.with-rail .org-layout {
+  display: grid;
+  grid-template-columns: 16rem 1fr;
+  gap: var(--pico-spacing);
+}
+body.with-rail .org-layout > .rail { display: block; }
+
 /* Icon sizing helpers - paired with {% icon %}. */
 svg[aria-hidden] {
   width: 1em;

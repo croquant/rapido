@@ -1,0 +1,12 @@
+{% extends "_base.html" %}
+{% load i18n %}
+
+{% block body_class %}picker{% endblock %}
+
+{% block content %}
+  <a class="skip-link" href="#main">{% trans "Skip to content" %}</a>
+  {% block topbar %}{% endblock %}
+  <main id="main" class="container">
+    {% block main %}{% endblock %}
+  </main>
+{% endblock %}
