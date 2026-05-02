@@ -1,7 +1,7 @@
 from typing import cast
 
 from django.conf import settings
-from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import SESSION_KEY, update_session_auth_hash
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ValidationError as DjangoValidationError
@@ -62,8 +62,12 @@ def change_password(
 
 def _invalidate_other_sessions(*, user_pk: int, keep: str | None) -> None:
     user_pk_str = str(user_pk)
-    for session in Session.objects.filter(expire_date__gte=timezone.now()):
-        if session.session_key == keep:
-            continue
-        if session.get_decoded().get("_auth_user_id") == user_pk_str:
-            session.delete()
+    sessions = Session.objects.filter(expire_date__gte=timezone.now())
+    keys = [
+        s.session_key
+        for s in sessions.iterator()
+        if s.session_key != keep
+        and s.get_decoded().get(SESSION_KEY) == user_pk_str
+    ]
+    if keys:
+        Session.objects.filter(session_key__in=keys).delete()
