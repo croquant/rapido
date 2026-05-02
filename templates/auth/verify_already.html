@@ -1,0 +1,10 @@
+{% extends "base_public.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Already verified" %}{% endblock %}
+
+{% block main %}
+  <h1>{% trans "Already verified" %}</h1>
+  <p>{% trans "Your email is already verified - this link has been used." %}</p>
+  <p><a href="/login/">{% trans "Sign in" %}</a></p>
+{% endblock %}
