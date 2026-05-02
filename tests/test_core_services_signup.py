@@ -195,6 +195,32 @@ def test_verify_email_enqueued_on_commit(
 
 
 @pytest.mark.django_db
+def test_email_send_failure_does_not_break_signup(
+    django_capture_on_commit_callbacks: _Capture,
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    with (
+        patch(
+            "core.services.signup.send_templated",
+            side_effect=RuntimeError("smtp down"),
+        ),
+        django_capture_on_commit_callbacks(execute=True),
+    ):
+        org, user, _ = create_organization_with_admin(
+            email="o@x.be",
+            password="hunter22",
+            org_name="X",
+            org_slug="x",
+            vat_number="BE0417710407",
+            billing_email="b@x.be",
+            default_language="nl-BE",
+        )
+    assert org.pk is not None
+    assert user.pk is not None
+    assert any("verify email send failed" in r.message for r in caplog.records)
+
+
+@pytest.mark.django_db
 def test_email_not_sent_if_transaction_rolls_back(
     django_capture_on_commit_callbacks: _Capture,
 ) -> None:
