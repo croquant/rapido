@@ -147,6 +147,8 @@ DEFAULT_FROM_EMAIL = env(
     default="noreply@localhost",  # type: ignore[arg-type]
 )
 SITE_BRAND = env("SITE_BRAND", default="Rapido")  # type: ignore[arg-type]
+# Absolute base for transactional email links (no trailing slash).
+SITE_URL = env("SITE_URL", default="http://localhost:8000")  # type: ignore[arg-type]
 
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/orgs/"

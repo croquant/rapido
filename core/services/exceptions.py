@@ -13,3 +13,11 @@ class LastActiveAdminError(Exception):
             f"Operation would leave organization(s) without an active "
             f"ADMIN: {slugs}"
         )
+
+
+class AlreadyActiveError(Exception):
+    """User is already active; verify token reuse is a no-op at the page."""
+
+
+class NoAdminMembershipError(Exception):
+    """User has no active ADMIN membership to anchor org activation."""
