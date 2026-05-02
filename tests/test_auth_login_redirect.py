@@ -400,6 +400,30 @@ def test_resend_get_returns_405() -> None:
 
 
 @pytest.mark.django_db
+def test_resend_swallows_send_failure_to_avoid_enumeration(
+    django_capture_on_commit_callbacks: _Capture,
+) -> None:
+    # Mail backend / template failures must not turn the inactive-user
+    # branch into a 500 - active/missing emails still return 200 and a
+    # divergent response would leak account existence.
+    user = UserFactory(email="pending@example.be", is_active=False)
+    OrganizationMembershipFactory(user=user, role=Role.ADMIN)
+    client = Client()
+
+    with patch(
+        "core.services.resend.send_templated",
+        side_effect=RuntimeError("smtp down"),
+    ):
+        with django_capture_on_commit_callbacks(execute=True):
+            response = client.post(
+                reverse("core:resend_verification"),
+                data={"email": "pending@example.be"},
+            )
+        assert response.status_code == 200
+        assert "auth/verify_resent.html" in [t.name for t in response.templates]
+
+
+@pytest.mark.django_db
 def test_resend_case_insensitive_email_match(
     django_capture_on_commit_callbacks: _Capture,
 ) -> None:
