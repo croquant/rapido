@@ -1,16 +1,24 @@
+from typing import cast
+
 from django.conf import settings
-from django.contrib.auth import login
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
 from django.core import signing
 from django.db import IntegrityError
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.http import require_POST
 
+from core.forms.auth import LoginForm
 from core.forms.signup import SignupForm
+from core.models import User
 from core.services.activation import activate_from_token
 from core.services.exceptions import AlreadyActiveError, NoAdminMembershipError
 from core.services.login_redirect import login_redirect_for
+from core.services.resend import resend_verification_email
 from core.services.signup import create_organization_with_admin
 
 
@@ -63,5 +71,46 @@ def verify(request: HttpRequest, token: str) -> HttpResponse:
         return render(request, "auth/verify_failed.html")
     except AlreadyActiveError:
         return render(request, "auth/verify_already.html")
-    login(request, user)
+    auth_login(request, user)
     return redirect(login_redirect_for(user))
+
+
+def login(request: HttpRequest) -> HttpResponse:
+    if request.user.is_authenticated:
+        return redirect(login_redirect_for(cast(User, request.user)))
+    next_param = request.POST.get("next") or request.GET.get("next") or ""
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            assert user is not None  # form invariant when is_valid()
+            auth_login(request, user)
+            if next_param and url_has_allowed_host_and_scheme(
+                next_param,
+                allowed_hosts={request.get_host()},
+                require_https=request.is_secure(),
+            ):
+                return redirect(next_param)
+            return redirect(login_redirect_for(user))
+    else:
+        form = LoginForm()
+    return render(
+        request,
+        "auth/login.html",
+        {"form": form, "next": next_param},
+    )
+
+
+@require_POST
+def logout(request: HttpRequest) -> HttpResponse:
+    auth_logout(request)
+    return redirect(settings.LOGOUT_REDIRECT_URL)
+
+
+@require_POST
+def resend_verification(request: HttpRequest) -> HttpResponse:
+    # Always renders the same "sent" page so the response can't be used to
+    # enumerate accounts (whitepaper epic 2b §3, issue #56 acceptance).
+    email = (request.POST.get("email") or "").strip().lower()
+    resend_verification_email(email)
+    return render(request, "auth/verify_resent.html")
