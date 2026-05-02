@@ -1,14 +1,45 @@
+import hashlib
 import logging
 
 from django.conf import settings
+from django.core import signing
 from django.db import transaction
 from django.urls import reverse
 
 from core.models import OrganizationMembership, Role, User
 from core.services.mail import send_templated
-from core.services.tokens import RESET_SALT, make_token
+from core.services.tokens import RESET_MAX_AGE, RESET_SALT
 
 logger = logging.getLogger(__name__)
+
+
+def _password_fingerprint(user: User) -> str:
+    # Short SHA-256 prefix of the password hash. Embedded in the signed
+    # token so a successful reset invalidates the prior link: once
+    # set_password() runs, the stored hash changes and the token's
+    # fingerprint no longer matches. Keeps replay-after-success out of
+    # the 1h window without persisting per-token state.
+    return hashlib.sha256(user.password.encode()).hexdigest()[:16]
+
+
+def make_password_reset_token(user: User) -> str:
+    return signing.dumps(
+        {"user_id": user.pk, "pwf": _password_fingerprint(user)},
+        salt=RESET_SALT,
+    )
+
+
+def verify_password_reset_token(token: str) -> User:
+    # Raises signing.BadSignature (incl. SignatureExpired) on bad/expired
+    # tokens, on inactive users, and on fingerprint mismatch (the password
+    # has been rotated since the token was issued).
+    payload = signing.loads(token, salt=RESET_SALT, max_age=RESET_MAX_AGE)
+    user = User.objects.filter(
+        pk=payload.get("user_id"), is_active=True
+    ).first()
+    if user is None or _password_fingerprint(user) != payload.get("pwf"):
+        raise signing.BadSignature("password reset token no longer valid")
+    return user
 
 
 def _send_reset_email(
@@ -47,7 +78,7 @@ def request_password_reset_email(email: str) -> None:
         .first()
     )
     language = mem.organization.default_language if mem else None
-    token = make_token(user, salt=RESET_SALT)
+    token = make_password_reset_token(user)
     reset_url = (
         f"{settings.SITE_URL}"
         f"{reverse('core:password_reset_confirm', args=[token])}"

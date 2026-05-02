@@ -23,10 +23,12 @@ from core.models import OrganizationMembership, User
 from core.services.activation import activate_from_token
 from core.services.exceptions import AlreadyActiveError, NoAdminMembershipError
 from core.services.login_redirect import login_redirect_for
-from core.services.password_reset import request_password_reset_email
+from core.services.password_reset import (
+    request_password_reset_email,
+    verify_password_reset_token,
+)
 from core.services.resend import resend_verification_email
 from core.services.signup import create_organization_with_admin
-from core.services.tokens import RESET_MAX_AGE, RESET_SALT, verify_token
 
 
 def signup(request: HttpRequest) -> HttpResponse:
@@ -137,21 +139,13 @@ def password_reset_request(request: HttpRequest) -> HttpResponse:
 
 
 def password_reset_confirm(request: HttpRequest, token: str) -> HttpResponse:
+    # `verify_password_reset_token` folds together: signature/expiry check,
+    # active-user lookup, and password-fingerprint binding (a successful
+    # reset rotates the hash, which invalidates every prior token even
+    # within the 1h window).
     try:
-        payload = verify_token(token, salt=RESET_SALT, max_age=RESET_MAX_AGE)
+        user = verify_password_reset_token(token)
     except signing.BadSignature:
-        # SignatureExpired is a BadSignature subclass; one catch covers both.
-        return render(request, "auth/password_reset_failed.html")
-    # Cross-tenant by design: the signed token carries the user PK and the
-    # confirm page runs before any tenant context is selected, so there's
-    # no `for_request` / `for_organization` to scope to.
-    user = User.objects.filter(  # noqa: tenant-lint
-        pk=payload["user_id"], is_active=True
-    ).first()
-    if user is None:
-        # Account deactivated between request and confirm; mirrors the
-        # LoginForm rejection so an inactive user can't end up in a
-        # half-authenticated state via auth_login().
         return render(request, "auth/password_reset_failed.html")
     if request.method == "POST":
         form = PasswordResetConfirmForm(request.POST, user=user)

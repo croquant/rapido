@@ -9,7 +9,7 @@ from django.test import Client
 from django.urls import reverse
 
 from core.models import Role
-from core.services.tokens import RESET_SALT, make_token
+from core.services.password_reset import make_password_reset_token
 from tests.factories import (
     OrganizationFactory,
     OrganizationMembershipFactory,
@@ -124,7 +124,7 @@ def test_request_email_normalised_case_insensitive(
 def test_confirm_get_with_valid_token_renders_form() -> None:
     user = UserFactory(is_active=True)
     OrganizationMembershipFactory(user=user, role=Role.ADMIN)
-    token = make_token(user, salt=RESET_SALT)
+    token = make_password_reset_token(user)
 
     response = Client().get(
         reverse("core:password_reset_confirm", args=[token])
@@ -141,7 +141,7 @@ def test_confirm_valid_post_updates_password_and_logs_in() -> None:
     user = UserFactory(is_active=True)
     org = OrganizationFactory(slug="frituur-janssens")
     OrganizationMembershipFactory(user=user, organization=org, role=Role.ADMIN)
-    token = make_token(user, salt=RESET_SALT)
+    token = make_password_reset_token(user)
     client = Client()
 
     response = client.post(
@@ -165,7 +165,7 @@ def test_confirm_valid_post_updates_password_and_logs_in() -> None:
 def test_confirm_mismatched_passwords_keep_old_password() -> None:
     user = UserFactory(is_active=True)
     OrganizationMembershipFactory(user=user, role=Role.ADMIN)
-    token = make_token(user, salt=RESET_SALT)
+    token = make_password_reset_token(user)
 
     response = Client().post(
         reverse("core:password_reset_confirm", args=[token]),
@@ -190,7 +190,7 @@ def test_confirm_mismatched_passwords_keep_old_password() -> None:
 def test_confirm_weak_password_keeps_old_password() -> None:
     user = UserFactory(is_active=True)
     OrganizationMembershipFactory(user=user, role=Role.ADMIN)
-    token = make_token(user, salt=RESET_SALT)
+    token = make_password_reset_token(user)
 
     response = Client().post(
         reverse("core:password_reset_confirm", args=[token]),
@@ -225,10 +225,10 @@ def test_confirm_tampered_token_renders_failed() -> None:
 def test_confirm_expired_token_renders_failed() -> None:
     user = UserFactory(is_active=True)
     OrganizationMembershipFactory(user=user, role=Role.ADMIN)
-    token = make_token(user, salt=RESET_SALT)
+    token = make_password_reset_token(user)
 
     with patch(
-        "core.views.auth.verify_token",
+        "core.views.auth.verify_password_reset_token",
         side_effect=signing.SignatureExpired("expired"),
     ):
         response = Client().get(
@@ -246,7 +246,7 @@ def test_confirm_inactive_user_renders_failed() -> None:
     # Token issued while user was active; user later deactivated.
     user = UserFactory(is_active=True)
     OrganizationMembershipFactory(user=user, role=Role.ADMIN)
-    token = make_token(user, salt=RESET_SALT)
+    token = make_password_reset_token(user)
     user.is_active = False
     user.save(update_fields=["is_active"])
 
@@ -266,6 +266,43 @@ def test_confirm_inactive_user_renders_failed() -> None:
     assert user.check_password("password")
     auth_user = get_user(Client())
     assert not auth_user.is_authenticated
+
+
+@pytest.mark.django_db
+def test_confirm_token_invalidated_after_successful_reset() -> None:
+    # The token is bound to the user's password hash via a fingerprint in
+    # the signed payload. Once the password is rotated the same link must
+    # not be reusable to overwrite the password again, even within the
+    # 1h signing window. (Codex review #69, P2.)
+    user = UserFactory(is_active=True)
+    OrganizationMembershipFactory(user=user, role=Role.ADMIN)
+    token = make_password_reset_token(user)
+
+    first = Client().post(
+        reverse("core:password_reset_confirm", args=[token]),
+        {
+            "new_password": "n3w-l0ng-p4ssword!",
+            "confirm_password": "n3w-l0ng-p4ssword!",
+        },
+    )
+    assert first.status_code == 302
+
+    # Replay the same token: the password hash has changed so the
+    # fingerprint no longer matches.
+    replay = Client().post(
+        reverse("core:password_reset_confirm", args=[token]),
+        {
+            "new_password": "h1jacked-p4ssword!",
+            "confirm_password": "h1jacked-p4ssword!",
+        },
+    )
+    assert replay.status_code == 200
+    assert "auth/password_reset_failed.html" in [
+        t.name for t in replay.templates
+    ]
+    user.refresh_from_db()
+    assert user.check_password("n3w-l0ng-p4ssword!")
+    assert not user.check_password("h1jacked-p4ssword!")
 
 
 # ---------------------------------------------------------------------------
