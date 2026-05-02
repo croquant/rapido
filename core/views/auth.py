@@ -120,8 +120,13 @@ def resend_verification(request: HttpRequest) -> HttpResponse:
 @login_required
 def org_picker(request: HttpRequest) -> HttpResponse:
     user = cast(User, request.user)
+    # Cross-tenant by design: the picker runs before any tenant
+    # context is selected, so there's no `for_request` / `for_organization`
+    # to scope to.
     memberships = list(
-        OrganizationMembership.objects.filter(user=user, is_active=True)
+        OrganizationMembership.objects.filter(  # noqa: tenant-lint
+            user=user, is_active=True
+        )
         .select_related("organization")
         .order_by("organization__name")
     )
