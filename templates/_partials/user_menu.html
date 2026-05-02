@@ -1,4 +1,4 @@
 {% load i18n %}{% if request.user.is_authenticated %}<details class="dropdown user-menu">
 <summary>{% if request.user.first_name or request.user.last_name %}{{ request.user.first_name }} {{ request.user.last_name }}{% else %}{{ request.user.email }}{% endif %}</summary>
-<ul>{% url 'profile' as profile_url %}{% if profile_url %}<li><a href="{{ profile_url }}">{% trans "Profile" %}</a></li>{% endif %}{% url 'logout' as logout_url %}{% if logout_url %}<li><form method="post" action="{{ logout_url }}">{% csrf_token %}<button type="submit" class="secondary">{% trans "Sign out" %}</button></form></li>{% endif %}</ul>
+<ul>{% url 'profile' as profile_url %}{% if profile_url %}<li><a href="{{ profile_url }}">{% trans "Profile" %}</a></li>{% endif %}<li><form method="post" action="{% url 'core:logout' %}">{% csrf_token %}<button type="submit" class="secondary">{% trans "Sign out" %}</button></form></li></ul>
 </details>{% endif %}

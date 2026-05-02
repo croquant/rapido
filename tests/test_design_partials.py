@@ -17,8 +17,10 @@ def _stub(request: HttpRequest) -> HttpResponse:
     return HttpResponse()
 
 
+_core_patterns = ([path("logout/", _stub, name="logout")], "core")
+
 urlpatterns = [
-    path("logout/", _stub, name="logout"),
+    path("", include(_core_patterns, namespace="core")),
     path("profile/", _stub, name="profile"),
     path("i18n/", include("django.conf.urls.i18n")),
 ]
@@ -106,13 +108,15 @@ def test_user_menu_falls_back_to_email_when_name_blank() -> None:
 
 
 @pytest.mark.django_db
-def test_user_menu_omits_profile_and_logout_when_urls_undefined() -> None:
+def test_user_menu_omits_profile_when_url_undefined() -> None:
+    # Sign out always renders against core:logout; the project URLconf
+    # does not yet expose a `profile` URL, so that link stays dormant.
     user = UserFactory()
     out = _render_include(
         "_partials/user_menu.html", request=_request(user=user)
     )
     assert "Profile" not in out
-    assert "Sign out" not in out
+    assert "Sign out" in out
 
 
 @pytest.mark.django_db

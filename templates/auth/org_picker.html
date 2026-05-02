@@ -1,0 +1,32 @@
+{% extends "base_picker.html" %}
+{% load i18n icons %}
+
+{% block title %}{% trans "Choose an organisation" %}{% endblock %}
+
+{% block main %}
+  {% if memberships %}
+    <h1>{% trans "Choose an organisation" %}</h1>
+    <ul class="org-list">
+      {% for membership in memberships %}
+        <li>
+          <article>
+            <a href="/o/{{ membership.organization.slug }}/">
+              <h3>{{ membership.organization.name }}</h3>
+              <small>{{ membership.get_role_display }}</small>
+            </a>
+          </article>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <article class="ks-empty">
+      {% icon "building" %}
+      <h3>{% trans "No organisations" %}</h3>
+      <p>{% trans "Your account isn't linked to any active organisation." %}</p>
+      <form method="post" action="{% url 'core:logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="secondary">{% trans "Sign out" %}</button>
+      </form>
+    </article>
+  {% endif %}
+{% endblock %}
