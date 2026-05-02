@@ -56,8 +56,10 @@ def signup_done(request: HttpRequest) -> HttpResponse:
 def verify(request: HttpRequest, token: str) -> HttpResponse:
     try:
         user = activate_from_token(token)
-    except signing.BadSignature, NoAdminMembershipError:
+    except signing.BadSignature:
         # SignatureExpired is a BadSignature subclass; one catch covers both.
+        return render(request, "auth/verify_failed.html")
+    except NoAdminMembershipError:
         return render(request, "auth/verify_failed.html")
     except AlreadyActiveError:
         return render(request, "auth/verify_already.html")
