@@ -77,9 +77,9 @@ Form partials under `templates/forms/`:
 - [x] Self-host Alpine.js 3.14.9: `static/js/alpine.min.js` (loaded `defer` after htmx in `_base.html`).
 - [x] SVG sprite: `static/icons/sprite.svg` seeded with the 25 Lucide v0.265.0 icons (menu, x, plus, edit, trash, check, alert, chevron-down, search, user, building, map-pin, settings, log-out, eye, eye-off, mail, lock, calendar, copy, refresh, more-vertical, arrow-left, arrow-right, info). Note: "edit" sourced from Lucide `pencil.svg` (no `edit.svg` in this release).
 - [x] `core/templatetags/__init__.py` (empty), `core/templatetags/icons.py` (`{% icon "name" [class] %}` - renders `_partials/icon.html`).
-- [ ] `core/templatetags/forms.py` (`{% field form.x [hint] %}`).
-- [ ] `templates/_base.html`, `templates/base_public.html`, `templates/base_picker.html`, `templates/base_org.html`. Replace the old 12-line `templates/base.html` (delete it). Wire `<script src="{% static 'js/htmx.min.js' %}">` here.
-- [x] Partials: `_partials/icon.html`. Remaining: `_partials/{nav_top,user_menu,lang_switcher,flash,modal}.html`.
-- [ ] Form partials: `forms/{_field,_errors,_submit}.html`.
-- [ ] `core/views/__init__.py:design_kitchen_sink` (DEBUG-only); URL `path("__design__/", views.design_kitchen_sink, name="design_kitchen_sink")`. Renders every component state on one page (buttons, forms in valid/invalid/disabled state, tables, dialogs, toasts, empty states).
-- [ ] `tests/test_design_shells.py`: render each shell with a stub view; assert `lang="en-US"`, single `<main>`, skip-link present (public + org shells), Pico + brand stylesheets included in correct order.
+- [x] `core/templatetags/forms.py`: `{% field form.x [hint] %}` (renders `_field.html`, wires `aria-invalid` / `aria-describedby` from form errors) plus `{% submit primary [secondary [url]] %}` (renders `_submit.html`).
+- [x] `templates/_base.html`, `templates/base_public.html`, `templates/base_picker.html`, `templates/base_org.html`. Old 12-line `templates/base.html` deleted. `_base.html` wires both `js/htmx.min.js` and `js/alpine.min.js` (`defer`).
+- [x] Partials: `_partials/{icon,nav_top,user_menu,lang_switcher,flash,modal}.html`.
+- [x] Form partials: `forms/{_field,_errors,_submit}.html`.
+- [x] `core/views/design.py:design_kitchen_sink` (DEBUG-only; routed in `core/urls.py` under `if settings.DEBUG`). Renders clean / invalid / disabled `KitchenSinkForm` plus the full icon sprite. (Lives in `core/views/design.py`, not `__init__.py`, since `__init__.py` now hosts the `home` view from epic 2b.)
+- [x] `tests/test_design_shells.py` and `tests/test_design_partials.py`: each shell renders with a stub request; assert `lang="en-US"`, single `<main id="main">`, skip-link to `#main`, Pico-before-brand stylesheet order, plus rail markup on `base_org.html`.
