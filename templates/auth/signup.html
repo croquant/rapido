@@ -1,0 +1,40 @@
+{% extends "base_public.html" %}
+{% load i18n forms %}
+
+{% block title %}{% trans "Create your account" %}{% endblock %}
+
+{% block main %}
+  <h1>{% trans "Create your organisation" %}</h1>
+  <form method="post" novalidate
+        x-data="{
+          slugDirty: {% if form.org_slug.value %}true{% else %}false{% endif %},
+          slugify(s) {
+            return s.toString().toLowerCase()
+              .normalize('NFD').replace(/\p{M}/gu, '')
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/^-+|-+$/g, '');
+          },
+          onInput(e) {
+            if (e.target.id === 'id_org_slug') { this.slugDirty = true; return; }
+            if (e.target.id === 'id_org_name' && !this.slugDirty) {
+              const slug = document.getElementById('id_org_slug');
+              if (slug) slug.value = this.slugify(e.target.value);
+            }
+          }
+        }"
+        @input="onInput">
+    {% csrf_token %}
+    {% include "forms/_errors.html" %}
+    {% field form.email %}
+    {% field form.password %}
+    {% field form.org_name %}
+    {% trans "Lowercase letters, numbers, and dashes." as slug_hint %}
+    {% field form.org_slug hint=slug_hint %}
+    {% trans "Format: BE0123456789" as vat_hint %}
+    {% field form.vat_number hint=vat_hint %}
+    {% field form.country %}
+    {% field form.default_language %}
+    {% trans "Create account" as submit_label %}
+    {% submit submit_label %}
+  </form>
+{% endblock %}
