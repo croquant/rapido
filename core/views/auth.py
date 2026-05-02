@@ -13,12 +13,20 @@ from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
-from core.forms.auth import LoginForm
+from core.forms.auth import (
+    LoginForm,
+    PasswordResetConfirmForm,
+    PasswordResetRequestForm,
+)
 from core.forms.signup import SignupForm
 from core.models import OrganizationMembership, User
 from core.services.activation import activate_from_token
 from core.services.exceptions import AlreadyActiveError, NoAdminMembershipError
 from core.services.login_redirect import login_redirect_for
+from core.services.password_reset import (
+    request_password_reset_email,
+    verify_password_reset_token,
+)
 from core.services.resend import resend_verification_email
 from core.services.signup import create_organization_with_admin
 
@@ -115,6 +123,44 @@ def resend_verification(request: HttpRequest) -> HttpResponse:
     email = (request.POST.get("email") or "").strip().lower()
     resend_verification_email(email)
     return render(request, "auth/verify_resent.html")
+
+
+def password_reset_request(request: HttpRequest) -> HttpResponse:
+    # Always renders the same "sent" template after POST so the response
+    # can't be used to enumerate accounts (whitepaper epic 2b §4).
+    if request.method == "POST":
+        form = PasswordResetRequestForm(request.POST)
+        if form.is_valid():
+            request_password_reset_email(form.cleaned_data["email"])
+            return render(request, "auth/password_reset_sent.html")
+    else:
+        form = PasswordResetRequestForm()
+    return render(request, "auth/password_reset_request.html", {"form": form})
+
+
+def password_reset_confirm(request: HttpRequest, token: str) -> HttpResponse:
+    # `verify_password_reset_token` folds together: signature/expiry check,
+    # active-user lookup, and password-fingerprint binding (a successful
+    # reset rotates the hash, which invalidates every prior token even
+    # within the 1h window).
+    try:
+        user = verify_password_reset_token(token)
+    except signing.BadSignature:
+        return render(request, "auth/password_reset_failed.html")
+    if request.method == "POST":
+        form = PasswordResetConfirmForm(request.POST, user=user)
+        if form.is_valid():
+            user.set_password(form.cleaned_data["new_password"])
+            user.save(update_fields=["password"])
+            auth_login(request, user)
+            return redirect(login_redirect_for(user))
+    else:
+        form = PasswordResetConfirmForm(user=user)
+    return render(
+        request,
+        "auth/password_reset_confirm.html",
+        {"form": form, "token": token},
+    )
 
 
 @login_required
