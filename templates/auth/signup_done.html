@@ -1,0 +1,10 @@
+{% extends "base_public.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Check your inbox" %}{% endblock %}
+
+{% block main %}
+  <h1>{% trans "Check your inbox" %}</h1>
+  <p>{% trans "We've sent a verification link to your email. Click it to activate your account." %}</p>
+  <p>{% trans "The link is valid for 7 days." %}</p>
+{% endblock %}

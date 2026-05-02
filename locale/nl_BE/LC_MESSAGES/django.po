@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rapido\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-01 23:26+0000\n"
+"POT-Creation-Date: 2026-05-02 10:51+0000\n"
 "PO-Revision-Date: 2026-05-01 11:19+0000\n"
 "Language-Team: Dutch (Belgium)\n"
 "Language: nl_BE\n"
@@ -48,6 +48,50 @@ msgstr "Persoonlijke informatie"
 #: core/admin.py:250
 msgid "Permissions"
 msgstr "Rechten"
+
+#: core/forms/signup.py:16 core/views/design.py:37
+#, fuzzy
+#| msgid "email"
+msgid "Email"
+msgstr "e-mail"
+
+#: core/forms/signup.py:20
+msgid "Password"
+msgstr ""
+
+#: core/forms/signup.py:25
+#, fuzzy
+#| msgid "organization"
+msgid "Organisation name"
+msgstr "organisatie"
+
+#: core/forms/signup.py:29
+msgid "URL slug"
+msgstr ""
+
+#: core/forms/signup.py:34 core/models/organization.py:64
+msgid "VAT number"
+msgstr "btw-nummer"
+
+#: core/forms/signup.py:37
+#, fuzzy
+#| msgid "country"
+msgid "Country"
+msgstr "land"
+
+#: core/forms/signup.py:39
+#, fuzzy
+#| msgid "default language"
+msgid "Language"
+msgstr "standaardtaal"
+
+#: core/forms/signup.py:57
+msgid "This slug is already taken."
+msgstr ""
+
+#: core/forms/signup.py:62
+msgid "An account with this email already exists."
+msgstr ""
 
 #: core/models/location.py:27 core/models/membership.py:29
 #: core/models/organization.py:76
@@ -157,10 +201,6 @@ msgstr "standaardvaluta"
 msgid "default language"
 msgstr "standaardtaal"
 
-#: core/models/organization.py:64
-msgid "VAT number"
-msgstr "btw-nummer"
-
 #: core/models/organization.py:67
 msgid "billing email"
 msgstr "facturatie-e-mail"
@@ -224,6 +264,10 @@ msgstr "Ongeldige valutacode. Ondersteunde valuta's zijn: %(currencies)s."
 msgid "URL must contain only lowercase letters, digits, and hyphens."
 msgstr "URL mag alleen kleine letters, cijfers en koppeltekens bevatten."
 
+#: core/views/auth.py:32
+msgid "This email or organisation slug is already in use."
+msgstr ""
+
 #: core/views/design.py:36
 msgid "Name"
 msgstr ""
@@ -231,12 +275,6 @@ msgstr ""
 #: core/views/design.py:36
 msgid "Your full name."
 msgstr ""
-
-#: core/views/design.py:37
-#, fuzzy
-#| msgid "email"
-msgid "Email"
-msgstr "e-mail"
 
 #: core/views/design.py:39
 msgid "Role"
@@ -267,6 +305,44 @@ msgstr ""
 
 #: templates/_partials/user_menu.html:3
 msgid "Sign out"
+msgstr ""
+
+#: templates/auth/signup.html:4
+msgid "Create your account"
+msgstr ""
+
+#: templates/auth/signup.html:7
+#, fuzzy
+#| msgid "organization"
+msgid "Create your organisation"
+msgstr "organisatie"
+
+#: templates/auth/signup.html:14
+#, fuzzy
+#| msgid "URL must contain only lowercase letters, digits, and hyphens."
+msgid "Lowercase letters, numbers, and dashes."
+msgstr "URL mag alleen kleine letters, cijfers en koppeltekens bevatten."
+
+#: templates/auth/signup.html:16
+msgid "Format: BE0123456789"
+msgstr ""
+
+#: templates/auth/signup.html:20
+msgid "Create account"
+msgstr ""
+
+#: templates/auth/signup_done.html:4 templates/auth/signup_done.html:7
+msgid "Check your inbox"
+msgstr ""
+
+#: templates/auth/signup_done.html:8
+msgid ""
+"We've sent a verification link to your email. Click it to activate your "
+"account."
+msgstr ""
+
+#: templates/auth/signup_done.html:9
+msgid "The link is valid for 7 days."
 msgstr ""
 
 #: templates/base_org.html:7 templates/base_picker.html:7
