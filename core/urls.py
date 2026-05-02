@@ -6,6 +6,7 @@ from .views import home
 from .views.auth import (
     login,
     logout,
+    org_picker,
     resend_verification,
     signup,
     signup_done,
@@ -27,6 +28,7 @@ urlpatterns: list[URLPattern] = [
         view=resend_verification,
         name="resend_verification",
     ),
+    path(route="orgs/", view=org_picker, name="org_picker"),
 ]
 
 if settings.DEBUG:

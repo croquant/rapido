@@ -3,6 +3,7 @@ from typing import cast
 from django.conf import settings
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.decorators import login_required
 from django.core import signing
 from django.db import IntegrityError
 from django.http import HttpRequest, HttpResponse
@@ -14,7 +15,7 @@ from django.views.decorators.http import require_POST
 
 from core.forms.auth import LoginForm
 from core.forms.signup import SignupForm
-from core.models import User
+from core.models import OrganizationMembership, User
 from core.services.activation import activate_from_token
 from core.services.exceptions import AlreadyActiveError, NoAdminMembershipError
 from core.services.login_redirect import login_redirect_for
@@ -114,3 +115,20 @@ def resend_verification(request: HttpRequest) -> HttpResponse:
     email = (request.POST.get("email") or "").strip().lower()
     resend_verification_email(email)
     return render(request, "auth/verify_resent.html")
+
+
+@login_required
+def org_picker(request: HttpRequest) -> HttpResponse:
+    user = cast(User, request.user)
+    memberships = list(
+        OrganizationMembership.objects.filter(user=user, is_active=True)
+        .select_related("organization")
+        .order_by("organization__name")
+    )
+    if len(memberships) == 1:
+        return redirect(login_redirect_for(user))
+    return render(
+        request,
+        "auth/org_picker.html",
+        {"memberships": memberships},
+    )
