@@ -1,0 +1,10 @@
+{% extends "base_public.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Verification link invalid" %}{% endblock %}
+
+{% block main %}
+  <h1>{% trans "Verification link invalid or expired" %}</h1>
+  <p>{% trans "This verification link can't be used. It may have expired (links are valid for 7 days), been tampered with, or already replaced by a newer one." %}</p>
+  <p><a href="/login/">{% trans "Sign in" %}</a> {% trans "to request a new verification email." %}</p>
+{% endblock %}

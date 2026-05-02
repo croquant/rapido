@@ -1,4 +1,6 @@
 from django.conf import settings
+from django.contrib.auth import login
+from django.core import signing
 from django.db import IntegrityError
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
@@ -6,6 +8,9 @@ from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 
 from core.forms.signup import SignupForm
+from core.services.activation import activate_from_token
+from core.services.exceptions import AlreadyActiveError, NoAdminMembershipError
+from core.services.login_redirect import login_redirect_for
 from core.services.signup import create_organization_with_admin
 
 
@@ -48,6 +53,15 @@ def signup_done(request: HttpRequest) -> HttpResponse:
     return render(request, "auth/signup_done.html")
 
 
-def verify_placeholder(request: HttpRequest, token: str) -> HttpResponse:
-    del request, token
-    return HttpResponse(status=501)
+def verify(request: HttpRequest, token: str) -> HttpResponse:
+    try:
+        user = activate_from_token(token)
+    except signing.BadSignature:
+        # SignatureExpired is a BadSignature subclass; one catch covers both.
+        return render(request, "auth/verify_failed.html")
+    except NoAdminMembershipError:
+        return render(request, "auth/verify_failed.html")
+    except AlreadyActiveError:
+        return render(request, "auth/verify_already.html")
+    login(request, user)
+    return redirect(login_redirect_for(user))
