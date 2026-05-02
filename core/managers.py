@@ -18,10 +18,15 @@ For models where `Organization` is reached via a related field, override
         organization_lookup = "location__organization"
 """
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from django.db import models
 from django.http import HttpRequest
 
-from core.models import Organization
+if TYPE_CHECKING:
+    from core.models import Organization
 
 
 class TenantOwnedManager(models.Manager):
