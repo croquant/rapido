@@ -7,6 +7,8 @@ from .views.auth import (
     login,
     logout,
     org_picker,
+    password_reset_confirm,
+    password_reset_request,
     resend_verification,
     signup,
     signup_done,
@@ -27,6 +29,16 @@ urlpatterns: list[URLPattern] = [
         route="resend-verification/",
         view=resend_verification,
         name="resend_verification",
+    ),
+    path(
+        route="password/reset/",
+        view=password_reset_request,
+        name="password_reset_request",
+    ),
+    path(
+        route="password/reset/<str:token>/",
+        view=password_reset_confirm,
+        name="password_reset_confirm",
     ),
     path(route="orgs/", view=org_picker, name="org_picker"),
 ]
