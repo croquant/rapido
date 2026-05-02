@@ -142,7 +142,12 @@ def password_reset_confirm(request: HttpRequest, token: str) -> HttpResponse:
     except signing.BadSignature:
         # SignatureExpired is a BadSignature subclass; one catch covers both.
         return render(request, "auth/password_reset_failed.html")
-    user = User.objects.filter(pk=payload["user_id"], is_active=True).first()
+    # Cross-tenant by design: the signed token carries the user PK and the
+    # confirm page runs before any tenant context is selected, so there's
+    # no `for_request` / `for_organization` to scope to.
+    user = User.objects.filter(  # noqa: tenant-lint
+        pk=payload["user_id"], is_active=True
+    ).first()
     if user is None:
         # Account deactivated between request and confirm; mirrors the
         # LoginForm rejection so an inactive user can't end up in a
