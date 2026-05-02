@@ -21,3 +21,44 @@ class AlreadyActiveError(Exception):
 
 class NoAdminMembershipError(Exception):
     """User has no active ADMIN membership to anchor org activation."""
+
+
+class AlreadyMemberError(Exception):
+    """An active OrganizationMembership already exists for (email, org)."""
+
+    def __init__(self, email: str, organization: Organization) -> None:
+        self.email = email
+        self.organization = organization
+        super().__init__(
+            f"{email} is already an active member of {organization.slug}"
+        )
+
+
+class OperatorRequiresLocationsError(Exception):
+    """OPERATOR invitation must list at least one valid, active location."""
+
+    def __init__(self, message: str | None = None) -> None:
+        super().__init__(
+            message or "OPERATOR invitations require at least one location."
+        )
+
+
+class BadStateError(Exception):
+    """Invitation operation rejected due to terminal/invalid state.
+
+    `reason` is the contract caller views match on:
+    `pending_exists`, `already_accepted`, `already_revoked`, `expired`,
+    `stale_locations`, `invalid_token`, `already_member`.
+    """
+
+    def __init__(self, reason: str) -> None:
+        self.reason = reason
+        super().__init__(reason)
+
+
+class WeakPasswordError(Exception):
+    """Password failed Django's validators on new-user invite accept."""
+
+    def __init__(self, messages: list[str]) -> None:
+        self.messages = messages
+        super().__init__("; ".join(messages))
