@@ -1,0 +1,26 @@
+{% extends "base_org.html" %}
+{% load i18n forms %}
+
+{% block title %}{% trans "Organization settings" %}{% endblock %}
+
+{% block rail %}{% include "_partials/settings_rail.html" %}{% endblock %}
+
+{% block main %}
+  <h1>{% trans "Organization settings" %}</h1>
+  <p>
+    <strong>{% trans "URL" %}:</strong> <code>{{ organization.slug }}</code>
+    <small>{% trans "URL cannot be changed once set." %}</small>
+  </p>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include "forms/_errors.html" %}
+    {% field form.name %}
+    {% field form.country %}
+    {% field form.vat_number %}
+    {% field form.default_language %}
+    {% trans "Save" as primary_label %}
+    {% trans "Cancel" as secondary_label %}
+    {% url 'core:settings_organization' organization.slug as cancel_url %}
+    {% submit primary_label secondary_label cancel_url %}
+  </form>
+{% endblock %}
