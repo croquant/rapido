@@ -23,14 +23,16 @@ def _admin_client(
     return client, membership.organization
 
 
-def _routes(slug: str, pk: int = 1) -> dict[str, str]:
+def _routes(slug: str, pk: int = 1, upk: int = 1) -> dict[str, str]:
     base = f"/o/{slug}/settings/locations"
     return {
         "list": f"{base}/",
         "create": f"{base}/new/",
+        "detail": f"{base}/{pk}/",
         "edit": f"{base}/{pk}/edit/",
         "deactivate": f"{base}/{pk}/deactivate/",
         "reactivate": f"{base}/{pk}/reactivate/",
+        "toggle_operator": f"{base}/{pk}/operators/{upk}/toggle/",
     }
 
 
@@ -353,3 +355,117 @@ def test_superuser_can_access_list() -> None:
 
     assert response.status_code == 200
     assert "ListedForSuperuser" in response.content.decode()
+
+
+# ---- detail -----------------------------------------------------------------
+
+
+@pytest.mark.django_db
+def test_admin_detail_lists_operator_chips() -> None:
+    client, org = _admin_client()
+    location = LocationFactory(organization=org)
+    operator = OrganizationMembershipFactory(
+        role=Role.OPERATOR, organization=org
+    )
+
+    response = client.get(_routes(org.slug, location.pk)["detail"])
+
+    assert response.status_code == 200
+    assert operator.user.email in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_detail_cross_org_404() -> None:
+    client, org = _admin_client()
+    other_loc = LocationFactory(organization=OrganizationFactory())
+
+    response = client.get(_routes(org.slug, other_loc.pk)["detail"])
+    assert response.status_code == 404
+
+
+# ---- toggle_operator --------------------------------------------------------
+
+
+@pytest.mark.django_db
+def test_toggle_operator_creates_then_deactivates_same_row() -> None:
+    client, org = _admin_client()
+    location = LocationFactory(organization=org)
+    operator = OrganizationMembershipFactory(
+        role=Role.OPERATOR, organization=org
+    )
+
+    on = client.post(
+        _routes(org.slug, location.pk, operator.user.pk)["toggle_operator"],
+        HTTP_HX_REQUEST="true",
+    )
+    assert on.status_code == 200
+    assert (
+        LocationMembership.objects.filter(
+            user=operator.user, location=location, is_active=True
+        ).count()
+        == 1
+    )
+
+    off = client.post(
+        _routes(org.slug, location.pk, operator.user.pk)["toggle_operator"],
+        HTTP_HX_REQUEST="true",
+    )
+    assert off.status_code == 200
+    assert (
+        LocationMembership.objects.filter(
+            user=operator.user, location=location
+        ).count()
+        == 1
+    )
+    assert (
+        LocationMembership.objects.get(
+            user=operator.user, location=location
+        ).is_active
+        is False
+    )
+
+
+@pytest.mark.django_db
+def test_toggle_operator_admin_user_404() -> None:
+    """Only OPERATOR memberships are eligible for the operator toggle."""
+    client, org = _admin_client()
+    location = LocationFactory(organization=org)
+    other_admin = OrganizationMembershipFactory(
+        role=Role.ADMIN, organization=org
+    )
+
+    response = client.post(
+        _routes(org.slug, location.pk, other_admin.user.pk)["toggle_operator"],
+        HTTP_HX_REQUEST="true",
+    )
+    assert response.status_code == 404
+
+
+@pytest.mark.django_db
+def test_toggle_operator_inactive_location_404() -> None:
+    client, org = _admin_client()
+    inactive_loc = LocationFactory(organization=org, is_active=False)
+    operator = OrganizationMembershipFactory(
+        role=Role.OPERATOR, organization=org
+    )
+
+    response = client.post(
+        _routes(org.slug, inactive_loc.pk, operator.user.pk)["toggle_operator"],
+        HTTP_HX_REQUEST="true",
+    )
+    assert response.status_code == 404
+
+
+@pytest.mark.django_db
+def test_toggle_operator_cross_org_404() -> None:
+    client, org = _admin_client()
+    other_loc = LocationFactory(organization=OrganizationFactory())
+    operator = OrganizationMembershipFactory(
+        role=Role.OPERATOR, organization=org
+    )
+
+    response = client.post(
+        _routes(org.slug, other_loc.pk, operator.user.pk)["toggle_operator"],
+        HTTP_HX_REQUEST="true",
+    )
+    assert response.status_code == 404

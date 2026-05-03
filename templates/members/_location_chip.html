@@ -1,0 +1,12 @@
+{% load i18n %}<form id="member-chip-loc-{{ location.pk }}"
+    method="post"
+    action="{% url 'core:settings_members_toggle_location' organization.slug membership.pk location.pk %}"
+    hx-post="{% url 'core:settings_members_toggle_location' organization.slug membership.pk location.pk %}"
+    hx-target="#member-chip-loc-{{ location.pk }}" hx-swap="outerHTML"
+    role="listitem" style="display:inline-block">
+  {% csrf_token %}
+  <button type="submit" class="{% if is_active %}chip chip-on{% else %}chip chip-off secondary{% endif %}"
+          aria-pressed="{% if is_active %}true{% else %}false{% endif %}">
+    {{ location.name }}{% if is_active %} <span aria-hidden="true">&times;</span>{% else %} <span aria-hidden="true">+</span>{% endif %}
+  </button>
+</form>

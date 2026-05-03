@@ -2,7 +2,7 @@ from django.conf import settings
 from django.urls import path
 from django.urls.resolvers import URLPattern
 
-from .views import home, locations
+from .views import home, invitations, locations, members
 from .views.auth import (
     login,
     logout,
@@ -16,11 +16,7 @@ from .views.auth import (
 )
 from .views.dashboard import dashboard
 from .views.design import design_kitchen_sink
-from .views.settings import (
-    settings_invitations,
-    settings_members,
-    settings_organization,
-)
+from .views.settings import settings_organization
 
 app_name = "core"
 
@@ -59,6 +55,11 @@ urlpatterns: list[URLPattern] = [
         name="settings_locations_create",
     ),
     path(
+        route="o/<slug:slug>/settings/locations/<int:pk>/",
+        view=locations.detail,
+        name="settings_locations_detail",
+    ),
+    path(
         route="o/<slug:slug>/settings/locations/<int:pk>/edit/",
         view=locations.edit,
         name="settings_locations_edit",
@@ -74,14 +75,54 @@ urlpatterns: list[URLPattern] = [
         name="settings_locations_reactivate",
     ),
     path(
+        route="o/<slug:slug>/settings/locations/<int:pk>/operators/<int:upk>/toggle/",
+        view=locations.toggle_operator,
+        name="settings_locations_toggle_operator",
+    ),
+    path(
         route="o/<slug:slug>/settings/members/",
-        view=settings_members,
+        view=members.list_view,
         name="settings_members",
     ),
     path(
+        route="o/<slug:slug>/settings/members/<int:pk>/",
+        view=members.detail,
+        name="settings_members_detail",
+    ),
+    path(
+        route="o/<slug:slug>/settings/members/<int:pk>/role/",
+        view=members.change_role,
+        name="settings_members_change_role",
+    ),
+    path(
+        route="o/<slug:slug>/settings/members/<int:pk>/deactivate/",
+        view=members.deactivate,
+        name="settings_members_deactivate",
+    ),
+    path(
+        route="o/<slug:slug>/settings/members/<int:pk>/reactivate/",
+        view=members.reactivate,
+        name="settings_members_reactivate",
+    ),
+    path(
+        route="o/<slug:slug>/settings/members/<int:pk>/locations/<int:lpk>/toggle/",
+        view=members.toggle_location,
+        name="settings_members_toggle_location",
+    ),
+    path(
         route="o/<slug:slug>/settings/invitations/",
-        view=settings_invitations,
-        name="settings_invitations",
+        view=invitations.create,
+        name="settings_invitations_create",
+    ),
+    path(
+        route="o/<slug:slug>/settings/invitations/<int:pk>/resend/",
+        view=invitations.resend,
+        name="settings_invitations_resend",
+    ),
+    path(
+        route="o/<slug:slug>/settings/invitations/<int:pk>/revoke/",
+        view=invitations.revoke,
+        name="settings_invitations_revoke",
     ),
     path(
         route="o/<slug:slug>/settings/organization/",

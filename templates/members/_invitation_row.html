@@ -1,0 +1,31 @@
+{% load i18n %}<tr id="invitation-row-{{ invitation.pk }}">
+  <td>{{ invitation.email }}</td>
+  <td>{{ invitation.get_role_display }}</td>
+  {% if variant == "pending" %}
+    <td>
+      {% for location in invitation.locations.all %}{{ location.name }}{% if not forloop.last %}, {% endif %}{% empty %}<span aria-hidden="true">&mdash;</span>{% endfor %}
+    </td>
+    <td>{{ invitation.expires_at|date:"Y-m-d H:i" }}</td>
+    <td>
+      <form method="post" action="{% url 'core:settings_invitations_resend' organization.slug invitation.pk %}"
+            hx-post="{% url 'core:settings_invitations_resend' organization.slug invitation.pk %}"
+            hx-target="#invitation-row-{{ invitation.pk }}" hx-swap="outerHTML" style="display:inline">
+        {% csrf_token %}
+        <button type="submit" class="secondary">{% trans "Resend" %}</button>
+      </form>
+      <form method="post" action="{% url 'core:settings_invitations_revoke' organization.slug invitation.pk %}"
+            hx-post="{% url 'core:settings_invitations_revoke' organization.slug invitation.pk %}"
+            style="display:inline">
+        {% csrf_token %}
+        <button type="submit" class="secondary">{% trans "Revoke" %}</button>
+      </form>
+    </td>
+  {% else %}
+    <td>
+      {% if invitation.revoked_at %}{% trans "Revoked" %}{% else %}{% trans "Expired" %}{% endif %}
+    </td>
+    <td>
+      {% if invitation.revoked_at %}{{ invitation.revoked_at|date:"Y-m-d H:i" }}{% else %}{{ invitation.expires_at|date:"Y-m-d H:i" }}{% endif %}
+    </td>
+  {% endif %}
+</tr>

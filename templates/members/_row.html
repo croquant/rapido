@@ -1,0 +1,33 @@
+{% load i18n %}<tr id="member-row-{{ membership.pk }}">
+  <td>{{ membership.user.email }}</td>
+  <td>
+    <form method="post" action="{% url 'core:settings_members_change_role' organization.slug membership.pk %}"
+          hx-post="{% url 'core:settings_members_change_role' organization.slug membership.pk %}"
+          hx-target="#member-row-{{ membership.pk }}" hx-swap="outerHTML" style="display:inline">
+      {% csrf_token %}
+      <select name="role" onchange="this.form.requestSubmit()" aria-label="{% trans 'Role' %}">
+        <option value="ADMIN"{% if membership.role == 'ADMIN' %} selected{% endif %}>{% trans "Admin" %}</option>
+        <option value="OPERATOR"{% if membership.role == 'OPERATOR' %} selected{% endif %}>{% trans "Operator" %}</option>
+      </select>
+    </form>
+  </td>
+  <td>{% if membership.is_active %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</td>
+  <td>
+    <a href="{% url 'core:settings_members_detail' organization.slug membership.pk %}">{% trans "Detail" %}</a>
+    {% if membership.is_active %}
+      <form method="post" action="{% url 'core:settings_members_deactivate' organization.slug membership.pk %}"
+            hx-post="{% url 'core:settings_members_deactivate' organization.slug membership.pk %}"
+            hx-target="#member-row-{{ membership.pk }}" hx-swap="outerHTML" style="display:inline">
+        {% csrf_token %}
+        <button type="submit" class="secondary">{% trans "Deactivate" %}</button>
+      </form>
+    {% else %}
+      <form method="post" action="{% url 'core:settings_members_reactivate' organization.slug membership.pk %}"
+            hx-post="{% url 'core:settings_members_reactivate' organization.slug membership.pk %}"
+            hx-target="#member-row-{{ membership.pk }}" hx-swap="outerHTML" style="display:inline">
+        {% csrf_token %}
+        <button type="submit">{% trans "Reactivate" %}</button>
+      </form>
+    {% endif %}
+  </td>
+</tr>
