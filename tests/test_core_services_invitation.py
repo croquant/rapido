@@ -186,8 +186,50 @@ def test_create_invitation_fires_email_on_commit(
         args, kwargs = send.call_args
         assert args == ("email/invitation",)
         assert kwargs["language"] == "nl-BE"
-        assert kwargs["context"]["org_name"] == inv.organization.name
-        assert kwargs["context"]["accept_url"].startswith("http")
+        ctx = kwargs["context"]
+        assert ctx["organization_name"] == inv.organization.name
+        assert ctx["accept_url"].startswith("http")
+        assert ctx["invitee_email"] == "invitee@example.be"
+        assert ctx["role"] == Role.ADMIN
+        assert ctx["locations"] == []
+        assert ctx["expires_at"] == inv.expires_at
+        assert ctx["inviter_name"]
+
+
+@pytest.mark.django_db
+def test_create_invitation_email_uses_existing_user_preferred_language(
+    django_capture_on_commit_callbacks: _Capture,
+) -> None:
+    UserFactory(email="invitee@example.be", preferred_language="fr-BE")
+    with patch("core.services.invitation.send_templated") as send:
+        with django_capture_on_commit_callbacks(execute=True):
+            create_invitation(
+                organization=OrganizationFactory(default_language="nl-BE"),
+                email="invitee@example.be",
+                role=Role.ADMIN,
+                locations=[],
+                created_by=UserFactory(),
+            )
+        _, kwargs = send.call_args
+        assert kwargs["language"] == "fr-BE"
+
+
+@pytest.mark.django_db
+def test_create_invitation_email_falls_back_to_org_language_when_user_blank(
+    django_capture_on_commit_callbacks: _Capture,
+) -> None:
+    UserFactory(email="invitee@example.be", preferred_language="")
+    with patch("core.services.invitation.send_templated") as send:
+        with django_capture_on_commit_callbacks(execute=True):
+            create_invitation(
+                organization=OrganizationFactory(default_language="nl-BE"),
+                email="invitee@example.be",
+                role=Role.ADMIN,
+                locations=[],
+                created_by=UserFactory(),
+            )
+        _, kwargs = send.call_args
+        assert kwargs["language"] == "nl-BE"
 
 
 @pytest.mark.django_db

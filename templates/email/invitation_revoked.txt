@@ -1,0 +1,6 @@
+{% extends "email/_base.txt" %}{% load i18n %}
+{% block body %}
+{% blocktrans with name=invitee_email %}Hi {{ name }},{% endblocktrans %}
+
+{% blocktrans with org=organization_name %}Your invitation to join {{ org }} on {{ brand }} has been withdrawn. No action is needed.{% endblocktrans %}
+{% endblock %}
