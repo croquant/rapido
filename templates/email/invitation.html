@@ -1,0 +1,20 @@
+{% extends "email/_base.html" %}{% load i18n %}
+{% block body %}
+  <p>{% blocktrans with name=invitee_email %}Hi {{ name }},{% endblocktrans %}</p>
+  <p>{% blocktrans with inviter=inviter_name org=organization_name %}{{ inviter }} invited you to join {{ org }} on {{ brand }}.{% endblocktrans %}</p>
+  <p>{% if role == "ADMIN" %}{% trans "You'll join as an administrator." %}{% else %}{% trans "You'll join as an operator." %}{% endif %}</p>
+  {% if locations %}
+  <p style="margin:0 0 8px 0;">{% trans "Your assigned locations:" %}</p>
+  <ul style="margin:0 0 16px 20px;padding:0;">
+    {% for loc in locations %}<li>{{ loc.name }}</li>{% endfor %}
+  </ul>
+  {% endif %}
+  <p style="margin:24px 0;">
+    <a href="{{ accept_url }}" style="display:inline-block;padding:10px 18px;background:#111;color:#fff;text-decoration:none;border-radius:4px;">
+      {% trans "Accept invitation" %}
+    </a>
+  </p>
+  <p style="font-size:13px;color:#666;">{% blocktrans count days=7 %}This link expires in {{ days }} day.{% plural %}This link expires in {{ days }} days.{% endblocktrans %}</p>
+  <p style="font-size:13px;color:#666;word-break:break-all;">{{ accept_url }}</p>
+{% endblock %}
+{% block footer_extra %}{% blocktrans with org=organization_name %}Sent for {{ org }}. {% endblocktrans %}{% endblock %}

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rapido\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-01 23:26+0000\n"
+"POT-Creation-Date: 2026-05-03 00:28+0000\n"
 "PO-Revision-Date: 2026-05-01 11:19+0000\n"
 "Language-Team: French (Belgium)\n"
 "Language: fr_BE\n"
@@ -49,10 +49,123 @@ msgstr "Informations personnelles"
 msgid "Permissions"
 msgstr "Permissions"
 
-#: core/models/location.py:27 core/models/membership.py:29
-#: core/models/organization.py:76
+#: core/forms/auth.py:14 core/forms/auth.py:58 core/forms/signup.py:16
+#: core/views/design.py:37
+#, fuzzy
+#| msgid "email"
+msgid "Email"
+msgstr "e-mail"
+
+#: core/forms/auth.py:18 core/forms/signup.py:20
+msgid "Password"
+msgstr ""
+
+#: core/forms/auth.py:40
+msgid "Invalid email or password."
+msgstr ""
+
+#: core/forms/auth.py:45
+msgid ""
+"Your email isn't verified yet. Check your inbox for the verification link."
+msgstr ""
+
+#: core/forms/auth.py:68
+msgid "New password"
+msgstr ""
+
+#: core/forms/auth.py:73
+msgid "Confirm password"
+msgstr ""
+
+#: core/forms/auth.py:89
+msgid "Passwords do not match."
+msgstr ""
+
+#: core/forms/signup.py:25
+#, fuzzy
+#| msgid "organization"
+msgid "Organisation name"
+msgstr "organisation"
+
+#: core/forms/signup.py:29
+msgid "URL slug"
+msgstr ""
+
+#: core/forms/signup.py:34 core/models/organization.py:64
+msgid "VAT number"
+msgstr "numéro de TVA"
+
+#: core/forms/signup.py:37
+#, fuzzy
+#| msgid "country"
+msgid "Country"
+msgstr "pays"
+
+#: core/forms/signup.py:39
+#, fuzzy
+#| msgid "default language"
+msgid "Language"
+msgstr "langue par défaut"
+
+#: core/forms/signup.py:57
+msgid "This slug is already taken."
+msgstr ""
+
+#: core/forms/signup.py:62
+msgid "An account with this email already exists."
+msgstr ""
+
+#: core/models/invitation.py:32 core/models/location.py:27
+#: core/models/membership.py:29 core/models/organization.py:76
 msgid "organization"
 msgstr "organisation"
+
+#: core/models/invitation.py:35 core/models/user.py:57
+msgid "email"
+msgstr "e-mail"
+
+#: core/models/invitation.py:40 core/models/membership.py:34
+msgid "role"
+msgstr "rôle"
+
+#: core/models/invitation.py:46 core/models/location.py:57
+msgid "locations"
+msgstr "établissements"
+
+#: core/models/invitation.py:52 core/models/membership.py:45
+#: core/models/membership.py:91
+msgid "created by"
+msgstr "créé par"
+
+#: core/models/invitation.py:60
+#, fuzzy
+#| msgid "created by"
+msgid "revoked by"
+msgstr "créé par"
+
+#: core/models/invitation.py:63
+msgid "expires at"
+msgstr ""
+
+#: core/models/invitation.py:66
+msgid "accepted at"
+msgstr ""
+
+#: core/models/invitation.py:69
+msgid "revoked at"
+msgstr ""
+
+#: core/models/invitation.py:78
+#, fuzzy
+#| msgid "organization"
+msgid "invitation"
+msgstr "organisation"
+
+#: core/models/invitation.py:79
+#, fuzzy
+#| msgid "organizations"
+msgid "invitations"
+msgstr "organisations"
 
 #: core/models/location.py:30 core/models/organization.py:34
 msgid "name"
@@ -92,10 +205,6 @@ msgstr "actif"
 msgid "location"
 msgstr "établissement"
 
-#: core/models/location.py:57
-msgid "locations"
-msgstr "établissements"
-
 #: core/models/membership.py:14
 msgid "Admin"
 msgstr "Administrateur"
@@ -108,14 +217,6 @@ msgstr "Opérateur"
 #: core/models/user.py:87
 msgid "user"
 msgstr "utilisateur"
-
-#: core/models/membership.py:34
-msgid "role"
-msgstr "rôle"
-
-#: core/models/membership.py:45 core/models/membership.py:91
-msgid "created by"
-msgstr "créé par"
 
 #: core/models/membership.py:51
 msgid "organization membership"
@@ -157,10 +258,6 @@ msgstr "devise par défaut"
 msgid "default language"
 msgstr "langue par défaut"
 
-#: core/models/organization.py:64
-msgid "VAT number"
-msgstr "numéro de TVA"
-
 #: core/models/organization.py:67
 msgid "billing email"
 msgstr "e-mail de facturation"
@@ -180,10 +277,6 @@ msgstr "Le superutilisateur doit avoir is_staff=True."
 #: core/models/user.py:48
 msgid "Superuser must have is_superuser=True."
 msgstr "Le superutilisateur doit avoir is_superuser=True."
-
-#: core/models/user.py:57
-msgid "email"
-msgstr "e-mail"
 
 #: core/models/user.py:60
 msgid "first name"
@@ -226,6 +319,10 @@ msgstr ""
 "L'URL ne peut contenir que des lettres minuscules, des chiffres et des "
 "traits d'union."
 
+#: core/views/auth.py:54
+msgid "This email or organisation slug is already in use."
+msgstr ""
+
 #: core/views/design.py:36
 msgid "Name"
 msgstr ""
@@ -233,12 +330,6 @@ msgstr ""
 #: core/views/design.py:36
 msgid "Your full name."
 msgstr ""
-
-#: core/views/design.py:37
-#, fuzzy
-#| msgid "email"
-msgid "Email"
-msgstr "e-mail"
 
 #: core/views/design.py:39
 msgid "Role"
@@ -267,8 +358,168 @@ msgstr "langue par défaut"
 msgid "Profile"
 msgstr ""
 
-#: templates/_partials/user_menu.html:3
+#: templates/_partials/user_menu.html:3 templates/auth/org_picker.html:28
 msgid "Sign out"
+msgstr ""
+
+#: templates/auth/login.html:4 templates/auth/login.html:7
+#: templates/auth/login.html:14 templates/auth/verify_already.html:9
+#: templates/auth/verify_failed.html:9
+msgid "Sign in"
+msgstr ""
+
+#: templates/auth/login.html:22
+msgid "Resend verification email"
+msgstr ""
+
+#: templates/auth/login.html:26
+msgid "Forgot password?"
+msgstr ""
+
+#: templates/auth/login.html:27
+msgid "Create an account"
+msgstr ""
+
+#: templates/auth/org_picker.html:4 templates/auth/org_picker.html:8
+#, fuzzy
+#| msgid "organization"
+msgid "Choose an organisation"
+msgstr "organisation"
+
+#: templates/auth/org_picker.html:24
+#, fuzzy
+#| msgid "organizations"
+msgid "No organisations"
+msgstr "organisations"
+
+#: templates/auth/org_picker.html:25
+msgid "Your account isn't linked to any active organisation."
+msgstr ""
+
+#: templates/auth/password_reset_confirm.html:4
+#: templates/auth/password_reset_confirm.html:7
+msgid "Choose a new password"
+msgstr ""
+
+#: templates/auth/password_reset_confirm.html:13
+msgid "Set new password"
+msgstr ""
+
+#: templates/auth/password_reset_failed.html:4
+msgid "Reset link invalid"
+msgstr ""
+
+#: templates/auth/password_reset_failed.html:7
+msgid "This link is invalid or has expired"
+msgstr ""
+
+#: templates/auth/password_reset_failed.html:8
+msgid "Reset links expire after 1 hour. Request a new one to continue."
+msgstr ""
+
+#: templates/auth/password_reset_failed.html:9
+msgid "Request a new link"
+msgstr ""
+
+#: templates/auth/password_reset_request.html:4
+#: templates/auth/password_reset_request.html:7
+#: templates/email/password_reset.html:7
+msgid "Reset password"
+msgstr ""
+
+#: templates/auth/password_reset_request.html:8
+msgid ""
+"Enter the email for your account and we'll send a link to set a new password."
+msgstr ""
+
+#: templates/auth/password_reset_request.html:13
+msgid "Send reset link"
+msgstr ""
+
+#: templates/auth/password_reset_request.html:17
+#: templates/auth/password_reset_sent.html:9
+msgid "Back to sign in"
+msgstr ""
+
+#: templates/auth/password_reset_sent.html:4
+#: templates/auth/password_reset_sent.html:7 templates/auth/signup_done.html:4
+#: templates/auth/signup_done.html:7 templates/auth/verify_resent.html:4
+#: templates/auth/verify_resent.html:7
+msgid "Check your inbox"
+msgstr ""
+
+#: templates/auth/password_reset_sent.html:8
+msgid ""
+"If an account exists for that email, we've sent a link to reset your "
+"password. The link expires in 1 hour."
+msgstr ""
+
+#: templates/auth/signup.html:4
+msgid "Create your account"
+msgstr ""
+
+#: templates/auth/signup.html:7
+#, fuzzy
+#| msgid "organization"
+msgid "Create your organisation"
+msgstr "organisation"
+
+#: templates/auth/signup.html:31
+#, fuzzy
+#| msgid "URL must contain only lowercase letters, digits, and hyphens."
+msgid "Lowercase letters, numbers, and dashes."
+msgstr ""
+"L'URL ne peut contenir que des lettres minuscules, des chiffres et des "
+"traits d'union."
+
+#: templates/auth/signup.html:33
+msgid "Format: BE0123456789"
+msgstr ""
+
+#: templates/auth/signup.html:37
+msgid "Create account"
+msgstr ""
+
+#: templates/auth/signup_done.html:8
+msgid ""
+"We've sent a verification link to your email. Click it to activate your "
+"account."
+msgstr ""
+
+#: templates/auth/signup_done.html:9
+msgid "The link is valid for 7 days."
+msgstr ""
+
+#: templates/auth/verify_already.html:4 templates/auth/verify_already.html:7
+msgid "Already verified"
+msgstr ""
+
+#: templates/auth/verify_already.html:8
+msgid "Your email is already verified - this link has been used."
+msgstr ""
+
+#: templates/auth/verify_failed.html:4
+msgid "Verification link invalid"
+msgstr ""
+
+#: templates/auth/verify_failed.html:7
+msgid "Verification link invalid or expired"
+msgstr ""
+
+#: templates/auth/verify_failed.html:8
+msgid ""
+"This verification link can't be used. It may have expired (links are valid "
+"for 7 days), been tampered with, or already replaced by a newer one."
+msgstr ""
+
+#: templates/auth/verify_failed.html:9
+msgid "to request a new verification email."
+msgstr ""
+
+#: templates/auth/verify_resent.html:8
+msgid ""
+"If an unverified account exists for that email, we've sent a fresh "
+"verification link."
 msgstr ""
 
 #: templates/base_org.html:7 templates/base_picker.html:7
@@ -281,20 +532,75 @@ msgstr ""
 msgid "Sent by %(brand)s."
 msgstr ""
 
+#: templates/email/invitation.html:3 templates/email/invitation.txt:3
+#: templates/email/invitation_revoked.html:3
+#: templates/email/invitation_revoked.txt:3
 #: templates/email/password_reset.html:3 templates/email/password_reset.txt:3
 #: templates/email/verify.html:3 templates/email/verify.txt:3
 #, python-format
 msgid "Hi %(name)s,"
 msgstr ""
 
+#: templates/email/invitation.html:4 templates/email/invitation.txt:5
+#, python-format
+msgid "%(inviter)s invited you to join %(org)s on %(brand)s."
+msgstr ""
+
+#: templates/email/invitation.html:5 templates/email/invitation.txt:7
+msgid "You'll join as an administrator."
+msgstr ""
+
+#: templates/email/invitation.html:5 templates/email/invitation.txt:7
+msgid "You'll join as an operator."
+msgstr ""
+
+#: templates/email/invitation.html:7 templates/email/invitation.txt:9
+msgid "Your assigned locations:"
+msgstr ""
+
+#: templates/email/invitation.html:14
+msgid "Accept invitation"
+msgstr ""
+
+#: templates/email/invitation.html:17 templates/email/invitation.txt:16
+#: templates/email/verify.html:10 templates/email/verify.txt:9
+#, python-format
+msgid "This link expires in %(days)s day."
+msgid_plural "This link expires in %(days)s days."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/email/invitation.html:20 templates/email/invitation.txt:18
+#, python-format
+msgid "Sent for %(org)s. "
+msgstr ""
+
+#: templates/email/invitation.txt:12
+msgid "Accept your invitation:"
+msgstr ""
+
+#: templates/email/invitation_revoked.html:4
+#: templates/email/invitation_revoked.txt:5
+#, python-format
+msgid ""
+"Your invitation to join %(org)s on %(brand)s has been withdrawn. No action "
+"is needed."
+msgstr ""
+
+#: templates/email/invitation_revoked_subject.txt:1
+#, python-format
+msgid "Your invitation to %(org)s was withdrawn"
+msgstr ""
+
+#: templates/email/invitation_subject.txt:1
+#, python-format
+msgid "You're invited to %(org)s on %(brand)s"
+msgstr ""
+
 #: templates/email/password_reset.html:4
 msgid ""
 "We received a request to reset your password. Use the button below to choose "
 "a new one:"
-msgstr ""
-
-#: templates/email/password_reset.html:7
-msgid "Reset password"
 msgstr ""
 
 #: templates/email/password_reset.html:10 templates/email/password_reset.txt:9
@@ -321,13 +627,6 @@ msgstr ""
 #: templates/email/verify.html:7
 msgid "Verify email"
 msgstr ""
-
-#: templates/email/verify.html:10 templates/email/verify.txt:9
-#, python-format
-msgid "This link expires in %(days)s day."
-msgid_plural "This link expires in %(days)s days."
-msgstr[0] ""
-msgstr[1] ""
 
 #: templates/email/verify.html:13 templates/email/verify.txt:11
 #, python-format

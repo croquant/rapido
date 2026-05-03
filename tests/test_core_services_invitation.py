@@ -186,8 +186,14 @@ def test_create_invitation_fires_email_on_commit(
         args, kwargs = send.call_args
         assert args == ("email/invitation",)
         assert kwargs["language"] == "nl-BE"
-        assert kwargs["context"]["org_name"] == inv.organization.name
-        assert kwargs["context"]["accept_url"].startswith("http")
+        ctx = kwargs["context"]
+        assert ctx["organization_name"] == inv.organization.name
+        assert ctx["accept_url"].startswith("http")
+        assert ctx["invitee_email"] == "invitee@example.be"
+        assert ctx["role"] == Role.ADMIN
+        assert ctx["locations"] == []
+        assert ctx["expires_at"] == inv.expires_at
+        assert ctx["inviter_name"]
 
 
 @pytest.mark.django_db

@@ -53,14 +53,22 @@ def _send_invitation_email(invitation: Invitation) -> None:
             addressee = existing
         token = make_invite_token(invitation)
         accept_url = f"{settings.SITE_URL}/invite/{token}/"
+        inviter = invitation.created_by
+        inviter_name = (
+            f"{inviter.first_name} {inviter.last_name}".strip() or inviter.email
+        )
         send_templated(
             "email/invitation",
             to=addressee,
             language=language,
             context={
-                "accept_url": accept_url,
-                "org_name": invitation.organization.name,
+                "invitee_email": invitation.email,
+                "inviter_name": inviter_name,
+                "organization_name": invitation.organization.name,
                 "role": invitation.role,
+                "locations": list(invitation.locations.all()),
+                "accept_url": accept_url,
+                "expires_at": invitation.expires_at,
             },
         )
     except Exception:
