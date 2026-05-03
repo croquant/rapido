@@ -113,6 +113,80 @@ def test_next_param_accepts_path_under_org_slug() -> None:
 
 
 @pytest.mark.django_db
+def test_next_param_rejects_path_traversal() -> None:
+    # Browsers normalize `..` segments in 302 Location headers, so
+    # `?next=/o/acme/../admin/` would redirect to /admin/ if the prefix
+    # check ran on the unnormalized path.
+    user = UserFactory()
+    OrganizationMembershipFactory(
+        user=user,
+        organization=OrganizationFactory(slug="acme"),
+        role=Role.ADMIN,
+    )
+    OrganizationMembershipFactory(
+        user=user,
+        organization=OrganizationFactory(slug="beta"),
+        role=Role.ADMIN,
+    )
+    client = Client()
+    client.force_login(user)
+
+    response = client.get("/orgs/?next=/o/acme/../admin/")
+
+    assert response.status_code == 200
+    assert "auth/org_picker.html" in [t.name for t in response.templates]
+
+
+@pytest.mark.django_db
+def test_next_param_rejects_percent_encoded_traversal() -> None:
+    user = UserFactory()
+    OrganizationMembershipFactory(
+        user=user,
+        organization=OrganizationFactory(slug="acme"),
+        role=Role.ADMIN,
+    )
+    OrganizationMembershipFactory(
+        user=user,
+        organization=OrganizationFactory(slug="beta"),
+        role=Role.ADMIN,
+    )
+    client = Client()
+    client.force_login(user)
+
+    response = client.get("/orgs/?next=/o/acme/%2e%2e/admin/")
+
+    assert response.status_code == 200
+    assert "auth/org_picker.html" in [t.name for t in response.templates]
+
+
+@pytest.mark.django_db
+def test_next_param_for_inactive_org_renders_picker() -> None:
+    # ?next= for an org with active membership but is_active=False on the
+    # org itself must fall through (TenantMiddleware would 404 anyway).
+    # Two other active-org memberships keep the picker rendering instead
+    # of triggering the single-org shortcut.
+    user = UserFactory()
+    for slug in ("active-a", "active-b"):
+        OrganizationMembershipFactory(
+            user=user,
+            organization=OrganizationFactory(slug=slug, is_active=True),
+            role=Role.ADMIN,
+        )
+    OrganizationMembershipFactory(
+        user=user,
+        organization=OrganizationFactory(slug="inactive-org", is_active=False),
+        role=Role.ADMIN,
+    )
+    client = Client()
+    client.force_login(user)
+
+    response = client.get("/orgs/?next=/o/inactive-org/")
+
+    assert response.status_code == 200
+    assert "auth/org_picker.html" in [t.name for t in response.templates]
+
+
+@pytest.mark.django_db
 def test_next_param_for_non_member_renders_picker() -> None:
     user = UserFactory()
     OrganizationFactory(slug="stranger")

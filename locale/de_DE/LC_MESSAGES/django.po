@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rapido\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-03 01:50+0000\n"
+"POT-Creation-Date: 2026-05-03 02:05+0000\n"
 "PO-Revision-Date: 2026-05-01 11:19+0000\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -303,7 +303,7 @@ msgstr "Ungültiger Währungscode. Unterstützte Währungen: %(currencies)s."
 msgid "URL must contain only lowercase letters, digits, and hyphens."
 msgstr "URL darf nur Kleinbuchstaben, Ziffern und Bindestriche enthalten."
 
-#: core/views/auth.py:55
+#: core/views/auth.py:56
 msgid "This email or organisation slug is already in use."
 msgstr ""
 "Diese E-Mail-Adresse oder dieses Organisationskürzel wird bereits verwendet."

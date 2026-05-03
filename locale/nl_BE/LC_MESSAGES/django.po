@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rapido\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-03 01:50+0000\n"
+"POT-Creation-Date: 2026-05-03 02:05+0000\n"
 "PO-Revision-Date: 2026-05-01 11:19+0000\n"
 "Language-Team: Dutch (Belgium)\n"
 "Language: nl_BE\n"
@@ -302,7 +302,7 @@ msgstr "Ongeldige valutacode. Ondersteunde valuta's zijn: %(currencies)s."
 msgid "URL must contain only lowercase letters, digits, and hyphens."
 msgstr "URL mag alleen kleine letters, cijfers en koppeltekens bevatten."
 
-#: core/views/auth.py:55
+#: core/views/auth.py:56
 msgid "This email or organisation slug is already in use."
 msgstr "Dit e-mailadres of deze organisatie-slug is al in gebruik."
 

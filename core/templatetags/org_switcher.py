@@ -15,8 +15,10 @@ def get_org_switcher_memberships(
     cached = getattr(user, "_org_switcher_memberships", None)
     if cached is not None:
         return cached or None
+    # Cross-tenant by design: the switcher needs every active membership
+    # the user has, before any tenant context exists.
     memberships = list(
-        OrganizationMembership.objects.filter(  # noqa: tenant-lint
+        OrganizationMembership.objects.filter(
             user=user, is_active=True, organization__is_active=True
         )
         .select_related("organization")
