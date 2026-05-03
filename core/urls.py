@@ -14,7 +14,14 @@ from .views.auth import (
     signup_done,
     verify,
 )
+from .views.dashboard import dashboard
 from .views.design import design_kitchen_sink
+from .views.settings import (
+    settings_invitations,
+    settings_locations,
+    settings_members,
+    settings_organization,
+)
 
 app_name = "core"
 
@@ -41,6 +48,27 @@ urlpatterns: list[URLPattern] = [
         name="password_reset_confirm",
     ),
     path(route="orgs/", view=org_picker, name="org_picker"),
+    path(route="o/<slug:slug>/", view=dashboard, name="org_dashboard"),
+    path(
+        route="o/<slug:slug>/settings/locations/",
+        view=settings_locations,
+        name="settings_locations",
+    ),
+    path(
+        route="o/<slug:slug>/settings/members/",
+        view=settings_members,
+        name="settings_members",
+    ),
+    path(
+        route="o/<slug:slug>/settings/invitations/",
+        view=settings_invitations,
+        name="settings_invitations",
+    ),
+    path(
+        route="o/<slug:slug>/settings/organization/",
+        view=settings_organization,
+        name="settings_organization",
+    ),
 ]
 
 if settings.DEBUG:
