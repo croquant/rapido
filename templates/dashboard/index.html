@@ -1,0 +1,14 @@
+{% extends "base_org.html" %}
+{% load i18n %}
+
+{% block main %}
+  <h1>{% trans "Dashboard" %}</h1>
+  <nav>
+    <ul>
+      <li><a href="{% url 'core:settings_locations' organization.slug %}">{% trans "Locations" %}</a></li>
+      <li><a href="{% url 'core:settings_members' organization.slug %}">{% trans "Members" %}</a></li>
+      <li><a href="{% url 'core:settings_invitations' organization.slug %}">{% trans "Invitations" %}</a></li>
+      <li><a href="{% url 'core:settings_organization' organization.slug %}">{% trans "Organization" %}</a></li>
+    </ul>
+  </nav>
+{% endblock %}
