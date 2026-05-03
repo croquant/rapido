@@ -31,9 +31,11 @@ class LocationForm(forms.ModelForm):
         if editing:
             self.fields.pop("slug", None)
 
-    def clean_slug(self) -> str:
-        slug = self.cleaned_data["slug"]
-        qs = Location.tenant_objects.for_organization(  # type: ignore[attr-defined]
+    def clean_slug(self) -> str | None:
+        slug = self.cleaned_data.get("slug")
+        if not slug:
+            return slug
+        qs = Location.tenant_objects.for_organization(
             self._organization
         ).filter(slug=slug)
         if self.instance.pk is not None:

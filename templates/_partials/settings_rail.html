@@ -1,6 +1,6 @@
 {% load i18n %}<nav aria-label="{% trans 'Settings' %}">
 <ul>
-<li><a href="{% url 'core:settings_locations' organization.slug %}"{% if request.resolver_match.url_name == 'settings_locations' or request.resolver_match.url_name == 'settings_locations_create' or request.resolver_match.url_name == 'settings_locations_edit' or request.resolver_match.url_name == 'settings_locations_deactivate' or request.resolver_match.url_name == 'settings_locations_reactivate' %} aria-current="page"{% endif %}>{% trans "Locations" %}</a></li>
+<li><a href="{% url 'core:settings_locations' organization.slug %}"{% if 'settings_locations' in request.resolver_match.url_name %} aria-current="page"{% endif %}>{% trans "Locations" %}</a></li>
 <li><a href="{% url 'core:settings_members' organization.slug %}"{% if request.resolver_match.url_name == 'settings_members' %} aria-current="page"{% endif %}>{% trans "Members" %}</a></li>
 <li><a href="{% url 'core:settings_invitations' organization.slug %}"{% if request.resolver_match.url_name == 'settings_invitations' %} aria-current="page"{% endif %}>{% trans "Invitations" %}</a></li>
 <li><a href="{% url 'core:settings_organization' organization.slug %}"{% if request.resolver_match.url_name == 'settings_organization' %} aria-current="page"{% endif %}>{% trans "Organization" %}</a></li>
