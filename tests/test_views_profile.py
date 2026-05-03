@@ -223,9 +223,7 @@ def test_post_password_weak_renders_error() -> None:
 
 
 @pytest.mark.django_db
-def test_post_password_success_keeps_current_session_and_invalidates_others() -> (
-    None
-):
+def test_post_password_success_keeps_session_kills_others() -> None:
     user = UserFactory()
     other_session = _create_db_session_for(user)
     client = Client()
