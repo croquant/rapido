@@ -33,6 +33,7 @@ coverage.xml
 .mypy_cache/
 .pyright/
 .playwright-mcp/
+.gemini/
 
 # IDE / OS
 .idea/
