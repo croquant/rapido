@@ -1,0 +1,10 @@
+{% extends "base_org.html" %}
+{% load i18n %}
+
+{% block main %}
+  <h1>{% trans "Point of sale" %}</h1>
+  <p>{% trans "The POS interface is coming soon." %}</p>
+  {% if location %}
+    <p>{% blocktrans with name=location.name %}Location: {{ name }}{% endblocktrans %}</p>
+  {% endif %}
+{% endblock %}

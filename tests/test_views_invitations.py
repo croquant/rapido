@@ -389,6 +389,7 @@ def test_accept_post_new_user_creates_user_and_memberships() -> None:
     )
 
     assert response.status_code == 302
+    assert client.get(response["Location"]).status_code == 200
     user = User.objects.get(email="newhire@example.be")
     assert OrganizationMembership.objects.filter(
         user=user, organization=org, is_active=True, role=Role.OPERATOR
