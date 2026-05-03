@@ -52,6 +52,21 @@ def test_pos_location_unknown_slug_returns_404() -> None:
 
 
 @pytest.mark.django_db
+def test_pos_location_operator_without_membership_returns_404() -> None:
+    membership = OrganizationMembershipFactory(role=Role.OPERATOR)
+    org = membership.organization
+    assigned = LocationFactory(organization=org, slug="assigned")
+    LocationFactory(organization=org, slug="other")
+    LocationMembershipFactory(user=membership.user, location=assigned)
+    client = Client()
+    client.force_login(membership.user)
+
+    response = client.get(f"/o/{org.slug}/l/other/pos/")
+
+    assert response.status_code == 404
+
+
+@pytest.mark.django_db
 def test_pos_location_inactive_location_returns_404() -> None:
     membership = OrganizationMembershipFactory(role=Role.ADMIN)
     org = membership.organization
