@@ -32,7 +32,6 @@ def test_admin_renders_dashboard_with_settings_links() -> None:
     slug = membership.organization.slug
     assert f"/o/{slug}/settings/locations/" in body
     assert f"/o/{slug}/settings/members/" in body
-    assert f"/o/{slug}/settings/invitations/" in body
     assert f"/o/{slug}/settings/organization/" in body
 
 

@@ -1,0 +1,35 @@
+{% extends "base_org.html" %}
+{% load i18n %}
+
+{% block title %}{{ location.name }}{% endblock %}
+
+{% block rail %}{% include "_partials/settings_rail.html" %}{% endblock %}
+
+{% block main %}
+  <header>
+    <a href="{% url 'core:settings_locations' organization.slug %}">&larr; {% trans "Locations" %}</a>
+    <h1>{{ location.name }}</h1>
+    <p>
+      {% trans "Active" %}: {% if location.is_active %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}
+      &middot;
+      <a href="{% url 'core:settings_locations_edit' organization.slug location.pk %}">{% trans "Edit" %}</a>
+    </p>
+  </header>
+
+  <section aria-labelledby="operators-heading">
+    <h2 id="operators-heading">{% trans "Operators" %}</h2>
+    {% if not operator_memberships %}
+      <p>{% trans "No operators in this organization yet." %}</p>
+    {% else %}
+      <div class="chip-grid" role="list">
+        {% for op in operator_memberships %}
+          {% if op.user_id in active_user_ids %}
+            {% include "locations/_operator_chip.html" with operator=op.user is_active=True %}
+          {% else %}
+            {% include "locations/_operator_chip.html" with operator=op.user is_active=False %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

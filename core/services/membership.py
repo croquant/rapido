@@ -1,6 +1,13 @@
 from django.db import transaction
 
-from core.models import Organization, OrganizationMembership, Role, User
+from core.models import (
+    Location,
+    LocationMembership,
+    Organization,
+    OrganizationMembership,
+    Role,
+    User,
+)
 from core.services.exceptions import LastActiveAdminError
 
 
@@ -122,3 +129,48 @@ def deactivate_user(user: User) -> None:
         locked_user.save(update_fields=["is_active", "updated_at"])
         user.is_active = False
         user.updated_at = locked_user.updated_at
+
+
+def reactivate_membership(membership: OrganizationMembership) -> None:
+    if membership.is_active:
+        return
+    with transaction.atomic():
+        locked = OrganizationMembership.objects.select_for_update().get(
+            pk=membership.pk
+        )
+        if locked.is_active:
+            return
+        locked.is_active = True
+        locked.save(update_fields=["is_active", "updated_at"])
+        membership.is_active = True
+        membership.updated_at = locked.updated_at
+
+
+def toggle_location_membership(
+    *, user: User, location: Location, by: User | None = None
+) -> tuple[LocationMembership, bool]:
+    if not OrganizationMembership.objects.filter(
+        user=user,
+        organization=location.organization,
+        is_active=True,
+    ).exists():
+        raise ValueError(
+            "user has no active membership in the location's organization"
+        )
+    with transaction.atomic():
+        existing = (
+            LocationMembership.objects.select_for_update()
+            .filter(user=user, location=location)
+            .first()
+        )
+        if existing is None:
+            membership = LocationMembership.objects.create(
+                user=user,
+                location=location,
+                is_active=True,
+                created_by=by,
+            )
+            return membership, True
+        existing.is_active = not existing.is_active
+        existing.save(update_fields=["is_active", "updated_at"])
+        return existing, existing.is_active

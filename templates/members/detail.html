@@ -1,0 +1,35 @@
+{% extends "base_org.html" %}
+{% load i18n %}
+
+{% block title %}{{ membership.user.email }}{% endblock %}
+
+{% block rail %}{% include "_partials/settings_rail.html" %}{% endblock %}
+
+{% block main %}
+  <header>
+    <a href="{% url 'core:settings_members' organization.slug %}">&larr; {% trans "Members" %}</a>
+    <h1>{{ membership.user.email }}</h1>
+    <p>
+      {% trans "Role" %}: {{ membership.get_role_display }}
+      &middot;
+      {% trans "Active" %}: {% if membership.is_active %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}
+    </p>
+  </header>
+
+  <section aria-labelledby="locations-heading">
+    <h2 id="locations-heading">{% trans "Locations" %}</h2>
+    {% if not locations %}
+      <p>{% trans "This organization has no active locations." %}</p>
+    {% else %}
+      <div class="chip-grid" role="list">
+        {% for location in locations %}
+          {% if location.pk in active_location_ids %}
+            {% include "members/_location_chip.html" with is_active=True %}
+          {% else %}
+            {% include "members/_location_chip.html" with is_active=False %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

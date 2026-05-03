@@ -1,8 +1,12 @@
 # pyright: reportPrivateImportUsage=false, reportIncompatibleVariableOverride=false
+from datetime import timedelta
+
 import factory
+from django.utils import timezone
 from factory.django import DjangoModelFactory
 
 from core.models import (
+    Invitation,
     Location,
     LocationMembership,
     Organization,
@@ -63,3 +67,16 @@ class LocationMembershipFactory(DjangoModelFactory):
 
     user = factory.SubFactory(UserFactory)
     location = factory.SubFactory(LocationFactory)
+
+
+class InvitationFactory(DjangoModelFactory):
+    class Meta:
+        model = Invitation
+
+    organization = factory.SubFactory(OrganizationFactory)
+    email = factory.Sequence(lambda n: f"invite{n}@example.be")
+    role = Role.OPERATOR
+    created_by = factory.SubFactory(UserFactory)
+    expires_at = factory.LazyFunction(
+        lambda: timezone.now() + timedelta(days=7)
+    )

@@ -1,0 +1,15 @@
+{% load i18n forms %}<form id="invite-modal-form"
+    method="post" action="{% url 'core:settings_invitations_create' organization.slug %}"
+    hx-post="{% url 'core:settings_invitations_create' organization.slug %}"
+    hx-target="#invite-modal-body" hx-swap="innerHTML">
+  {% csrf_token %}
+  <header><h2>{% trans "Invite member" %}</h2></header>
+  {% include "forms/_errors.html" %}
+  {% field form.email %}
+  {% field form.role %}
+  {% field form.locations %}
+  <footer>
+    <button type="button" class="secondary" x-data @click="$dispatch('invite-modal:close')">{% trans "Cancel" %}</button>
+    <button type="submit">{% trans "Send invitation" %}</button>
+  </footer>
+</form>

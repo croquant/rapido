@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rapido\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-03 02:05+0000\n"
+"POT-Creation-Date: 2026-05-03 13:28+0000\n"
 "PO-Revision-Date: 2026-05-01 11:19+0000\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -47,8 +47,10 @@ msgstr "Persönliche Informationen"
 msgid "Permissions"
 msgstr "Berechtigungen"
 
-#: core/forms/auth.py:14 core/forms/auth.py:58 core/forms/signup.py:16
-#: core/views/design.py:37
+#: core/forms/auth.py:14 core/forms/auth.py:58 core/forms/invitation.py:11
+#: core/forms/signup.py:16 core/views/design.py:37
+#: templates/members/list.html:19 templates/members/list.html:41
+#: templates/members/list.html:62
 msgid "Email"
 msgstr "E-Mail"
 
@@ -79,6 +81,32 @@ msgstr "Passwort bestätigen"
 msgid "Passwords do not match."
 msgstr "Passwörter stimmen nicht überein."
 
+#: core/forms/invitation.py:12 core/forms/member.py:8 core/views/design.py:39
+#: templates/members/_row.html:8 templates/members/detail.html:13
+#: templates/members/list.html:20 templates/members/list.html:42
+#: templates/members/list.html:63
+msgid "Role"
+msgstr "Rolle"
+
+#: core/forms/invitation.py:17 templates/_partials/settings_rail.html:3
+#: templates/dashboard/index.html:8 templates/locations/detail.html:10
+#: templates/locations/list.html:4 templates/locations/list.html:10
+#: templates/members/detail.html:20 templates/members/list.html:21
+#, fuzzy
+#| msgid "locations"
+msgid "Locations"
+msgstr "Standorte"
+
+#: core/forms/invitation.py:42 core/views/invitations.py:71
+msgid "Operators must be assigned at least one location."
+msgstr ""
+
+#: core/forms/location.py:46
+#, fuzzy
+#| msgid "An account with this email already exists."
+msgid "A location with this URL already exists in this organization."
+msgstr "Mit dieser E-Mail-Adresse existiert bereits ein Konto."
+
 #: core/forms/signup.py:25
 msgid "Organisation name"
 msgstr "Name der Organisation"
@@ -107,7 +135,7 @@ msgstr "Dieses Kürzel ist bereits vergeben."
 msgid "An account with this email already exists."
 msgstr "Mit dieser E-Mail-Adresse existiert bereits ein Konto."
 
-#: core/models/invitation.py:32 core/models/location.py:27
+#: core/models/invitation.py:32 core/models/location.py:28
 #: core/models/membership.py:29 core/models/organization.py:76
 msgid "organization"
 msgstr "Organisation"
@@ -120,7 +148,7 @@ msgstr "E-Mail"
 msgid "role"
 msgstr "Rolle"
 
-#: core/models/invitation.py:46 core/models/location.py:57
+#: core/models/invitation.py:46 core/models/location.py:61
 msgid "locations"
 msgstr "Standorte"
 
@@ -153,49 +181,50 @@ msgstr "Einladung"
 msgid "invitations"
 msgstr "Einladungen"
 
-#: core/models/location.py:30 core/models/organization.py:34
+#: core/models/location.py:31 core/models/organization.py:34
 msgid "name"
 msgstr "Name"
 
-#: core/models/location.py:34 core/models/organization.py:39
+#: core/models/location.py:35 core/models/organization.py:39
+#: templates/locations/edit.html:11 templates/locations/list.html:18
 msgid "URL"
 msgstr "URL"
 
-#: core/models/location.py:35
+#: core/models/location.py:36
 msgid "Used in web addresses for this location."
 msgstr "Wird in Webadressen für diesen Standort verwendet."
 
-#: core/models/location.py:38
+#: core/models/location.py:39
 msgid "street"
 msgstr "Straße"
 
-#: core/models/location.py:41
+#: core/models/location.py:42
 msgid "postal code"
 msgstr "Postleitzahl"
 
-#: core/models/location.py:44
+#: core/models/location.py:45
 msgid "city"
 msgstr "Stadt"
 
-#: core/models/location.py:47
+#: core/models/location.py:48
 msgid "phone"
 msgstr "Telefon"
 
-#: core/models/location.py:50 core/models/membership.py:37
+#: core/models/location.py:51 core/models/membership.py:37
 #: core/models/membership.py:83 core/models/organization.py:70
 #: core/models/user.py:72
 msgid "active"
 msgstr "aktiv"
 
-#: core/models/location.py:56 core/models/membership.py:75
+#: core/models/location.py:60 core/models/membership.py:75
 msgid "location"
 msgstr "Standort"
 
-#: core/models/membership.py:14
+#: core/models/membership.py:14 templates/members/_row.html:9
 msgid "Admin"
 msgstr "Administrator"
 
-#: core/models/membership.py:15
+#: core/models/membership.py:15 templates/members/_row.html:10
 msgid "Operator"
 msgstr "Operator"
 
@@ -308,17 +337,13 @@ msgid "This email or organisation slug is already in use."
 msgstr ""
 "Diese E-Mail-Adresse oder dieses Organisationskürzel wird bereits verwendet."
 
-#: core/views/design.py:36
+#: core/views/design.py:36 templates/locations/list.html:17
 msgid "Name"
 msgstr "Name"
 
 #: core/views/design.py:36
 msgid "Your full name."
 msgstr "Ihr vollständiger Name."
-
-#: core/views/design.py:39
-msgid "Role"
-msgstr "Rolle"
 
 #: core/views/design.py:40
 msgid "Owner"
@@ -332,6 +357,14 @@ msgstr "Mitarbeiter"
 msgid "Accept terms"
 msgstr "Bedingungen akzeptieren"
 
+#: core/views/invitations.py:65
+msgid "This person is already an active member of this organization."
+msgstr ""
+
+#: core/views/invitations.py:78
+msgid "A pending invitation already exists for this email."
+msgstr ""
+
 #: templates/_partials/lang_switcher.html:2
 #: templates/_partials/lang_switcher.html:3
 msgid "Change language"
@@ -344,6 +377,22 @@ msgstr "Organisation wechseln"
 #: templates/_partials/org_switcher.html:3
 msgid "Switch"
 msgstr "Wechseln"
+
+#: templates/_partials/settings_rail.html:1
+msgid "Settings"
+msgstr ""
+
+#: templates/_partials/settings_rail.html:4 templates/dashboard/index.html:9
+#: templates/members/detail.html:10 templates/members/list.html:4
+#: templates/members/list.html:10 templates/members/list.html:37
+msgid "Members"
+msgstr ""
+
+#: templates/_partials/settings_rail.html:5 templates/dashboard/index.html:10
+#, fuzzy
+#| msgid "organization"
+msgid "Organization"
+msgstr "Organisation"
 
 #: templates/_partials/user_menu.html:3
 msgid "Profile"
@@ -523,6 +572,10 @@ msgstr ""
 msgid "Skip to content"
 msgstr "Zum Inhalt springen"
 
+#: templates/dashboard/index.html:5
+msgid "Dashboard"
+msgstr ""
+
 #: templates/email/_base.html:15 templates/email/_base.txt:4
 #, python-format
 msgid "Sent by %(brand)s."
@@ -653,6 +706,176 @@ msgstr "Registrieren"
 #: templates/home.html:10
 msgid "Log in"
 msgstr "Anmelden"
+
+#: templates/locations/_row.html:5 templates/locations/detail.html:13
+#: templates/members/_row.html:14 templates/members/detail.html:15
+msgid "Yes"
+msgstr ""
+
+#: templates/locations/_row.html:5 templates/locations/detail.html:13
+#: templates/members/_row.html:14 templates/members/detail.html:15
+msgid "No"
+msgstr ""
+
+#: templates/locations/_row.html:7 templates/locations/detail.html:15
+msgid "Edit"
+msgstr ""
+
+#: templates/locations/_row.html:11 templates/members/_row.html:22
+#, fuzzy
+#| msgid "active"
+msgid "Deactivate"
+msgstr "aktiv"
+
+#: templates/locations/_row.html:16 templates/members/_row.html:29
+#, fuzzy
+#| msgid "active"
+msgid "Reactivate"
+msgstr "aktiv"
+
+#: templates/locations/create.html:4 templates/locations/create.html:9
+#: templates/locations/list.html:11
+#, fuzzy
+#| msgid "location"
+msgid "New location"
+msgstr "Standort"
+
+#: templates/locations/create.html:19
+#, fuzzy
+#| msgid "created by"
+msgid "Create"
+msgstr "erstellt von"
+
+#: templates/locations/create.html:20 templates/locations/edit.html:23
+#: templates/members/_invite_modal.html:12
+msgid "Cancel"
+msgstr ""
+
+#: templates/locations/detail.html:13 templates/locations/list.html:20
+#: templates/members/detail.html:15 templates/members/list.html:43
+#, fuzzy
+#| msgid "active"
+msgid "Active"
+msgstr "aktiv"
+
+#: templates/locations/detail.html:20
+#, fuzzy
+#| msgid "Operator"
+msgid "Operators"
+msgstr "Operator"
+
+#: templates/locations/detail.html:22
+msgid "No operators in this organization yet."
+msgstr ""
+
+#: templates/locations/edit.html:4 templates/locations/edit.html:9
+#, fuzzy
+#| msgid "location"
+msgid "Edit location"
+msgstr "Standort"
+
+#: templates/locations/edit.html:12
+msgid "URL cannot be changed once set."
+msgstr ""
+
+#: templates/locations/edit.html:22
+msgid "Save"
+msgstr ""
+
+#: templates/locations/list.html:19
+msgid "City"
+msgstr ""
+
+#: templates/locations/list.html:21 templates/members/list.html:23
+#: templates/members/list.html:44
+#, fuzzy
+#| msgid "locations"
+msgid "Actions"
+msgstr "Standorte"
+
+#: templates/locations/list.html:28
+#, fuzzy
+#| msgid "locations"
+msgid "No locations yet."
+msgstr "Standorte"
+
+#: templates/members/_invitation_row.html:14
+msgid "Resend"
+msgstr ""
+
+#: templates/members/_invitation_row.html:20
+#, fuzzy
+#| msgid "revoked by"
+msgid "Revoke"
+msgstr "widerrufen von"
+
+#: templates/members/_invitation_row.html:25
+#, fuzzy
+#| msgid "revoked by"
+msgid "Revoked"
+msgstr "widerrufen von"
+
+#: templates/members/_invitation_row.html:25
+msgid "Expired"
+msgstr ""
+
+#: templates/members/_invite_modal.html:6 templates/members/list.html:11
+msgid "Invite member"
+msgstr ""
+
+#: templates/members/_invite_modal.html:13
+#, fuzzy
+#| msgid "invitation"
+msgid "Send invitation"
+msgstr "Einladung"
+
+#: templates/members/_row.html:16
+msgid "Detail"
+msgstr ""
+
+#: templates/members/detail.html:22
+#, fuzzy
+#| msgid "Organization would have no active ADMIN after this change."
+msgid "This organization has no active locations."
+msgstr "Organisation hätte nach dieser Änderung keinen aktiven ADMIN mehr."
+
+#: templates/members/list.html:15
+#, fuzzy
+#| msgid "invitations"
+msgid "Pending invitations"
+msgstr "Einladungen"
+
+#: templates/members/list.html:22
+#, fuzzy
+#| msgid "expires at"
+msgid "Expires"
+msgstr "läuft ab am"
+
+#: templates/members/list.html:30
+#, fuzzy
+#| msgid "invitations"
+msgid "No pending invitations."
+msgstr "Einladungen"
+
+#: templates/members/list.html:51
+msgid "No members yet."
+msgstr ""
+
+#: templates/members/list.html:58
+msgid "Archive (revoked and expired invitations)"
+msgstr ""
+
+#: templates/members/list.html:64
+msgid "Status"
+msgstr ""
+
+#: templates/members/list.html:65
+msgid "When"
+msgstr ""
+
+#: templates/members/list.html:72
+msgid "Archive is empty."
+msgstr ""
 
 #~ msgid "Important dates"
 #~ msgstr "Wichtige Daten"

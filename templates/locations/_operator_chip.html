@@ -1,0 +1,12 @@
+{% load i18n %}<form id="loc-chip-user-{{ operator.pk }}"
+    method="post"
+    action="{% url 'core:settings_locations_toggle_operator' organization.slug location.pk operator.pk %}"
+    hx-post="{% url 'core:settings_locations_toggle_operator' organization.slug location.pk operator.pk %}"
+    hx-target="#loc-chip-user-{{ operator.pk }}" hx-swap="outerHTML"
+    role="listitem" style="display:inline-block">
+  {% csrf_token %}
+  <button type="submit" class="{% if is_active %}chip chip-on{% else %}chip chip-off secondary{% endif %}"
+          aria-pressed="{% if is_active %}true{% else %}false{% endif %}">
+    {{ operator.email }}{% if is_active %} <span aria-hidden="true">&times;</span>{% else %} <span aria-hidden="true">+</span>{% endif %}
+  </button>
+</form>

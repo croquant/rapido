@@ -1,0 +1,87 @@
+{% extends "base_org.html" %}
+{% load i18n forms %}
+
+{% block title %}{% trans "Members" %}{% endblock %}
+
+{% block rail %}{% include "_partials/settings_rail.html" %}{% endblock %}
+
+{% block main %}
+  <header>
+    <h1>{% trans "Members" %}</h1>
+    <button type="button" x-data @click="$dispatch('invite-modal:open')">{% trans "Invite member" %}</button>
+  </header>
+
+  <section aria-labelledby="pending-invitations-heading">
+    <h2 id="pending-invitations-heading">{% trans "Pending invitations" %}</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>{% trans "Email" %}</th>
+          <th>{% trans "Role" %}</th>
+          <th>{% trans "Locations" %}</th>
+          <th>{% trans "Expires" %}</th>
+          <th>{% trans "Actions" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for invitation in pending_invitations %}
+          {% include "members/_invitation_row.html" with variant="pending" %}
+        {% empty %}
+          <tr><td colspan="5">{% trans "No pending invitations." %}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <section aria-labelledby="members-heading">
+    <h2 id="members-heading">{% trans "Members" %}</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>{% trans "Email" %}</th>
+          <th>{% trans "Role" %}</th>
+          <th>{% trans "Active" %}</th>
+          <th>{% trans "Actions" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for membership in memberships %}
+          {% include "members/_row.html" %}
+        {% empty %}
+          <tr><td colspan="4">{% trans "No members yet." %}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <details>
+    <summary>{% trans "Archive (revoked and expired invitations)" %}</summary>
+    <table>
+      <thead>
+        <tr>
+          <th>{% trans "Email" %}</th>
+          <th>{% trans "Role" %}</th>
+          <th>{% trans "Status" %}</th>
+          <th>{% trans "When" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for invitation in archived_invitations %}
+          {% include "members/_invitation_row.html" with variant="archived" %}
+        {% empty %}
+          <tr><td colspan="4">{% trans "Archive is empty." %}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </details>
+
+  <dialog
+    x-data
+    @invite-modal:open.window="if (!$el.open) $el.showModal()"
+    @invite-modal:close.window="if ($el.open) $el.close()"
+  >
+    <article id="invite-modal-body">
+      {% include "members/_invite_modal.html" with form=invite_form %}
+    </article>
+  </dialog>
+{% endblock %}
