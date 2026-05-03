@@ -2,7 +2,7 @@ from django.conf import settings
 from django.urls import path
 from django.urls.resolvers import URLPattern
 
-from .views import home, invitations, locations, members
+from .views import home, invitations, locations, members, profile
 from .views.auth import (
     login,
     logout,
@@ -48,6 +48,17 @@ urlpatterns: list[URLPattern] = [
         name="password_reset_confirm",
     ),
     path(route="orgs/", view=org_picker, name="org_picker"),
+    path(route="me/", view=profile.me, name="profile"),
+    path(
+        route="me/profile/",
+        view=profile.update_profile_view,
+        name="profile_update",
+    ),
+    path(
+        route="me/password/",
+        view=profile.change_password_view,
+        name="profile_password",
+    ),
     path(route="o/<slug:slug>/", view=dashboard, name="org_dashboard"),
     path(
         route="o/<slug:slug>/settings/locations/",
