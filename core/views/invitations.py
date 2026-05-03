@@ -185,11 +185,6 @@ def accept(request: HttpRequest, token: str) -> HttpResponse:
 
     organization = invitation.organization
 
-    if request.user.is_authenticated:
-        current_email = (request.user.email or "").lower()  # type: ignore[union-attr]
-        if current_email != invitation.email:
-            auth_logout(request)
-
     if invitation.accepted_at is not None:
         return _accept_error(
             request,
@@ -223,7 +218,9 @@ def accept(request: HttpRequest, token: str) -> HttpResponse:
             stale_locations=stale,
         )
 
-    existing_user = User.objects.filter(email__iexact=invitation.email).first()
+    existing_user = User.objects.filter(  # noqa: tenant-lint
+        email__iexact=invitation.email
+    ).first()
     if existing_user is not None:
         active_membership = OrganizationMembership.objects.filter(  # noqa: tenant-lint
             user=existing_user,
@@ -239,6 +236,15 @@ def accept(request: HttpRequest, token: str) -> HttpResponse:
             )
 
     if request.method == "POST":
+        # Mismatched authenticated user: clear the wrong session before
+        # processing the accept (no-op on GET to keep it side-effect-free,
+        # since /invite/<token>/ is publicly reachable and a GET-side
+        # logout would be a CSRF-style logout vector).
+        if (
+            request.user.is_authenticated
+            and (request.user.email or "").lower() != invitation.email  # type: ignore[union-attr]
+        ):
+            auth_logout(request)
         if existing_user is None:
             form = InviteAcceptForm(request.POST)
             if not form.is_valid():

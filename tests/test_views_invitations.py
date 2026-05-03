@@ -556,7 +556,7 @@ def test_accept_post_atomic_rollback_on_service_failure(
 
     real_create = LocationMembership.objects.create
 
-    def boom(*args, **kwargs):  # noqa: ARG001
+    def boom(*args: object, **kwargs: object) -> None:  # noqa: ARG001
         raise RuntimeError("boom")
 
     monkeypatch.setattr(
@@ -636,7 +636,9 @@ def test_accept_authenticated_matching_email_proceeds() -> None:
 
 
 @pytest.mark.django_db
-def test_accept_authenticated_mismatched_email_logs_out_and_renders() -> None:
+def test_accept_get_mismatched_email_does_not_logout() -> None:
+    # GET must be side-effect-free: a logout-on-GET on this public URL would
+    # be a CSRF-style logout vector (e.g., <img src="/invite/<token>/">).
     other_user = UserFactory(email="someone-else@example.be")
     invite = _make_invite(email="newhire@example.be")
     token = make_invite_token(invite)
@@ -646,8 +648,27 @@ def test_accept_authenticated_mismatched_email_logs_out_and_renders() -> None:
     response = client.get(_accept_url(token))
 
     assert response.status_code == 200
-    assert response.wsgi_request.user.is_anonymous
+    assert response.wsgi_request.user.is_authenticated
+    assert response.wsgi_request.user.pk == other_user.pk
     assert b'name="new_password"' in response.content
+
+
+@pytest.mark.django_db
+def test_accept_post_mismatched_email_logs_out_and_processes() -> None:
+    other_user = UserFactory(email="someone-else@example.be")
+    invite = _make_invite(email="newhire@example.be")
+    token = make_invite_token(invite)
+    client = Client()
+    client.force_login(other_user)
+
+    response = client.post(
+        _accept_url(token),
+        {"new_password": "Sup3rSecret!", "confirm_password": "Sup3rSecret!"},
+    )
+
+    assert response.status_code == 302
+    new_user = User.objects.get(email="newhire@example.be")
+    assert response.wsgi_request.user.pk == new_user.pk
 
 
 @pytest.mark.django_db
