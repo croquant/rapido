@@ -1,0 +1,20 @@
+{% load i18n %}<tr id="location-row-{{ location.pk }}">
+  <td>{{ location.name }}</td>
+  <td><code>{{ location.slug }}</code></td>
+  <td>{{ location.city }}</td>
+  <td>{% if location.is_active %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</td>
+  <td>
+    <a href="{% url 'core:settings_locations_edit' organization.slug location.pk %}">{% trans "Edit" %}</a>
+    {% if location.is_active %}
+      <form method="post" action="{% url 'core:settings_locations_deactivate' organization.slug location.pk %}" hx-post="{% url 'core:settings_locations_deactivate' organization.slug location.pk %}" hx-target="#location-row-{{ location.pk }}" hx-swap="outerHTML" style="display:inline">
+        {% csrf_token %}
+        <button type="submit" class="secondary">{% trans "Deactivate" %}</button>
+      </form>
+    {% else %}
+      <form method="post" action="{% url 'core:settings_locations_reactivate' organization.slug location.pk %}" hx-post="{% url 'core:settings_locations_reactivate' organization.slug location.pk %}" hx-target="#location-row-{{ location.pk }}" hx-swap="outerHTML" style="display:inline">
+        {% csrf_token %}
+        <button type="submit">{% trans "Reactivate" %}</button>
+      </form>
+    {% endif %}
+  </td>
+</tr>

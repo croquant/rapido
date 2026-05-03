@@ -10,6 +10,7 @@ from django.db.models.fields import (
 )
 from django.utils.translation import gettext_lazy as _
 
+from core.managers import TenantOwnedManager
 from core.models.base import TimestampedModel
 from core.models.organization import Organization
 from core.utils.ids import uuid7
@@ -49,6 +50,9 @@ class Location(TimestampedModel):
     is_active: BooleanField[bool] = models.BooleanField(
         default=True, verbose_name=_("active")
     )
+
+    objects: ClassVar[models.Manager[Location]] = models.Manager()  # type: ignore[assignment]
+    tenant_objects: ClassVar[TenantOwnedManager] = TenantOwnedManager()
 
     class Meta(TimestampedModel.Meta):
         abstract = False
