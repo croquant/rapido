@@ -14,32 +14,30 @@ msgstr ""
 #: core/admin.py:59
 #, python-format
 msgid "Cannot change: %(org)s would have no active ADMIN."
-msgstr ""
+msgstr "Modification impossible : %(org)s n'aurait plus d'ADMIN actif."
 
 #: core/admin.py:100
 #, python-format
 msgid "Cannot deactivate: user is the last active ADMIN of %(orgs)s."
 msgstr ""
+"Désactivation impossible : l'utilisateur est le dernier ADMIN actif de "
+"%(orgs)s."
 
 #: core/admin.py:169
 msgid "Organization would have no active ADMIN after this change."
-msgstr ""
+msgstr "L'organisation n'aurait plus d'ADMIN actif après cette modification."
 
 #: core/admin.py:215
-#, fuzzy
-#| msgid "location"
 msgid "Localisation"
-msgstr "établissement"
+msgstr "Localisation"
 
 #: core/admin.py:225
-#, fuzzy
-#| msgid "billing email"
 msgid "Billing"
-msgstr "e-mail de facturation"
+msgstr "Facturation"
 
 #: core/admin.py:227 core/admin.py:262
 msgid "Identifiers"
-msgstr ""
+msgstr "Identifiants"
 
 #: core/admin.py:240
 msgid "Personal info"
@@ -51,69 +49,63 @@ msgstr "Permissions"
 
 #: core/forms/auth.py:14 core/forms/auth.py:58 core/forms/signup.py:16
 #: core/views/design.py:37
-#, fuzzy
-#| msgid "email"
 msgid "Email"
-msgstr "e-mail"
+msgstr "E-mail"
 
 #: core/forms/auth.py:18 core/forms/signup.py:20
 msgid "Password"
-msgstr ""
+msgstr "Mot de passe"
 
 #: core/forms/auth.py:40
 msgid "Invalid email or password."
-msgstr ""
+msgstr "E-mail ou mot de passe invalide."
 
 #: core/forms/auth.py:45
 msgid ""
 "Your email isn't verified yet. Check your inbox for the verification link."
 msgstr ""
+"Votre e-mail n'est pas encore vérifié. Consultez votre boîte de réception "
+"pour trouver le lien de vérification."
 
 #: core/forms/auth.py:68
 msgid "New password"
-msgstr ""
+msgstr "Nouveau mot de passe"
 
 #: core/forms/auth.py:73
 msgid "Confirm password"
-msgstr ""
+msgstr "Confirmer le mot de passe"
 
 #: core/forms/auth.py:89
 msgid "Passwords do not match."
-msgstr ""
+msgstr "Les mots de passe ne correspondent pas."
 
 #: core/forms/signup.py:25
-#, fuzzy
-#| msgid "organization"
 msgid "Organisation name"
-msgstr "organisation"
+msgstr "Nom de l'organisation"
 
 #: core/forms/signup.py:29
 msgid "URL slug"
-msgstr ""
+msgstr "Slug d'URL"
 
 #: core/forms/signup.py:34 core/models/organization.py:64
 msgid "VAT number"
 msgstr "numéro de TVA"
 
 #: core/forms/signup.py:37
-#, fuzzy
-#| msgid "country"
 msgid "Country"
-msgstr "pays"
+msgstr "Pays"
 
 #: core/forms/signup.py:39
-#, fuzzy
-#| msgid "default language"
 msgid "Language"
-msgstr "langue par défaut"
+msgstr "Langue"
 
 #: core/forms/signup.py:57
 msgid "This slug is already taken."
-msgstr ""
+msgstr "Ce slug est déjà utilisé."
 
 #: core/forms/signup.py:62
 msgid "An account with this email already exists."
-msgstr ""
+msgstr "Un compte existe déjà pour cet e-mail."
 
 #: core/models/invitation.py:32 core/models/location.py:27
 #: core/models/membership.py:29 core/models/organization.py:76
@@ -138,34 +130,28 @@ msgid "created by"
 msgstr "créé par"
 
 #: core/models/invitation.py:60
-#, fuzzy
-#| msgid "created by"
 msgid "revoked by"
-msgstr "créé par"
+msgstr "révoqué par"
 
 #: core/models/invitation.py:63
 msgid "expires at"
-msgstr ""
+msgstr "expire le"
 
 #: core/models/invitation.py:66
 msgid "accepted at"
-msgstr ""
+msgstr "accepté le"
 
 #: core/models/invitation.py:69
 msgid "revoked at"
-msgstr ""
+msgstr "révoqué le"
 
 #: core/models/invitation.py:78
-#, fuzzy
-#| msgid "organization"
 msgid "invitation"
-msgstr "organisation"
+msgstr "invitation"
 
 #: core/models/invitation.py:79
-#, fuzzy
-#| msgid "organizations"
 msgid "invitations"
-msgstr "organisations"
+msgstr "invitations"
 
 #: core/models/location.py:30 core/models/organization.py:34
 msgid "name"
@@ -321,216 +307,217 @@ msgstr ""
 
 #: core/views/auth.py:54
 msgid "This email or organisation slug is already in use."
-msgstr ""
+msgstr "Cet e-mail ou ce slug d'organisation est déjà utilisé."
 
 #: core/views/design.py:36
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: core/views/design.py:36
 msgid "Your full name."
-msgstr ""
+msgstr "Votre nom complet."
 
 #: core/views/design.py:39
 msgid "Role"
-msgstr ""
+msgstr "Rôle"
 
 #: core/views/design.py:40
 msgid "Owner"
-msgstr ""
+msgstr "Propriétaire"
 
 #: core/views/design.py:40
 msgid "Staff"
-msgstr ""
+msgstr "Équipe"
 
 #: core/views/design.py:42
 msgid "Accept terms"
-msgstr ""
+msgstr "Accepter les conditions"
 
 #: templates/_partials/lang_switcher.html:2
 #: templates/_partials/lang_switcher.html:3
-#, fuzzy
-#| msgid "default language"
 msgid "Change language"
-msgstr "langue par défaut"
+msgstr "Changer de langue"
 
 #: templates/_partials/user_menu.html:3
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: templates/_partials/user_menu.html:3 templates/auth/org_picker.html:28
 msgid "Sign out"
-msgstr ""
+msgstr "Se déconnecter"
 
 #: templates/auth/login.html:4 templates/auth/login.html:7
 #: templates/auth/login.html:14 templates/auth/verify_already.html:9
 #: templates/auth/verify_failed.html:9
 msgid "Sign in"
-msgstr ""
+msgstr "Se connecter"
 
 #: templates/auth/login.html:22
 msgid "Resend verification email"
-msgstr ""
+msgstr "Renvoyer l'e-mail de vérification"
 
 #: templates/auth/login.html:26
 msgid "Forgot password?"
-msgstr ""
+msgstr "Mot de passe oublié ?"
 
 #: templates/auth/login.html:27
 msgid "Create an account"
-msgstr ""
+msgstr "Créer un compte"
 
 #: templates/auth/org_picker.html:4 templates/auth/org_picker.html:8
-#, fuzzy
-#| msgid "organization"
 msgid "Choose an organisation"
-msgstr "organisation"
+msgstr "Choisir une organisation"
 
 #: templates/auth/org_picker.html:24
-#, fuzzy
-#| msgid "organizations"
 msgid "No organisations"
-msgstr "organisations"
+msgstr "Aucune organisation"
 
 #: templates/auth/org_picker.html:25
 msgid "Your account isn't linked to any active organisation."
-msgstr ""
+msgstr "Votre compte n'est lié à aucune organisation active."
 
 #: templates/auth/password_reset_confirm.html:4
 #: templates/auth/password_reset_confirm.html:7
 msgid "Choose a new password"
-msgstr ""
+msgstr "Choisir un nouveau mot de passe"
 
 #: templates/auth/password_reset_confirm.html:13
 msgid "Set new password"
-msgstr ""
+msgstr "Définir le nouveau mot de passe"
 
 #: templates/auth/password_reset_failed.html:4
 msgid "Reset link invalid"
-msgstr ""
+msgstr "Lien de réinitialisation invalide"
 
 #: templates/auth/password_reset_failed.html:7
 msgid "This link is invalid or has expired"
-msgstr ""
+msgstr "Ce lien est invalide ou a expiré"
 
 #: templates/auth/password_reset_failed.html:8
 msgid "Reset links expire after 1 hour. Request a new one to continue."
 msgstr ""
+"Les liens de réinitialisation expirent après 1 heure. Demandez-en un "
+"nouveau pour continuer."
 
 #: templates/auth/password_reset_failed.html:9
 msgid "Request a new link"
-msgstr ""
+msgstr "Demander un nouveau lien"
 
 #: templates/auth/password_reset_request.html:4
 #: templates/auth/password_reset_request.html:7
 #: templates/email/password_reset.html:7
 msgid "Reset password"
-msgstr ""
+msgstr "Réinitialiser le mot de passe"
 
 #: templates/auth/password_reset_request.html:8
 msgid ""
 "Enter the email for your account and we'll send a link to set a new password."
 msgstr ""
+"Indiquez l'e-mail de votre compte et nous vous enverrons un lien pour "
+"définir un nouveau mot de passe."
 
 #: templates/auth/password_reset_request.html:13
 msgid "Send reset link"
-msgstr ""
+msgstr "Envoyer le lien de réinitialisation"
 
 #: templates/auth/password_reset_request.html:17
 #: templates/auth/password_reset_sent.html:9
 msgid "Back to sign in"
-msgstr ""
+msgstr "Retour à la connexion"
 
 #: templates/auth/password_reset_sent.html:4
 #: templates/auth/password_reset_sent.html:7 templates/auth/signup_done.html:4
 #: templates/auth/signup_done.html:7 templates/auth/verify_resent.html:4
 #: templates/auth/verify_resent.html:7
 msgid "Check your inbox"
-msgstr ""
+msgstr "Consultez votre boîte de réception"
 
 #: templates/auth/password_reset_sent.html:8
 msgid ""
 "If an account exists for that email, we've sent a link to reset your "
 "password. The link expires in 1 hour."
 msgstr ""
+"Si un compte existe pour cet e-mail, nous avons envoyé un lien pour "
+"réinitialiser votre mot de passe. Le lien expire dans 1 heure."
 
 #: templates/auth/signup.html:4
 msgid "Create your account"
-msgstr ""
+msgstr "Créez votre compte"
 
 #: templates/auth/signup.html:7
-#, fuzzy
-#| msgid "organization"
 msgid "Create your organisation"
-msgstr "organisation"
+msgstr "Créez votre organisation"
 
 #: templates/auth/signup.html:31
-#, fuzzy
-#| msgid "URL must contain only lowercase letters, digits, and hyphens."
 msgid "Lowercase letters, numbers, and dashes."
-msgstr ""
-"L'URL ne peut contenir que des lettres minuscules, des chiffres et des "
-"traits d'union."
+msgstr "Lettres minuscules, chiffres et traits d'union."
 
 #: templates/auth/signup.html:33
 msgid "Format: BE0123456789"
-msgstr ""
+msgstr "Format : BE0123456789"
 
 #: templates/auth/signup.html:37
 msgid "Create account"
-msgstr ""
+msgstr "Créer le compte"
 
 #: templates/auth/signup_done.html:8
 msgid ""
 "We've sent a verification link to your email. Click it to activate your "
 "account."
 msgstr ""
+"Nous avons envoyé un lien de vérification à votre e-mail. Cliquez dessus "
+"pour activer votre compte."
 
 #: templates/auth/signup_done.html:9
 msgid "The link is valid for 7 days."
-msgstr ""
+msgstr "Le lien est valide pendant 7 jours."
 
 #: templates/auth/verify_already.html:4 templates/auth/verify_already.html:7
 msgid "Already verified"
-msgstr ""
+msgstr "Déjà vérifié"
 
 #: templates/auth/verify_already.html:8
 msgid "Your email is already verified - this link has been used."
-msgstr ""
+msgstr "Votre e-mail est déjà vérifié - ce lien a été utilisé."
 
 #: templates/auth/verify_failed.html:4
 msgid "Verification link invalid"
-msgstr ""
+msgstr "Lien de vérification invalide"
 
 #: templates/auth/verify_failed.html:7
 msgid "Verification link invalid or expired"
-msgstr ""
+msgstr "Lien de vérification invalide ou expiré"
 
 #: templates/auth/verify_failed.html:8
 msgid ""
 "This verification link can't be used. It may have expired (links are valid "
 "for 7 days), been tampered with, or already replaced by a newer one."
 msgstr ""
+"Ce lien de vérification ne peut pas être utilisé. Il a peut-être expiré "
+"(les liens sont valides pendant 7 jours), été altéré ou déjà remplacé par "
+"un plus récent."
 
 #: templates/auth/verify_failed.html:9
 msgid "to request a new verification email."
-msgstr ""
+msgstr "pour demander un nouvel e-mail de vérification."
 
 #: templates/auth/verify_resent.html:8
 msgid ""
 "If an unverified account exists for that email, we've sent a fresh "
 "verification link."
 msgstr ""
+"Si un compte non vérifié existe pour cet e-mail, nous avons envoyé un "
+"nouveau lien de vérification."
 
 #: templates/base_org.html:7 templates/base_picker.html:7
 #: templates/base_public.html:7
 msgid "Skip to content"
-msgstr ""
+msgstr "Aller au contenu"
 
 #: templates/email/_base.html:15 templates/email/_base.txt:4
 #, python-format
 msgid "Sent by %(brand)s."
-msgstr ""
+msgstr "Envoyé par %(brand)s."
 
 #: templates/email/invitation.html:3 templates/email/invitation.txt:3
 #: templates/email/invitation_revoked.html:3
@@ -539,45 +526,45 @@ msgstr ""
 #: templates/email/verify.html:3 templates/email/verify.txt:3
 #, python-format
 msgid "Hi %(name)s,"
-msgstr ""
+msgstr "Bonjour %(name)s,"
 
 #: templates/email/invitation.html:4 templates/email/invitation.txt:5
 #, python-format
 msgid "%(inviter)s invited you to join %(org)s on %(brand)s."
-msgstr ""
+msgstr "%(inviter)s vous a invité à rejoindre %(org)s sur %(brand)s."
 
 #: templates/email/invitation.html:5 templates/email/invitation.txt:7
 msgid "You'll join as an administrator."
-msgstr ""
+msgstr "Vous rejoindrez en tant qu'administrateur."
 
 #: templates/email/invitation.html:5 templates/email/invitation.txt:7
 msgid "You'll join as an operator."
-msgstr ""
+msgstr "Vous rejoindrez en tant qu'opérateur."
 
 #: templates/email/invitation.html:7 templates/email/invitation.txt:9
 msgid "Your assigned locations:"
-msgstr ""
+msgstr "Vos établissements assignés :"
 
 #: templates/email/invitation.html:14
 msgid "Accept invitation"
-msgstr ""
+msgstr "Accepter l'invitation"
 
 #: templates/email/invitation.html:17 templates/email/invitation.txt:16
 #: templates/email/verify.html:10 templates/email/verify.txt:9
 #, python-format
 msgid "This link expires in %(days)s day."
 msgid_plural "This link expires in %(days)s days."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ce lien expire dans %(days)s jour."
+msgstr[1] "Ce lien expire dans %(days)s jours."
 
 #: templates/email/invitation.html:20 templates/email/invitation.txt:18
 #, python-format
 msgid "Sent for %(org)s. "
-msgstr ""
+msgstr "Envoyé pour %(org)s. "
 
 #: templates/email/invitation.txt:12
 msgid "Accept your invitation:"
-msgstr ""
+msgstr "Acceptez votre invitation :"
 
 #: templates/email/invitation_revoked.html:4
 #: templates/email/invitation_revoked.txt:5
@@ -586,69 +573,77 @@ msgid ""
 "Your invitation to join %(org)s on %(brand)s has been withdrawn. No action "
 "is needed."
 msgstr ""
+"Votre invitation à rejoindre %(org)s sur %(brand)s a été retirée. Aucune "
+"action n'est nécessaire."
 
 #: templates/email/invitation_revoked_subject.txt:1
 #, python-format
 msgid "Your invitation to %(org)s was withdrawn"
-msgstr ""
+msgstr "Votre invitation à %(org)s a été retirée"
 
 #: templates/email/invitation_subject.txt:1
 #, python-format
 msgid "You're invited to %(org)s on %(brand)s"
-msgstr ""
+msgstr "Vous êtes invité à %(org)s sur %(brand)s"
 
 #: templates/email/password_reset.html:4
 msgid ""
 "We received a request to reset your password. Use the button below to choose "
 "a new one:"
 msgstr ""
+"Nous avons reçu une demande de réinitialisation de votre mot de passe. "
+"Utilisez le bouton ci-dessous pour en choisir un nouveau :"
 
 #: templates/email/password_reset.html:10 templates/email/password_reset.txt:9
 msgid ""
 "This link expires in 1 hour. If you did not request a password reset, you "
 "can ignore this email."
 msgstr ""
+"Ce lien expire dans 1 heure. Si vous n'avez pas demandé de "
+"réinitialisation, vous pouvez ignorer cet e-mail."
 
 #: templates/email/password_reset.txt:5
 msgid ""
 "We received a request to reset your password. Use the link below to choose a "
 "new one:"
 msgstr ""
+"Nous avons reçu une demande de réinitialisation de votre mot de passe. "
+"Utilisez le lien ci-dessous pour en choisir un nouveau :"
 
 #: templates/email/password_reset_subject.txt:1
 #, python-format
 msgid "Reset your %(brand)s password"
-msgstr ""
+msgstr "Réinitialisez votre mot de passe %(brand)s"
 
 #: templates/email/verify.html:4 templates/email/verify.txt:5
 msgid "Confirm your email address to activate your account:"
-msgstr ""
+msgstr "Confirmez votre adresse e-mail pour activer votre compte :"
 
 #: templates/email/verify.html:7
 msgid "Verify email"
-msgstr ""
+msgstr "Vérifier l'e-mail"
 
 #: templates/email/verify.html:13 templates/email/verify.txt:11
 #, python-format
 msgid "Sent for %(org_name)s. "
-msgstr ""
+msgstr "Envoyé pour %(org_name)s. "
 
 #: templates/email/verify_subject.txt:1
 #, python-format
 msgid "Verify your %(brand)s account"
-msgstr ""
+msgstr "Vérifiez votre compte %(brand)s"
 
 #: templates/home.html:7
 msgid "Streamlined POS and ERP for quick-service restaurants."
-msgstr ""
+msgstr "POS et ERP simplifiés pour la restauration rapide."
 
 #: templates/home.html:9
 msgid "Sign up"
-msgstr ""
+msgstr "S'inscrire"
 
 #: templates/home.html:10
 msgid "Log in"
-msgstr ""
+msgstr "Se connecter"
 
 #~ msgid "Important dates"
 #~ msgstr "Dates importantes"
