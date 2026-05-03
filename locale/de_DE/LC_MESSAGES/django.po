@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rapido\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-03 00:28+0000\n"
+"POT-Creation-Date: 2026-05-03 02:05+0000\n"
 "PO-Revision-Date: 2026-05-01 11:19+0000\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -303,9 +303,10 @@ msgstr "Ungültiger Währungscode. Unterstützte Währungen: %(currencies)s."
 msgid "URL must contain only lowercase letters, digits, and hyphens."
 msgstr "URL darf nur Kleinbuchstaben, Ziffern und Bindestriche enthalten."
 
-#: core/views/auth.py:54
+#: core/views/auth.py:56
 msgid "This email or organisation slug is already in use."
-msgstr "Diese E-Mail-Adresse oder dieses Organisationskürzel wird bereits verwendet."
+msgstr ""
+"Diese E-Mail-Adresse oder dieses Organisationskürzel wird bereits verwendet."
 
 #: core/views/design.py:36
 msgid "Name"
@@ -335,6 +336,14 @@ msgstr "Bedingungen akzeptieren"
 #: templates/_partials/lang_switcher.html:3
 msgid "Change language"
 msgstr "Sprache ändern"
+
+#: templates/_partials/org_switcher.html:2
+msgid "Switch organisation"
+msgstr "Organisation wechseln"
+
+#: templates/_partials/org_switcher.html:3
+msgid "Switch"
+msgstr "Wechseln"
 
 #: templates/_partials/user_menu.html:3
 msgid "Profile"
@@ -476,7 +485,9 @@ msgstr "Bereits verifiziert"
 
 #: templates/auth/verify_already.html:8
 msgid "Your email is already verified - this link has been used."
-msgstr "Ihre E-Mail-Adresse ist bereits verifiziert - dieser Link wurde bereits verwendet."
+msgstr ""
+"Ihre E-Mail-Adresse ist bereits verifiziert - dieser Link wurde bereits "
+"verwendet."
 
 #: templates/auth/verify_failed.html:4
 msgid "Verification link invalid"

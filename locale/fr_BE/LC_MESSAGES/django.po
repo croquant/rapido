@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rapido\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-03 00:28+0000\n"
+"POT-Creation-Date: 2026-05-03 02:05+0000\n"
 "PO-Revision-Date: 2026-05-01 11:19+0000\n"
 "Language-Team: French (Belgium)\n"
 "Language: fr_BE\n"
@@ -305,7 +305,7 @@ msgstr ""
 "L'URL ne peut contenir que des lettres minuscules, des chiffres et des "
 "traits d'union."
 
-#: core/views/auth.py:54
+#: core/views/auth.py:56
 msgid "This email or organisation slug is already in use."
 msgstr "Cet e-mail ou ce slug d'organisation est déjà utilisé."
 
@@ -337,6 +337,14 @@ msgstr "Accepter les conditions"
 #: templates/_partials/lang_switcher.html:3
 msgid "Change language"
 msgstr "Changer de langue"
+
+#: templates/_partials/org_switcher.html:2
+msgid "Switch organisation"
+msgstr "Changer d'organisation"
+
+#: templates/_partials/org_switcher.html:3
+msgid "Switch"
+msgstr "Changer"
 
 #: templates/_partials/user_menu.html:3
 msgid "Profile"
@@ -396,8 +404,8 @@ msgstr "Ce lien est invalide ou a expiré"
 #: templates/auth/password_reset_failed.html:8
 msgid "Reset links expire after 1 hour. Request a new one to continue."
 msgstr ""
-"Les liens de réinitialisation expirent après 1 heure. Demandez-en un "
-"nouveau pour continuer."
+"Les liens de réinitialisation expirent après 1 heure. Demandez-en un nouveau "
+"pour continuer."
 
 #: templates/auth/password_reset_failed.html:9
 msgid "Request a new link"
@@ -493,9 +501,9 @@ msgid ""
 "This verification link can't be used. It may have expired (links are valid "
 "for 7 days), been tampered with, or already replaced by a newer one."
 msgstr ""
-"Ce lien de vérification ne peut pas être utilisé. Il a peut-être expiré "
-"(les liens sont valides pendant 7 jours), été altéré ou déjà remplacé par "
-"un plus récent."
+"Ce lien de vérification ne peut pas être utilisé. Il a peut-être expiré (les "
+"liens sont valides pendant 7 jours), été altéré ou déjà remplacé par un plus "
+"récent."
 
 #: templates/auth/verify_failed.html:9
 msgid "to request a new verification email."
@@ -599,8 +607,8 @@ msgid ""
 "This link expires in 1 hour. If you did not request a password reset, you "
 "can ignore this email."
 msgstr ""
-"Ce lien expire dans 1 heure. Si vous n'avez pas demandé de "
-"réinitialisation, vous pouvez ignorer cet e-mail."
+"Ce lien expire dans 1 heure. Si vous n'avez pas demandé de réinitialisation, "
+"vous pouvez ignorer cet e-mail."
 
 #: templates/email/password_reset.txt:5
 msgid ""

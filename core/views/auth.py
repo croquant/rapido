@@ -1,4 +1,6 @@
+import posixpath
 from typing import cast
+from urllib.parse import unquote, urlsplit
 
 from django.conf import settings
 from django.contrib.auth import login as auth_login
@@ -171,11 +173,29 @@ def org_picker(request: HttpRequest) -> HttpResponse:
     # to scope to.
     memberships = list(
         OrganizationMembership.objects.filter(  # noqa: tenant-lint
-            user=user, is_active=True
+            user=user, is_active=True, organization__is_active=True
         )
         .select_related("organization")
         .order_by("organization__name")
     )
+    next_param = request.GET.get("next") or ""
+    if next_param and url_has_allowed_host_and_scheme(
+        next_param,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        # Normalize before prefix-matching: browsers resolve `..` segments
+        # in Location headers, so `/o/acme/../admin/` would otherwise
+        # bypass the `startswith("/o/acme/")` check and 302 to /admin/.
+        raw_path = unquote(urlsplit(next_param).path)
+        normalized = posixpath.normpath(raw_path)
+        if not normalized.endswith("/"):
+            normalized += "/"
+        allowed_prefixes = tuple(
+            f"/o/{m.organization.slug}/" for m in memberships
+        )
+        if allowed_prefixes and normalized.startswith(allowed_prefixes):
+            return redirect(next_param)
     if len(memberships) == 1:
         return redirect(login_redirect_for(user))
     return render(

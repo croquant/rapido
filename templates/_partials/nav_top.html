@@ -2,7 +2,7 @@
 <nav>
 <ul>
 <li><strong><a href="/" class="contrast">rapido</a></strong></li>
-{% if request.organization %}<li>{{ request.organization.name }}</li>{% endif %}
+<li>{% include "_partials/org_switcher.html" %}</li>
 </ul>
 <ul>
 <li>{% include "_partials/lang_switcher.html" %}</li>

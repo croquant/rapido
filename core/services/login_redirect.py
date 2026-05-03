@@ -8,7 +8,9 @@ def login_redirect_for(user: User) -> str:
     #     -> /o/<slug>/l/<lslug>/pos/ (route reserved; 404 until POS epic)
     #   anything else (zero or multiple orgs) -> /orgs/
     memberships = list(
-        OrganizationMembership.objects.filter(user=user, is_active=True)
+        OrganizationMembership.objects.filter(
+            user=user, is_active=True, organization__is_active=True
+        )
         .select_related("organization")
         .order_by("created_at")
     )

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rapido\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-03 00:28+0000\n"
+"POT-Creation-Date: 2026-05-03 02:05+0000\n"
 "PO-Revision-Date: 2026-05-01 11:19+0000\n"
 "Language-Team: Dutch (Belgium)\n"
 "Language: nl_BE\n"
@@ -302,7 +302,7 @@ msgstr "Ongeldige valutacode. Ondersteunde valuta's zijn: %(currencies)s."
 msgid "URL must contain only lowercase letters, digits, and hyphens."
 msgstr "URL mag alleen kleine letters, cijfers en koppeltekens bevatten."
 
-#: core/views/auth.py:54
+#: core/views/auth.py:56
 msgid "This email or organisation slug is already in use."
 msgstr "Dit e-mailadres of deze organisatie-slug is al in gebruik."
 
@@ -334,6 +334,14 @@ msgstr "Voorwaarden accepteren"
 #: templates/_partials/lang_switcher.html:3
 msgid "Change language"
 msgstr "Taal wijzigen"
+
+#: templates/_partials/org_switcher.html:2
+msgid "Switch organisation"
+msgstr "Organisatie wisselen"
+
+#: templates/_partials/org_switcher.html:3
+msgid "Switch"
+msgstr "Wisselen"
 
 #: templates/_partials/user_menu.html:3
 msgid "Profile"
@@ -432,9 +440,8 @@ msgid ""
 "If an account exists for that email, we've sent a link to reset your "
 "password. The link expires in 1 hour."
 msgstr ""
-"Als er een account bestaat voor dat e-mailadres, hebben we een link "
-"gestuurd om je wachtwoord opnieuw in te stellen. De link verloopt over 1 "
-"uur."
+"Als er een account bestaat voor dat e-mailadres, hebben we een link gestuurd "
+"om je wachtwoord opnieuw in te stellen. De link verloopt over 1 uur."
 
 #: templates/auth/signup.html:4
 msgid "Create your account"
@@ -461,8 +468,8 @@ msgid ""
 "We've sent a verification link to your email. Click it to activate your "
 "account."
 msgstr ""
-"We hebben een verificatielink naar je e-mailadres gestuurd. Klik erop om "
-"je account te activeren."
+"We hebben een verificatielink naar je e-mailadres gestuurd. Klik erop om je "
+"account te activeren."
 
 #: templates/auth/signup_done.html:9
 msgid "The link is valid for 7 days."
@@ -501,8 +508,8 @@ msgid ""
 "If an unverified account exists for that email, we've sent a fresh "
 "verification link."
 msgstr ""
-"Als er een niet-geverifieerd account bestaat voor dat e-mailadres, hebben "
-"we een nieuwe verificatielink gestuurd."
+"Als er een niet-geverifieerd account bestaat voor dat e-mailadres, hebben we "
+"een nieuwe verificatielink gestuurd."
 
 #: templates/base_org.html:7 templates/base_picker.html:7
 #: templates/base_public.html:7
@@ -568,8 +575,8 @@ msgid ""
 "Your invitation to join %(org)s on %(brand)s has been withdrawn. No action "
 "is needed."
 msgstr ""
-"Je uitnodiging om %(org)s te vervoegen op %(brand)s is ingetrokken. Je "
-"hoeft niets te doen."
+"Je uitnodiging om %(org)s te vervoegen op %(brand)s is ingetrokken. Je hoeft "
+"niets te doen."
 
 #: templates/email/invitation_revoked_subject.txt:1
 #, python-format
