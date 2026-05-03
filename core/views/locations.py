@@ -140,18 +140,15 @@ def detail(request: HttpRequest, slug: str, pk: int) -> HttpResponse:  # noqa: A
         Location.tenant_objects.for_request(request), pk=pk
     )
     operator_memberships = (
-        OrganizationMembership.objects.filter(
-            organization=organization,
-            role=Role.OPERATOR,
-            is_active=True,
-        )
+        OrganizationMembership.tenant_objects.for_request(request)
+        .filter(role=Role.OPERATOR, is_active=True)
         .select_related("user")
         .order_by("user__email")
     )
     active_user_ids = set(
-        LocationMembership.objects.filter(
-            location=location, is_active=True
-        ).values_list("user_id", flat=True)
+        LocationMembership.tenant_objects.for_request(request)
+        .filter(location=location, is_active=True)
+        .values_list("user_id", flat=True)
     )
     return render(
         request,
@@ -173,15 +170,15 @@ def toggle_operator(
     pk: int,
     upk: int,
 ) -> HttpResponse:
-    organization = request.organization  # type: ignore[attr-defined]
     location = get_object_or_404(
         Location.tenant_objects.for_request(request),
         pk=pk,
         is_active=True,
     )
     operator_membership = get_object_or_404(
-        OrganizationMembership.objects.select_related("user"),
-        organization=organization,
+        OrganizationMembership.tenant_objects.for_request(
+            request
+        ).select_related("user"),
         user_id=upk,
         role=Role.OPERATOR,
         is_active=True,

@@ -54,7 +54,7 @@ def _location_chip(
 def list_view(request: HttpRequest, slug: str) -> HttpResponse:  # noqa: ARG001
     organization = request.organization  # type: ignore[attr-defined]
     memberships = (
-        OrganizationMembership.objects.filter(organization=organization)
+        OrganizationMembership.tenant_objects.for_request(request)
         .select_related("user")
         .order_by("-is_active", "user__email")
     )
@@ -85,8 +85,9 @@ def list_view(request: HttpRequest, slug: str) -> HttpResponse:  # noqa: ARG001
 def detail(request: HttpRequest, slug: str, pk: int) -> HttpResponse:  # noqa: ARG001
     organization = request.organization  # type: ignore[attr-defined]
     membership = get_object_or_404(
-        OrganizationMembership.objects.select_related("user"),
-        organization=organization,
+        OrganizationMembership.tenant_objects.for_request(
+            request
+        ).select_related("user"),
         pk=pk,
     )
     locations = (
@@ -95,11 +96,13 @@ def detail(request: HttpRequest, slug: str, pk: int) -> HttpResponse:  # noqa: A
         .order_by("name")
     )
     active_loc_ids = set(
-        LocationMembership.objects.filter(
+        LocationMembership.tenant_objects.for_request(request)
+        .filter(
             user=membership.user,
             location__in=locations,
             is_active=True,
-        ).values_list("location_id", flat=True)
+        )
+        .values_list("location_id", flat=True)
     )
     return render(
         request,
@@ -122,8 +125,9 @@ def change_role(
 ) -> HttpResponse:
     organization = request.organization  # type: ignore[attr-defined]
     membership = get_object_or_404(
-        OrganizationMembership.objects.select_related("user"),
-        organization=organization,
+        OrganizationMembership.tenant_objects.for_request(
+            request
+        ).select_related("user"),
         pk=pk,
     )
     form = RoleChangeForm(request.POST)
@@ -153,8 +157,9 @@ def deactivate(
 ) -> HttpResponse:
     organization = request.organization  # type: ignore[attr-defined]
     membership = get_object_or_404(
-        OrganizationMembership.objects.select_related("user"),
-        organization=organization,
+        OrganizationMembership.tenant_objects.for_request(
+            request
+        ).select_related("user"),
         pk=pk,
     )
     try:
@@ -179,8 +184,9 @@ def reactivate(
 ) -> HttpResponse:
     organization = request.organization  # type: ignore[attr-defined]
     membership = get_object_or_404(
-        OrganizationMembership.objects.select_related("user"),
-        organization=organization,
+        OrganizationMembership.tenant_objects.for_request(
+            request
+        ).select_related("user"),
         pk=pk,
     )
     membership_service.reactivate_membership(membership)
@@ -197,10 +203,10 @@ def toggle_location(
     pk: int,
     lpk: int,
 ) -> HttpResponse:
-    organization = request.organization  # type: ignore[attr-defined]
     membership = get_object_or_404(
-        OrganizationMembership.objects.select_related("user"),
-        organization=organization,
+        OrganizationMembership.tenant_objects.for_request(
+            request
+        ).select_related("user"),
         pk=pk,
     )
     location = get_object_or_404(

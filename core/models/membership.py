@@ -5,9 +5,14 @@ from django.db import models
 from django.db.models.fields import BooleanField, CharField
 from django.utils.translation import gettext_lazy as _
 
+from core.managers import TenantOwnedManager
 from core.models.base import TimestampedModel
 from core.models.location import Location
 from core.models.organization import Organization
+
+
+class LocationMembershipManager(TenantOwnedManager):
+    organization_lookup = "location__organization"
 
 
 class Role(models.TextChoices):
@@ -44,6 +49,9 @@ class OrganizationMembership(TimestampedModel):
         blank=True,
         verbose_name=_("created by"),
     )
+
+    objects: ClassVar[models.Manager[OrganizationMembership]] = models.Manager()  # type: ignore[assignment]
+    tenant_objects: ClassVar[TenantOwnedManager] = TenantOwnedManager()
 
     class Meta(TimestampedModel.Meta):
         abstract = False
@@ -89,6 +97,11 @@ class LocationMembership(TimestampedModel):
         null=True,
         blank=True,
         verbose_name=_("created by"),
+    )
+
+    objects: ClassVar[models.Manager[LocationMembership]] = models.Manager()  # type: ignore[assignment]
+    tenant_objects: ClassVar[LocationMembershipManager] = (
+        LocationMembershipManager()
     )
 
     class Meta(TimestampedModel.Meta):
