@@ -1,6 +1,7 @@
 from typing import Any
 
 from django import forms
+from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
@@ -43,4 +44,30 @@ class InvitationForm(forms.Form):
                     )
                 }
             )
+        return cleaned
+
+
+class InviteAcceptForm(forms.Form):
+    new_password = forms.CharField(
+        label=_("Password"),
+        widget=forms.PasswordInput(render_value=False),
+        strip=False,
+    )
+    confirm_password = forms.CharField(
+        label=_("Confirm password"),
+        widget=forms.PasswordInput(render_value=False),
+        strip=False,
+    )
+
+    def clean(self) -> dict[str, Any]:
+        cleaned: dict[str, Any] = super().clean() or {}
+        p1 = cleaned.get("new_password")
+        p2 = cleaned.get("confirm_password")
+        if p1 and p2 and p1 != p2:
+            self.add_error("confirm_password", _("Passwords do not match."))
+        if p1 and not self.has_error("new_password"):
+            try:
+                validate_password(p1)
+            except ValidationError as e:
+                self.add_error("new_password", e)
         return cleaned

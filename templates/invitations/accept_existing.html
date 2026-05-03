@@ -1,0 +1,25 @@
+{% extends "base_public.html" %}
+{% load i18n %}
+
+{% block title %}{% blocktrans with org=organization.name %}Join {{ org }}{% endblocktrans %}{% endblock %}
+
+{% block main %}
+  <h1>{% blocktrans with org=organization.name %}Join {{ org }}{% endblocktrans %}</h1>
+  <p>{% blocktrans with email=invitation.email %}You're already signed up as <strong>{{ email }}</strong>. Accept to add this organization to your account.{% endblocktrans %}</p>
+  <p>
+    {% if invitation.role == "ADMIN" %}
+      {% trans "Role: Admin" %}
+    {% else %}
+      {% trans "Role: Operator" %}
+    {% endif %}
+  </p>
+  {% if invite_locations %}
+    <p>{% trans "Locations:" %}
+      {% for loc in invite_locations %}{{ loc.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+    </p>
+  {% endif %}
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <button type="submit">{% trans "Accept invitation" %}</button>
+  </form>
+{% endblock %}
