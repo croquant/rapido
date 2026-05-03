@@ -62,3 +62,7 @@ class WeakPasswordError(Exception):
     def __init__(self, messages: list[str]) -> None:
         self.messages = messages
         super().__init__("; ".join(messages))
+
+
+class WrongPasswordError(Exception):
+    """User-supplied current password did not match stored hash."""
