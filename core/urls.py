@@ -16,7 +16,7 @@ from .views.auth import (
 )
 from .views.dashboard import dashboard
 from .views.design import design_kitchen_sink
-from .views.settings import settings_organization
+from .views.organization import settings_view as settings_organization
 
 app_name = "core"
 
