@@ -2,7 +2,7 @@
 {% block body %}
   <p>{% blocktrans with name=invitee_email %}Hi {{ name }},{% endblocktrans %}</p>
   <p>{% blocktrans with inviter=inviter_name org=organization_name %}{{ inviter }} invited you to join {{ org }} on {{ brand }}.{% endblocktrans %}</p>
-  <p>{% if role == "ADMIN" %}{% trans "You'll join as an administrator." %}{% else %}{% trans "You'll join as an operator." %}{% endif %}</p>
+  <p>{% if role == "ADMIN" %}{% trans "You'll join as an administrator." %}{% elif role == "OPERATOR" %}{% trans "You'll join as an operator." %}{% endif %}</p>
   {% if locations %}
   <p style="margin:0 0 8px 0;">{% trans "Your assigned locations:" %}</p>
   <ul style="margin:0 0 16px 20px;padding:0;">

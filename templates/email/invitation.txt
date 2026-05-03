@@ -4,7 +4,7 @@
 
 {% blocktrans with inviter=inviter_name org=organization_name %}{{ inviter }} invited you to join {{ org }} on {{ brand }}.{% endblocktrans %}
 
-{% if role == "ADMIN" %}{% trans "You'll join as an administrator." %}{% else %}{% trans "You'll join as an operator." %}{% endif %}
+{% if role == "ADMIN" %}{% trans "You'll join as an administrator." %}{% elif role == "OPERATOR" %}{% trans "You'll join as an operator." %}{% endif %}
 {% if locations %}
 {% trans "Your assigned locations:" %}
 {% for loc in locations %}- {{ loc.name }}

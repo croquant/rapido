@@ -42,15 +42,19 @@ def _send_invitation_email(invitation: Invitation) -> None:
             .only("email", "preferred_language")
             .first()
         )
-        language = invitation.organization.default_language
+        org_lang = invitation.organization.default_language
         if existing is None:
             # Unsaved User just to satisfy send_templated's `to: User`
             # contract (it reads `email` and `preferred_language` only).
             addressee = User(
-                email=invitation.email, preferred_language=language
+                email=invitation.email, preferred_language=org_lang
             )
+            language = org_lang
         else:
+            # Epic 2c §6: existing user's preferred_language wins; fall back
+            # to the org default when blank.
             addressee = existing
+            language = existing.preferred_language or org_lang
         token = make_invite_token(invitation)
         accept_url = f"{settings.SITE_URL}/invite/{token}/"
         inviter = invitation.created_by
