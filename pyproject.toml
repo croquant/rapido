@@ -35,7 +35,7 @@ dev = [
 [tool.ruff]
 line-length = 80
 target-version = "py314"
-extend-exclude = ["migrations"]
+extend-exclude = ["migrations", ".claude"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "DJ", "SIM", "RUF", "ANN", "FBT", "ARG"]
