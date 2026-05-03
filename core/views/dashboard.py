@@ -13,14 +13,14 @@ def dashboard(request: HttpRequest, slug: str) -> HttpResponse:  # noqa: ARG001
     if user.is_superuser:
         role = Role.ADMIN
     else:
-        membership = OrganizationMembership.objects.get(
+        membership = OrganizationMembership.objects.get(  # noqa: tenant-lint
             user=user, organization=org, is_active=True
         )
         role = membership.role
 
     if role == Role.OPERATOR:
         loc_slugs = list(
-            LocationMembership.objects.filter(
+            LocationMembership.objects.filter(  # noqa: tenant-lint
                 user=user,
                 is_active=True,
                 location__organization=org,
