@@ -1,0 +1,27 @@
+{% extends "base_org.html" %}
+{% load i18n forms %}
+
+{% block title %}{% trans "Edit location" %}{% endblock %}
+
+{% block rail %}{% include "_partials/settings_rail.html" %}{% endblock %}
+
+{% block main %}
+  <h1>{% trans "Edit location" %}</h1>
+  <p>
+    <strong>{% trans "URL" %}:</strong> <code>{{ location.slug }}</code>
+    <small>{% trans "URL cannot be changed once set." %}</small>
+  </p>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include "forms/_errors.html" %}
+    {% field form.name %}
+    {% field form.street %}
+    {% field form.postal_code %}
+    {% field form.city %}
+    {% field form.phone %}
+    {% trans "Save" as primary_label %}
+    {% trans "Cancel" as secondary_label %}
+    {% url 'core:settings_locations' organization.slug as cancel_url %}
+    {% submit primary_label secondary_label cancel_url %}
+  </form>
+{% endblock %}

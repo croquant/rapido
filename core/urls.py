@@ -2,7 +2,7 @@ from django.conf import settings
 from django.urls import path
 from django.urls.resolvers import URLPattern
 
-from .views import home
+from .views import home, locations
 from .views.auth import (
     login,
     logout,
@@ -18,7 +18,6 @@ from .views.dashboard import dashboard
 from .views.design import design_kitchen_sink
 from .views.settings import (
     settings_invitations,
-    settings_locations,
     settings_members,
     settings_organization,
 )
@@ -51,8 +50,28 @@ urlpatterns: list[URLPattern] = [
     path(route="o/<slug:slug>/", view=dashboard, name="org_dashboard"),
     path(
         route="o/<slug:slug>/settings/locations/",
-        view=settings_locations,
+        view=locations.list_view,
         name="settings_locations",
+    ),
+    path(
+        route="o/<slug:slug>/settings/locations/new/",
+        view=locations.create,
+        name="settings_locations_create",
+    ),
+    path(
+        route="o/<slug:slug>/settings/locations/<int:pk>/edit/",
+        view=locations.edit,
+        name="settings_locations_edit",
+    ),
+    path(
+        route="o/<slug:slug>/settings/locations/<int:pk>/deactivate/",
+        view=locations.deactivate,
+        name="settings_locations_deactivate",
+    ),
+    path(
+        route="o/<slug:slug>/settings/locations/<int:pk>/reactivate/",
+        view=locations.reactivate,
+        name="settings_locations_reactivate",
     ),
     path(
         route="o/<slug:slug>/settings/members/",

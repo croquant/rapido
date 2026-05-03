@@ -1,0 +1,32 @@
+{% extends "base_org.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Locations" %}{% endblock %}
+
+{% block rail %}{% include "_partials/settings_rail.html" %}{% endblock %}
+
+{% block main %}
+  <header>
+    <h1>{% trans "Locations" %}</h1>
+    <a href="{% url 'core:settings_locations_create' organization.slug %}" role="button">{% trans "New location" %}</a>
+  </header>
+
+  <table>
+    <thead>
+      <tr>
+        <th>{% trans "Name" %}</th>
+        <th>{% trans "URL" %}</th>
+        <th>{% trans "City" %}</th>
+        <th>{% trans "Active" %}</th>
+        <th>{% trans "Actions" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for location in locations %}
+        {% include "locations/_row.html" %}
+      {% empty %}
+        <tr><td colspan="5">{% trans "No locations yet." %}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

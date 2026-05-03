@@ -1,0 +1,24 @@
+{% extends "base_org.html" %}
+{% load i18n forms %}
+
+{% block title %}{% trans "New location" %}{% endblock %}
+
+{% block rail %}{% include "_partials/settings_rail.html" %}{% endblock %}
+
+{% block main %}
+  <h1>{% trans "New location" %}</h1>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include "forms/_errors.html" %}
+    {% field form.name %}
+    {% field form.slug %}
+    {% field form.street %}
+    {% field form.postal_code %}
+    {% field form.city %}
+    {% field form.phone %}
+    {% trans "Create" as primary_label %}
+    {% trans "Cancel" as secondary_label %}
+    {% url 'core:settings_locations' organization.slug as cancel_url %}
+    {% submit primary_label secondary_label cancel_url %}
+  </form>
+{% endblock %}
