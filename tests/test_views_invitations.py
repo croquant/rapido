@@ -1,14 +1,25 @@
+from datetime import timedelta
+
 import pytest
 from django.core import mail
 from django.test import Client
 from django.utils import timezone
 
-from core.models import Invitation, Organization, OrganizationMembership, Role
+from core.models import (
+    Invitation,
+    LocationMembership,
+    Organization,
+    OrganizationMembership,
+    Role,
+    User,
+)
+from core.services.tokens import make_invite_token
 from tests.factories import (
     InvitationFactory,
     LocationFactory,
     OrganizationFactory,
     OrganizationMembershipFactory,
+    UserFactory,
 )
 
 
@@ -306,3 +317,350 @@ def test_get_on_create_returns_405() -> None:
     client, admin = _admin_client()
     response = client.get(_routes(admin.organization.slug)["create"])
     assert response.status_code == 405
+
+
+# ---- accept -----------------------------------------------------------------
+
+
+def _make_invite(
+    *,
+    organization: Organization | None = None,
+    email: str = "invitee@example.be",
+    role: str = Role.ADMIN,
+    locations: list | None = None,
+) -> Invitation:
+    org = organization or OrganizationFactory()
+    inviter = OrganizationMembershipFactory(
+        role=Role.ADMIN, organization=org
+    ).user
+    invite = InvitationFactory(
+        organization=org, email=email, role=role, created_by=inviter
+    )
+    if locations:
+        invite.locations.set(locations)
+    return invite
+
+
+def _accept_url(token: str) -> str:
+    return f"/invite/{token}/"
+
+
+@pytest.mark.django_db
+def test_accept_get_new_user_renders_password_form() -> None:
+    invite = _make_invite()
+    token = make_invite_token(invite)
+
+    response = Client().get(_accept_url(token))
+
+    assert response.status_code == 200
+    assert b'name="new_password"' in response.content
+    assert b'name="confirm_password"' in response.content
+
+
+@pytest.mark.django_db
+def test_accept_get_existing_user_renders_no_password() -> None:
+    org = OrganizationFactory()
+    UserFactory(email="invitee@example.be")
+    invite = _make_invite(organization=org, email="invitee@example.be")
+    token = make_invite_token(invite)
+
+    response = Client().get(_accept_url(token))
+
+    assert response.status_code == 200
+    assert b'name="new_password"' not in response.content
+
+
+@pytest.mark.django_db
+def test_accept_post_new_user_creates_user_and_memberships() -> None:
+    org = OrganizationFactory()
+    location = LocationFactory(organization=org)
+    invite = _make_invite(
+        organization=org,
+        email="newhire@example.be",
+        role=Role.OPERATOR,
+        locations=[location],
+    )
+    token = make_invite_token(invite)
+    client = Client()
+
+    response = client.post(
+        _accept_url(token),
+        {"new_password": "Sup3rSecret!", "confirm_password": "Sup3rSecret!"},
+    )
+
+    assert response.status_code == 302
+    user = User.objects.get(email="newhire@example.be")
+    assert OrganizationMembership.objects.filter(
+        user=user, organization=org, is_active=True, role=Role.OPERATOR
+    ).exists()
+    assert LocationMembership.objects.filter(
+        user=user, location=location, is_active=True
+    ).exists()
+    invite.refresh_from_db()
+    assert invite.accepted_at is not None
+    assert response.wsgi_request.user.is_authenticated
+    assert response.wsgi_request.user.pk == user.pk
+
+
+@pytest.mark.django_db
+def test_accept_post_redirects_per_login_rule_single_org() -> None:
+    org = OrganizationFactory(slug="acme")
+    invite = _make_invite(organization=org, email="newhire@example.be")
+    token = make_invite_token(invite)
+
+    response = Client().post(
+        _accept_url(token),
+        {"new_password": "Sup3rSecret!", "confirm_password": "Sup3rSecret!"},
+    )
+
+    assert response.status_code == 302
+    assert response.headers["Location"] == "/o/acme/"
+
+
+@pytest.mark.django_db
+def test_accept_post_existing_user_creates_memberships_only() -> None:
+    org = OrganizationFactory()
+    user = UserFactory(email="existing@example.be")
+    original_hash = user.password
+    invite = _make_invite(organization=org, email="existing@example.be")
+    token = make_invite_token(invite)
+
+    response = Client().post(_accept_url(token))
+
+    assert response.status_code == 302
+    assert User.objects.filter(email="existing@example.be").count() == 1
+    user.refresh_from_db()
+    assert user.password == original_hash
+    assert OrganizationMembership.objects.filter(
+        user=user, organization=org, is_active=True
+    ).exists()
+    invite.refresh_from_db()
+    assert invite.accepted_at is not None
+
+
+@pytest.mark.django_db
+def test_accept_get_expired_renders_error_200() -> None:
+    invite = _make_invite()
+    invite.expires_at = timezone.now() - timedelta(days=1)
+    invite.save(update_fields=["expires_at"])
+    token = make_invite_token(invite)
+
+    response = Client().get(_accept_url(token))
+
+    assert response.status_code == 200
+    assert b"invalid or has expired" in response.content
+
+
+@pytest.mark.django_db
+def test_accept_tampered_token_renders_error() -> None:
+    invite = _make_invite()
+    token = make_invite_token(invite)
+    tampered = token[:-1] + ("A" if token[-1] != "A" else "B")
+
+    response = Client().get(_accept_url(tampered))
+
+    assert response.status_code == 200
+    assert b"invalid or has expired" in response.content
+
+
+@pytest.mark.django_db
+def test_accept_already_accepted_renders_error() -> None:
+    invite = _make_invite()
+    invite.accepted_at = timezone.now()
+    invite.save(update_fields=["accepted_at"])
+    token = make_invite_token(invite)
+
+    response = Client().get(_accept_url(token))
+
+    assert response.status_code == 200
+    assert b"already been used" in response.content
+
+
+@pytest.mark.django_db
+def test_accept_revoked_renders_error() -> None:
+    invite = _make_invite()
+    invite.revoked_at = timezone.now()
+    invite.save(update_fields=["revoked_at"])
+    token = make_invite_token(invite)
+
+    response = Client().get(_accept_url(token))
+
+    assert response.status_code == 200
+    assert b"revoked" in response.content
+
+
+@pytest.mark.django_db
+def test_accept_stale_locations_get_renders_error_no_mutations() -> None:
+    org = OrganizationFactory()
+    location = LocationFactory(organization=org)
+    invite = _make_invite(
+        organization=org,
+        email="newhire@example.be",
+        role=Role.OPERATOR,
+        locations=[location],
+    )
+    location.is_active = False
+    location.save(update_fields=["is_active"])
+    token = make_invite_token(invite)
+
+    response = Client().get(_accept_url(token))
+
+    assert response.status_code == 200
+    assert b"no longer active" in response.content
+    assert not User.objects.filter(email="newhire@example.be").exists()
+    assert not OrganizationMembership.objects.filter(
+        organization=org, user__email="newhire@example.be"
+    ).exists()
+
+
+@pytest.mark.django_db
+def test_accept_stale_locations_post_does_not_mutate() -> None:
+    org = OrganizationFactory()
+    location = LocationFactory(organization=org)
+    invite = _make_invite(
+        organization=org,
+        email="newhire@example.be",
+        role=Role.OPERATOR,
+        locations=[location],
+    )
+    location.is_active = False
+    location.save(update_fields=["is_active"])
+    token = make_invite_token(invite)
+
+    response = Client().post(
+        _accept_url(token),
+        {"new_password": "Sup3rSecret!", "confirm_password": "Sup3rSecret!"},
+    )
+
+    assert response.status_code == 200
+    assert not User.objects.filter(email="newhire@example.be").exists()
+    invite.refresh_from_db()
+    assert invite.accepted_at is None
+
+
+@pytest.mark.django_db
+def test_accept_post_atomic_rollback_on_service_failure(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    org = OrganizationFactory()
+    location = LocationFactory(organization=org)
+    invite = _make_invite(
+        organization=org,
+        email="newhire@example.be",
+        role=Role.OPERATOR,
+        locations=[location],
+    )
+    token = make_invite_token(invite)
+
+    from core.services import invitation as invitation_service
+
+    real_create = LocationMembership.objects.create
+
+    def boom(*args, **kwargs):  # noqa: ARG001
+        raise RuntimeError("boom")
+
+    monkeypatch.setattr(
+        LocationMembership.objects, "create", boom, raising=True
+    )
+    assert invitation_service  # silence unused-name lint
+
+    with pytest.raises(RuntimeError):
+        Client().post(
+            _accept_url(token),
+            {
+                "new_password": "Sup3rSecret!",
+                "confirm_password": "Sup3rSecret!",
+            },
+        )
+
+    monkeypatch.setattr(
+        LocationMembership.objects, "create", real_create, raising=True
+    )
+    assert not User.objects.filter(email="newhire@example.be").exists()
+    assert not OrganizationMembership.objects.filter(
+        organization=org, user__email="newhire@example.be"
+    ).exists()
+    invite.refresh_from_db()
+    assert invite.accepted_at is None
+
+
+@pytest.mark.django_db
+def test_accept_weak_password_returns_422_with_errors() -> None:
+    invite = _make_invite(email="newhire@example.be")
+    token = make_invite_token(invite)
+
+    response = Client().post(
+        _accept_url(token),
+        {"new_password": "short", "confirm_password": "short"},
+    )
+
+    assert response.status_code == 422
+    assert not User.objects.filter(email="newhire@example.be").exists()
+
+
+@pytest.mark.django_db
+def test_accept_password_mismatch_returns_422() -> None:
+    invite = _make_invite(email="newhire@example.be")
+    token = make_invite_token(invite)
+
+    response = Client().post(
+        _accept_url(token),
+        {
+            "new_password": "Sup3rSecret!",
+            "confirm_password": "DifferentPass1!",
+        },
+    )
+
+    assert response.status_code == 422
+    assert not User.objects.filter(email="newhire@example.be").exists()
+
+
+@pytest.mark.django_db
+def test_accept_authenticated_matching_email_proceeds() -> None:
+    org = OrganizationFactory()
+    user = UserFactory(email="existing@example.be")
+    invite = _make_invite(organization=org, email="existing@example.be")
+    token = make_invite_token(invite)
+    client = Client()
+    client.force_login(user)
+
+    get_response = client.get(_accept_url(token))
+    assert get_response.status_code == 200
+    assert b'name="new_password"' not in get_response.content
+
+    post_response = client.post(_accept_url(token))
+    assert post_response.status_code == 302
+    assert OrganizationMembership.objects.filter(
+        user=user, organization=org, is_active=True
+    ).exists()
+
+
+@pytest.mark.django_db
+def test_accept_authenticated_mismatched_email_logs_out_and_renders() -> None:
+    other_user = UserFactory(email="someone-else@example.be")
+    invite = _make_invite(email="newhire@example.be")
+    token = make_invite_token(invite)
+    client = Client()
+    client.force_login(other_user)
+
+    response = client.get(_accept_url(token))
+
+    assert response.status_code == 200
+    assert response.wsgi_request.user.is_anonymous
+    assert b'name="new_password"' in response.content
+
+
+@pytest.mark.django_db
+def test_accept_already_member_renders_error() -> None:
+    org = OrganizationFactory()
+    user = UserFactory(email="existing@example.be")
+    OrganizationMembershipFactory(
+        user=user, organization=org, role=Role.ADMIN, is_active=True
+    )
+    invite = _make_invite(organization=org, email="existing@example.be")
+    token = make_invite_token(invite)
+
+    response = Client().get(_accept_url(token))
+
+    assert response.status_code == 200
+    assert b"already a member" in response.content

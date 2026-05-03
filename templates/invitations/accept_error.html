@@ -1,0 +1,35 @@
+{% extends "base_public.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Invitation unavailable" %}{% endblock %}
+
+{% block main %}
+  <h1>{% trans "Invitation unavailable" %}</h1>
+  {% if reason == "invalid_token" %}
+    <p>{% trans "This invitation link is invalid or has expired." %}</p>
+  {% elif reason == "expired" %}
+    <p>{% trans "This invitation link is invalid or has expired." %}</p>
+  {% elif reason == "already_accepted" %}
+    <p>{% trans "This invitation has already been used." %}</p>
+  {% elif reason == "already_revoked" %}
+    <p>{% trans "This invitation was revoked. Ask your admin for a new one." %}</p>
+  {% elif reason == "already_member" %}
+    <p>
+      {% if organization %}
+        {% blocktrans with org=organization.name %}You're already a member of {{ org }}.{% endblocktrans %}
+      {% else %}
+        {% trans "You're already a member of this organization." %}
+      {% endif %}
+    </p>
+  {% elif reason == "stale_locations" %}
+    <p>{% trans "Some locations on this invitation are no longer active. Ask your admin to re-invite you." %}</p>
+    {% if stale_locations %}
+      <ul>
+        {% for loc in stale_locations %}<li>{{ loc.name }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+  {% else %}
+    <p>{% trans "This invitation link can't be used." %}</p>
+  {% endif %}
+  <p><a href="/login/">{% trans "Sign in" %}</a></p>
+{% endblock %}

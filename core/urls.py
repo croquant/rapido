@@ -25,6 +25,11 @@ urlpatterns: list[URLPattern] = [
     path(route="signup/", view=signup, name="signup"),
     path(route="signup/done/", view=signup_done, name="signup_done"),
     path(route="verify/<str:token>/", view=verify, name="verify"),
+    path(
+        route="invite/<str:token>/",
+        view=invitations.accept,
+        name="invitation_accept",
+    ),
     path(route="login/", view=login, name="login"),
     path(route="logout/", view=logout, name="logout"),
     path(
