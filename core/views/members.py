@@ -1,7 +1,10 @@
+from django.contrib import messages
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.utils import timezone
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
 from core.decorators import permission_required
@@ -18,9 +21,21 @@ from core.services import membership as membership_service
 from core.services.exceptions import LastActiveAdminError
 
 
+def _annotate_only_active_admin(membership: OrganizationMembership) -> None:
+    membership.is_only_active_admin = (  # type: ignore[attr-defined]
+        membership.role == Role.ADMIN
+        and membership.is_active
+        and membership.user.is_active
+        and not membership_service.other_qualifying_admin_exists(
+            membership.organization, exclude_membership=membership
+        )
+    )
+
+
 def _row(
     request: HttpRequest, membership: OrganizationMembership
 ) -> HttpResponse:
+    _annotate_only_active_admin(membership)
     return render(
         request,
         "members/_row.html",
@@ -29,6 +44,17 @@ def _row(
             "membership": membership,
         },
     )
+
+
+def _row_with_flash(
+    request: HttpRequest, membership: OrganizationMembership
+) -> HttpResponse:
+    response = _row(request, membership)
+    flash_html = render_to_string(
+        "_partials/flash.html", {"oob": True}, request=request
+    )
+    response.write(flash_html)
+    return response
 
 
 def _location_chip(
@@ -53,11 +79,21 @@ def _location_chip(
 @permission_required(Role.ADMIN)
 def list_view(request: HttpRequest, slug: str) -> HttpResponse:  # noqa: ARG001
     organization = request.organization  # type: ignore[attr-defined]
-    memberships = (
+    memberships = list(
         OrganizationMembership.tenant_objects.for_request(request)
         .select_related("user")
         .order_by("-is_active", "user__email")
     )
+    qualifying_admin_pks = [
+        m.pk
+        for m in memberships
+        if m.role == Role.ADMIN and m.is_active and m.user.is_active
+    ]
+    only_admin_pk = (
+        qualifying_admin_pks[0] if len(qualifying_admin_pks) == 1 else None
+    )
+    for m in memberships:
+        m.is_only_active_admin = m.pk == only_admin_pk  # type: ignore[attr-defined]
     now = timezone.now()
     invitations = Invitation.tenant_objects.for_request(request).filter(
         accepted_at__isnull=True
@@ -139,7 +175,11 @@ def change_role(
         membership_service.change_role(membership, form.cleaned_data["role"])
     except LastActiveAdminError:
         membership.refresh_from_db()
-        response = _row(request, membership)
+        messages.error(
+            request,
+            _("You can't change the role of the last active admin."),
+        )
+        response = _row_with_flash(request, membership)
         response.status_code = 422
         response["HX-Trigger"] = "members:role_change_failed"
         return response
@@ -166,7 +206,11 @@ def deactivate(
         membership_service.deactivate_membership(membership)
     except LastActiveAdminError:
         membership.refresh_from_db()
-        response = _row(request, membership)
+        messages.error(
+            request,
+            _("You can't deactivate the last active admin."),
+        )
+        response = _row_with_flash(request, membership)
         response.status_code = 422
         response["HX-Trigger"] = "members:deactivate_failed"
         return response

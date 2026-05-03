@@ -100,6 +100,40 @@ def test_admin_list_shows_members_pending_and_archive() -> None:
 
 
 @pytest.mark.django_db
+def test_list_disables_role_and_deactivate_for_only_active_admin() -> None:
+    client, admin = _admin_client()
+    OrganizationMembershipFactory(
+        role=Role.OPERATOR, organization=admin.organization
+    )
+
+    response = client.get(_routes(admin.organization.slug)["list"])
+
+    assert response.status_code == 200
+    body = response.content.decode()
+    row_marker = f'id="member-row-{admin.pk}"'
+    assert row_marker in body
+    admin_row = body.split(row_marker, 1)[1].split("</tr>", 1)[0]
+    assert "disabled" in admin_row
+    assert admin_row.count("disabled") >= 2  # role <select> + deactivate button
+
+
+@pytest.mark.django_db
+def test_list_enables_controls_when_co_admin_exists() -> None:
+    client, admin = _admin_client()
+    OrganizationMembershipFactory(
+        role=Role.ADMIN, organization=admin.organization
+    )
+
+    response = client.get(_routes(admin.organization.slug)["list"])
+
+    assert response.status_code == 200
+    body = response.content.decode()
+    row_marker = f'id="member-row-{admin.pk}"'
+    admin_row = body.split(row_marker, 1)[1].split("</tr>", 1)[0]
+    assert "disabled" not in admin_row
+
+
+@pytest.mark.django_db
 def test_admin_list_does_not_leak_other_orgs() -> None:
     client, admin = _admin_client()
     other_org = OrganizationFactory()
@@ -150,6 +184,9 @@ def test_change_role_last_admin_returns_422_with_reverted_row() -> None:
     body = response.content.decode()
     assert f'id="member-row-{admin.pk}"' in body
     assert response.headers.get("HX-Trigger") == "members:role_change_failed"
+    assert 'id="flash"' in body
+    assert 'hx-swap-oob="true"' in body
+    assert "last active admin" in body
 
 
 # ---- deactivate / reactivate -----------------------------------------------
@@ -167,6 +204,10 @@ def test_deactivate_last_admin_returns_422() -> None:
     assert response.status_code == 422
     admin.refresh_from_db()
     assert admin.is_active is True
+    body = response.content.decode()
+    assert 'id="flash"' in body
+    assert 'hx-swap-oob="true"' in body
+    assert "last active admin" in body
 
 
 @pytest.mark.django_db
