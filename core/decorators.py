@@ -24,8 +24,16 @@ def permission_required(
     ) -> Callable[P, HttpResponse]:
         @wraps(view_func)
         def _wrapped(*args: P.args, **kwargs: P.kwargs) -> HttpResponse:
-            request = args[0]
-            assert isinstance(request, HttpRequest)
+            # Support both FBVs (request is args[0]) and CBV methods
+            # (self is args[0], request is args[1]).
+            if args and isinstance(args[0], HttpRequest):
+                request = args[0]
+            elif len(args) >= 2 and isinstance(args[1], HttpRequest):
+                request = args[1]
+            else:
+                raise TypeError(
+                    "permission_required: request not found in args"
+                )
             user = request.user
             if not user.is_authenticated:
                 return redirect_to_login(

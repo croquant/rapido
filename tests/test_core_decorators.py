@@ -133,3 +133,39 @@ def test_wraps_preserves_view_metadata() -> None:
     view = permission_required(Role.ADMIN)(_view)
     assert view.__name__ == "_view"
     assert view.__wrapped__ is _view  # type: ignore[attr-defined]
+
+
+# ---- CBV support ------------------------------------------------------------
+
+
+@pytest.mark.django_db
+def test_works_on_cbv_method_directly() -> None:
+    class View:
+        @permission_required(Role.ADMIN)
+        def get(self, _request: HttpRequest) -> HttpResponse:
+            return HttpResponse("ok")
+
+    membership = OrganizationMembershipFactory(role=Role.ADMIN)
+    response = View().get(_request(membership.user, membership.organization))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_cbv_method_blocks_wrong_role() -> None:
+    class View:
+        @permission_required(Role.ADMIN)
+        def get(self, _request: HttpRequest) -> HttpResponse:
+            return HttpResponse("ok")
+
+    membership = OrganizationMembershipFactory(role=Role.OPERATOR)
+    response = View().get(_request(membership.user, membership.organization))
+    assert response.status_code == 403
+
+
+def test_raises_when_no_request_in_args() -> None:
+    @permission_required()
+    def bad_view() -> HttpResponse:  # type: ignore[misc]
+        return HttpResponse("ok")
+
+    with pytest.raises(TypeError):
+        bad_view()  # type: ignore[call-arg]
