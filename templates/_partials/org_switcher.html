@@ -1,0 +1,4 @@
+{% load i18n org_switcher %}{% get_org_switcher_memberships request.user as switcher_memberships %}{% if switcher_memberships %}<form method="get" action="{% url 'core:org_picker' %}" class="org-switcher" role="navigation">
+<select name="next" aria-label="{% trans 'Switch organisation' %}" onchange="this.form.submit()">{% for m in switcher_memberships %}<option value="/o/{{ m.organization.slug }}/"{% if request.organization and m.organization.slug == request.organization.slug %} selected{% endif %}>{{ m.organization.name }}</option>{% endfor %}</select>
+<noscript><button type="submit">{% trans "Switch" %}</button></noscript>
+</form>{% elif request.organization %}{{ request.organization.name }}{% endif %}

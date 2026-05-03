@@ -1,4 +1,5 @@
 from typing import cast
+from urllib.parse import urlsplit
 
 from django.conf import settings
 from django.contrib.auth import login as auth_login
@@ -176,6 +177,18 @@ def org_picker(request: HttpRequest) -> HttpResponse:
         .select_related("organization")
         .order_by("organization__name")
     )
+    next_param = request.GET.get("next") or ""
+    if next_param and url_has_allowed_host_and_scheme(
+        next_param,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        next_path = urlsplit(next_param).path
+        allowed_prefixes = tuple(
+            f"/o/{m.organization.slug}/" for m in memberships
+        )
+        if allowed_prefixes and next_path.startswith(allowed_prefixes):
+            return redirect(next_param)
     if len(memberships) == 1:
         return redirect(login_redirect_for(user))
     return render(
