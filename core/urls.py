@@ -17,6 +17,7 @@ from .views.auth import (
 from .views.dashboard import dashboard
 from .views.design import design_kitchen_sink
 from .views.organization import settings_view as settings_organization
+from .views.pos import pos_location, pos_org
 
 app_name = "core"
 
@@ -60,6 +61,12 @@ urlpatterns: list[URLPattern] = [
         name="profile_password",
     ),
     path(route="o/<slug:slug>/", view=dashboard, name="org_dashboard"),
+    path(route="o/<slug:slug>/pos/", view=pos_org, name="pos_org"),
+    path(
+        route="o/<slug:slug>/l/<slug:lslug>/pos/",
+        view=pos_location,
+        name="pos_location",
+    ),
     path(
         route="o/<slug:slug>/settings/locations/",
         view=locations.list_view,

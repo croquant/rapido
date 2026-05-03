@@ -102,6 +102,7 @@ def test_post_operator_single_location_redirects_to_pos() -> None:
 
     assert response.status_code == 302
     assert response["Location"] == "/o/acme/l/downtown/pos/"
+    assert client.get(response["Location"]).status_code == 200
 
 
 @pytest.mark.django_db

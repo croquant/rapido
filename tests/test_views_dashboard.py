@@ -48,6 +48,7 @@ def test_operator_with_one_active_location_redirects_to_pos() -> None:
 
     assert response.status_code == 302
     assert response["Location"] == f"/o/{org.slug}/l/loc-a/pos/"
+    assert client.get(response["Location"]).status_code == 200
 
 
 @pytest.mark.django_db
@@ -67,6 +68,7 @@ def test_operator_with_multiple_locations_redirects_to_org_pos() -> None:
 
     assert response.status_code == 302
     assert response["Location"] == f"/o/{org.slug}/pos/"
+    assert client.get(response["Location"]).status_code == 200
 
 
 @pytest.mark.django_db
@@ -80,6 +82,7 @@ def test_operator_with_zero_locations_redirects_to_org_pos() -> None:
 
     assert response.status_code == 302
     assert response["Location"] == f"/o/{org.slug}/pos/"
+    assert client.get(response["Location"]).status_code == 200
 
 
 @pytest.mark.django_db
@@ -99,6 +102,7 @@ def test_operator_inactive_location_excluded_from_single_branch() -> None:
 
     assert response.status_code == 302
     assert response["Location"] == f"/o/{org.slug}/l/active-loc/pos/"
+    assert client.get(response["Location"]).status_code == 200
 
 
 @pytest.mark.django_db

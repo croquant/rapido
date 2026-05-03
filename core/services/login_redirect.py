@@ -5,7 +5,7 @@ def login_redirect_for(user: User) -> str:
     # Whitepaper epic 2b §4 redirect rule:
     #   single active org membership -> /o/<slug>/
     #   OPERATOR with exactly one active LocationMembership in that org
-    #     -> /o/<slug>/l/<lslug>/pos/ (route reserved; 404 until POS epic)
+    #     -> /o/<slug>/l/<lslug>/pos/
     #   anything else (zero or multiple orgs) -> /orgs/
     memberships = list(
         OrganizationMembership.objects.filter(
