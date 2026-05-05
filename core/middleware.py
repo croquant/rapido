@@ -2,7 +2,9 @@ import re
 from collections.abc import Callable
 
 from django.http import Http404, HttpRequest, HttpResponse
+from django.utils import translation
 
+from core.i18n import resolve_locale
 from core.models import Organization
 
 _TENANT_PATH_RE = re.compile(r"^/o/(?P<slug>[a-z0-9-]+)/")
@@ -40,4 +42,23 @@ class TenantMiddleware:
             raise Http404
 
         request.organization = org  # type: ignore[attr-defined]
+        return self.get_response(request)
+
+
+class LocalePreferenceMiddleware:
+    def __init__(
+        self,
+        get_response: Callable[[HttpRequest], HttpResponse],
+    ) -> None:
+        self.get_response = get_response
+
+    def __call__(self, request: HttpRequest) -> HttpResponse:
+        lang = resolve_locale(
+            getattr(request, "user", None),
+            getattr(request, "organization", None),
+            default=None,
+        )
+        if lang:
+            translation.activate(lang)
+            request.LANGUAGE_CODE = lang  # type: ignore[attr-defined]
         return self.get_response(request)
