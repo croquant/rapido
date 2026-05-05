@@ -9,13 +9,13 @@
     <td>
       <form method="post" action="{% url 'core:settings_invitations_resend' organization.slug invitation.pk %}"
             hx-post="{% url 'core:settings_invitations_resend' organization.slug invitation.pk %}"
-            hx-target="#invitation-row-{{ invitation.pk }}" hx-swap="outerHTML" style="display:inline">
+            hx-target="#invitation-row-{{ invitation.pk }}" hx-swap="outerHTML" class="inline">
         {% csrf_token %}
         <button type="submit" class="secondary">{% trans "Resend" %}</button>
       </form>
       <form method="post" action="{% url 'core:settings_invitations_revoke' organization.slug invitation.pk %}"
             hx-post="{% url 'core:settings_invitations_revoke' organization.slug invitation.pk %}"
-            style="display:inline">
+            class="inline">
         {% csrf_token %}
         <button type="submit" class="secondary">{% trans "Revoke" %}</button>
       </form>

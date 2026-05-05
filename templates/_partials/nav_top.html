@@ -1,12 +1,10 @@
-{% load i18n %}<header class="nav-top container-fluid">
-<nav>
-<ul>
-<li><strong><a href="/" class="contrast">rapido</a></strong></li>
-<li>{% include "_partials/org_switcher.html" %}</li>
-</ul>
-<ul>
-<li>{% include "_partials/lang_switcher.html" %}</li>
-<li>{% include "_partials/user_menu.html" %}</li>
-</ul>
+{% load i18n icons %}<header class="nav-top" x-data="{ open: false }">
+<div class="nav-top-inner">
+<a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><strong>rapido</strong></a>
+<button type="button" class="nav-toggle" aria-label="{% trans 'Menu' %}" aria-controls="nav-cluster" :aria-expanded="open.toString()" @click="open = !open"><span x-show="!open">{% icon "menu" %}</span><span x-show="open" x-cloak>{% icon "x" %}</span></button>
+<nav id="nav-cluster" class="nav-cluster" :class="{ 'is-open': open }">
+{% include "_partials/org_switcher.html" %}
+{% include "_partials/user_menu.html" %}
 </nav>
+</div>
 </header>

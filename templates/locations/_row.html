@@ -6,12 +6,12 @@
   <td>
     <a href="{% url 'core:settings_locations_edit' organization.slug location.pk %}">{% trans "Edit" %}</a>
     {% if location.is_active %}
-      <form method="post" action="{% url 'core:settings_locations_deactivate' organization.slug location.pk %}" hx-post="{% url 'core:settings_locations_deactivate' organization.slug location.pk %}" hx-target="#location-row-{{ location.pk }}" hx-swap="outerHTML" style="display:inline">
+      <form method="post" action="{% url 'core:settings_locations_deactivate' organization.slug location.pk %}" hx-post="{% url 'core:settings_locations_deactivate' organization.slug location.pk %}" hx-target="#location-row-{{ location.pk }}" hx-swap="outerHTML" class="inline">
         {% csrf_token %}
         <button type="submit" class="secondary">{% trans "Deactivate" %}</button>
       </form>
     {% else %}
-      <form method="post" action="{% url 'core:settings_locations_reactivate' organization.slug location.pk %}" hx-post="{% url 'core:settings_locations_reactivate' organization.slug location.pk %}" hx-target="#location-row-{{ location.pk }}" hx-swap="outerHTML" style="display:inline">
+      <form method="post" action="{% url 'core:settings_locations_reactivate' organization.slug location.pk %}" hx-post="{% url 'core:settings_locations_reactivate' organization.slug location.pk %}" hx-target="#location-row-{{ location.pk }}" hx-swap="outerHTML" class="inline">
         {% csrf_token %}
         <button type="submit">{% trans "Reactivate" %}</button>
       </form>

@@ -3,31 +3,15 @@
 
 {% block title %}Design kitchen sink{% endblock %}
 
-{% block extra_head %}
-<style>
-  .kitchen-sink section { margin-block: 3rem; padding-block-start: 1.5rem; border-block-start: 1px solid var(--pico-muted-border-color); }
-  .kitchen-sink section:first-of-type { border-block-start: 0; }
-  .kitchen-sink h2 { margin-block-end: 1rem; }
-  .ks-row { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
-  .ks-grid-forms { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-  .ks-icons { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
-  .ks-icons figure { display: flex; flex-direction: column; align-items: center; gap: .25rem; padding: .75rem; border: 1px solid var(--pico-muted-border-color); border-radius: var(--pico-border-radius); margin: 0; }
-  .ks-icons svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-  .ks-icons figcaption { font-size: .75rem; color: var(--pico-muted-color); }
-  .ks-empty { text-align: center; padding: 2rem 1rem; }
-  .ks-empty svg { width: 48px; height: 48px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; opacity: .5; }
-</style>
-{% endblock %}
-
 {% block main %}
-<div class="kitchen-sink">
-  <hgroup>
-    <h1>Design kitchen sink</h1>
+<section class="kitchen-sink" aria-labelledby="ks-title">
+  <header>
+    <h1 id="ks-title">Design kitchen sink</h1>
     <p>Every component, every state. DEBUG-only.</p>
-  </hgroup>
+  </header>
 
-  <section>
-    <h2>Buttons</h2>
+  <section aria-labelledby="ks-buttons">
+    <h2 id="ks-buttons">Buttons</h2>
     <div class="ks-row">
       <button>Primary</button>
       <button class="secondary">Secondary</button>
@@ -45,9 +29,9 @@
     </div>
   </section>
 
-  <section>
-    <h2>Forms</h2>
-    <div class="ks-grid-forms">
+  <section aria-labelledby="ks-forms">
+    <h2 id="ks-forms">Forms</h2>
+    <div class="ks-forms">
       <form>
         <h3>Clean (unbound)</h3>
         {% include "forms/_errors.html" with form=clean_form %}
@@ -77,8 +61,8 @@
     </div>
   </section>
 
-  <section>
-    <h2>Tables</h2>
+  <section aria-labelledby="ks-tables">
+    <h2 id="ks-tables">Tables</h2>
     <figure>
       <table>
         <thead>
@@ -99,8 +83,8 @@
       <table class="striped">
         <thead><tr><th>SKU</th><th>Item</th><th>Price</th></tr></thead>
         <tbody>
-          <tr><td>A001</td><td>Espresso</td><td>2.50</td></tr>
-          <tr><td>A002</td><td>Latte</td><td>3.50</td></tr>
+          <tr><td><code>A001</code></td><td>Espresso</td><td>2.50</td></tr>
+          <tr><td><code>A002</code></td><td>Latte</td><td>3.50</td></tr>
         </tbody>
       </table>
     </figure>
@@ -115,8 +99,8 @@
     </figure>
   </section>
 
-  <section>
-    <h2>Dialog</h2>
+  <section aria-labelledby="ks-dialog">
+    <h2 id="ks-dialog">Dialog</h2>
     <div x-data>
       <button @click="$refs.demo.showModal()">Open modal</button>
       <dialog x-ref="demo">
@@ -135,34 +119,34 @@
     </div>
   </section>
 
-  <section>
-    <h2>Toasts / flash</h2>
-    <article class="message message-info" role="status">Info: settings saved.</article>
-    <article class="message message-success" role="status">Success: location created.</article>
-    <article class="message message-warning" role="alert">Warning: payment is overdue.</article>
-    <article class="message message-error" role="alert">Error: could not connect to printer.</article>
+  <section aria-labelledby="ks-flash">
+    <h2 id="ks-flash">Toasts / flash</h2>
+    <article class="message message-info" role="status">Settings saved.</article>
+    <article class="message message-success" role="status">Location created.</article>
+    <article class="message message-warning" role="alert">Payment is overdue.</article>
+    <article class="message message-error" role="alert">Could not connect to printer.</article>
   </section>
 
-  <section>
-    <h2>Empty states</h2>
+  <section aria-labelledby="ks-empty">
+    <h2 id="ks-empty">Empty states</h2>
     <article class="ks-empty">
-      {% icon "building" %}
+      {% icon "building" "icon-xl" %}
       <h3>No locations yet</h3>
       <p>Add your first location to start taking orders.</p>
       <button>Add location</button>
     </article>
   </section>
 
-  <section>
-    <h2>Icons</h2>
-    <div class="ks-icons">
+  <section aria-labelledby="ks-icons">
+    <h2 id="ks-icons">Icons</h2>
+    <ul class="ks-icons">
       {% for name in icon_names %}
-        <figure>
-          {% icon name %}
-          <figcaption>{{ name }}</figcaption>
-        </figure>
+        <li>
+          {% icon name "icon-lg" %}
+          <span>{{ name }}</span>
+        </li>
       {% endfor %}
-    </div>
+    </ul>
   </section>
-</div>
+</section>
 {% endblock %}

@@ -21,15 +21,17 @@
     {% if not locations %}
       <p>{% trans "This organization has no active locations." %}</p>
     {% else %}
-      <div class="chip-grid" role="list">
+      <ul class="chip-grid">
         {% for location in locations %}
+          <li>
           {% if location.pk in active_location_ids %}
             {% include "members/_location_chip.html" with is_active=True %}
           {% else %}
             {% include "members/_location_chip.html" with is_active=False %}
           {% endif %}
+          </li>
         {% endfor %}
-      </div>
+      </ul>
     {% endif %}
   </section>
 {% endblock %}

@@ -1,4 +1,8 @@
 {% load i18n %}{% if request.user.is_authenticated %}<details class="dropdown user-menu">
 <summary>{% if request.user.first_name or request.user.last_name %}{{ request.user.first_name }} {{ request.user.last_name }}{% else %}{{ request.user.email }}{% endif %}</summary>
-<ul><li><a href="{% url 'core:profile' %}">{% trans "Profile" %}</a></li><li><form method="post" action="{% url 'core:logout' %}">{% csrf_token %}<button type="submit" class="secondary">{% trans "Sign out" %}</button></form></li></ul>
+<ul>
+<li><a href="{% url 'core:profile' %}">{% trans "Profile" %}</a></li>
+{% if not request.user.preferred_language %}<li>{% include "_partials/lang_switcher.html" %}</li>{% endif %}
+<li><form method="post" action="{% url 'core:logout' %}">{% csrf_token %}<button type="submit" class="secondary">{% trans "Sign out" %}</button></form></li>
+</ul>
 </details>{% endif %}

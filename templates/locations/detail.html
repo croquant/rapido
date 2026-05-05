@@ -21,15 +21,17 @@
     {% if not operator_memberships %}
       <p>{% trans "No operators in this organization yet." %}</p>
     {% else %}
-      <div class="chip-grid" role="list">
+      <ul class="chip-grid">
         {% for op in operator_memberships %}
+          <li>
           {% if op.user_id in active_user_ids %}
             {% include "locations/_operator_chip.html" with operator=op.user is_active=True %}
           {% else %}
             {% include "locations/_operator_chip.html" with operator=op.user is_active=False %}
           {% endif %}
+          </li>
         {% endfor %}
-      </div>
+      </ul>
     {% endif %}
   </section>
 {% endblock %}

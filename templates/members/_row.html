@@ -1,11 +1,14 @@
 {% load i18n %}<tr id="member-row-{{ membership.pk }}">
   <td>{{ membership.user.email }}</td>
   <td>
-    <form method="post" action="{% url 'core:settings_members_change_role' organization.slug membership.pk %}"
-          hx-post="{% url 'core:settings_members_change_role' organization.slug membership.pk %}"
-          hx-target="#member-row-{{ membership.pk }}" hx-swap="outerHTML" style="display:inline">
+    <form method="post" action="{% url 'core:settings_members_change_role' organization.slug membership.pk %}" class="inline">
       {% csrf_token %}
-      <select name="role" onchange="this.form.requestSubmit()" aria-label="{% trans 'Role' %}"
+      <select name="role" aria-label="{% trans 'Role' %}"
+              hx-post="{% url 'core:settings_members_change_role' organization.slug membership.pk %}"
+              hx-trigger="change"
+              hx-target="#member-row-{{ membership.pk }}"
+              hx-swap="outerHTML"
+              hx-include="closest form"
               {% if membership.is_only_active_admin %}disabled aria-describedby="lastadmin-{{ membership.pk }}" title="{% trans 'You are the last active admin. Add another admin first.' %}"{% endif %}>
         <option value="ADMIN"{% if membership.role == 'ADMIN' %} selected{% endif %}>{% trans "Admin" %}</option>
         <option value="OPERATOR"{% if membership.role == 'OPERATOR' %} selected{% endif %}>{% trans "Operator" %}</option>
@@ -22,7 +25,7 @@
       {% else %}
         <form method="post" action="{% url 'core:settings_members_deactivate' organization.slug membership.pk %}"
               hx-post="{% url 'core:settings_members_deactivate' organization.slug membership.pk %}"
-              hx-target="#member-row-{{ membership.pk }}" hx-swap="outerHTML" style="display:inline">
+              hx-target="#member-row-{{ membership.pk }}" hx-swap="outerHTML" class="inline">
           {% csrf_token %}
           <button type="submit" class="secondary">{% trans "Deactivate" %}</button>
         </form>
@@ -30,7 +33,7 @@
     {% else %}
       <form method="post" action="{% url 'core:settings_members_reactivate' organization.slug membership.pk %}"
             hx-post="{% url 'core:settings_members_reactivate' organization.slug membership.pk %}"
-            hx-target="#member-row-{{ membership.pk }}" hx-swap="outerHTML" style="display:inline">
+            hx-target="#member-row-{{ membership.pk }}" hx-swap="outerHTML" class="inline">
         {% csrf_token %}
         <button type="submit">{% trans "Reactivate" %}</button>
       </form>

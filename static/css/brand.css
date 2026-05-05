@@ -1,7 +1,8 @@
 /*!
- * rapido brand overrides
+ * rapido brand overrides - high-contrast industrial
  * Loaded after Pico CSS v2.1.1 (https://github.com/picocss/pico/releases/tag/v2.1.1).
  * Self-hosted Inter v4.1 (OFL, https://github.com/rsms/inter/releases/tag/v4.1).
+ * Self-hosted JetBrains Mono v2.304 (OFL, https://github.com/JetBrains/JetBrainsMono/releases/tag/v2.304).
  */
 
 @font-face {
@@ -11,7 +12,6 @@
   font-display: swap;
   src: url("../fonts/inter-regular.woff2") format("woff2");
 }
-
 @font-face {
   font-family: "Inter";
   font-style: normal;
@@ -19,68 +19,217 @@
   font-display: swap;
   src: url("../fonts/inter-semibold.woff2") format("woff2");
 }
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/jetbrains-mono-regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/jetbrains-mono-bold.woff2") format("woff2");
+}
 
-:root {
+:root,
+:host(:not([data-theme="dark"])),
+:root:not([data-theme="dark"]),
+[data-theme="light"] {
+  /* Typography */
   --pico-font-family-sans-serif: "Inter", system-ui, -apple-system,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    "Segoe UI", Roboto, sans-serif;
+  --pico-font-family-monospace: "JetBrains Mono", ui-monospace,
+    SFMono-Regular, Menlo, monospace;
   --pico-font-family: var(--pico-font-family-sans-serif);
+  --pico-font-weight: 400;
+  --pico-line-height: 1.4;
+  --pico-form-label-font-weight: 600;
 
-  --pico-border-radius: 0.375rem;
+  /* Color: near-black ink on near-white paper. */
+  --pico-background-color: #FAFAF7;
+  --pico-color: #0E0F0D;
+  --pico-h1-color: #0E0F0D;
+  --pico-h2-color: #0E0F0D;
+  --pico-h3-color: #0E0F0D;
+  --pico-h4-color: #0E0F0D;
+  --pico-h5-color: #0E0F0D;
+  --pico-h6-color: #0E0F0D;
+  --pico-muted-color: #3F3E3A;
+  --pico-muted-border-color: #0E0F0D;
+  --pico-table-border-color: #0E0F0D;
+  --pico-table-row-stripped-background-color: #F0EFE9;
+  --pico-card-background-color: #FAFAF7;
+  --pico-card-border-color: #0E0F0D;
+  --pico-card-sectioning-background-color: #F0EFE9;
+  --pico-code-background-color: #F0EFE9;
+  --pico-code-color: #0E0F0D;
+  --pico-blockquote-border-color: #0E0F0D;
+  --pico-mark-background-color: #FFD400;
+  --pico-mark-color: #0E0F0D;
 
-  /* Brand primary: teal #0d6e63. Contrast vs #fff = 6.1:1 (AA pass). */
-  --pico-primary: #0d6e63;
-  --pico-primary-background: #0d6e63;
-  --pico-primary-border: #0d6e63;
-  --pico-primary-hover: #0a584f;
-  --pico-primary-hover-background: #0a584f;
-  --pico-primary-hover-border: #0a584f;
-  --pico-primary-focus: rgba(13, 110, 99, 0.25);
-  --pico-primary-inverse: #fff;
+  /* Form elements */
+  --pico-form-element-background-color: #FAFAF7;
+  --pico-form-element-border-color: #0E0F0D;
+  --pico-form-element-color: #0E0F0D;
+  --pico-form-element-active-background-color: #FAFAF7;
+  --pico-form-element-active-border-color: #FF5A1F;
+  --pico-form-element-focus-color: #FF5A1F;
+  --pico-form-element-placeholder-color: #6B6964;
+
+  /* Hot accent: safety orange #FF5A1F. */
+  --pico-primary: #FF5A1F;
+  --pico-primary-background: #FF5A1F;
+  --pico-primary-border: #FF5A1F;
+  --pico-primary-hover: #E04A14;
+  --pico-primary-hover-background: #E04A14;
+  --pico-primary-hover-border: #E04A14;
+  --pico-primary-focus: rgba(255, 90, 31, 0.4);
+  --pico-primary-inverse: #0E0F0D;
+  --pico-primary-underline: #FF5A1F;
+
+  /* Geometry: square corners, heavy borders, no shadows. */
+  --pico-border-radius: 0;
+  --pico-border-width: 2px;
+  --pico-outline-width: 3px;
+  --pico-box-shadow: none;
+  --pico-button-box-shadow: none;
+  --pico-button-hover-box-shadow: none;
+  --pico-card-box-shadow: none;
+  --pico-dropdown-box-shadow: none;
+  --pico-group-box-shadow: none;
+  --pico-group-box-shadow-focus-with-button: none;
+  --pico-group-box-shadow-focus-with-input: none;
+  --pico-modal-overlay-backdrop-filter: none;
+  --pico-modal-overlay-background-color: rgba(14, 15, 13, 0.7);
+  --pico-transition: 0s;
 }
 
 [data-theme="dark"] {
-  /* Lighter teal for dark backgrounds. Contrast of #2dd4bf vs #11191f = 9.5:1. */
-  --pico-primary: #2dd4bf;
-  --pico-primary-background: #14b8a6;
-  --pico-primary-border: #14b8a6;
-  --pico-primary-hover: #5eead4;
-  --pico-primary-hover-background: #2dd4bf;
-  --pico-primary-hover-border: #2dd4bf;
-  --pico-primary-focus: rgba(45, 212, 191, 0.3);
-  --pico-primary-inverse: #042f2e;
+  --pico-background-color: #0E0F0D;
+  --pico-color: #F2F1EC;
+  --pico-h1-color: #F2F1EC;
+  --pico-h2-color: #F2F1EC;
+  --pico-h3-color: #F2F1EC;
+  --pico-h4-color: #F2F1EC;
+  --pico-h5-color: #F2F1EC;
+  --pico-h6-color: #F2F1EC;
+  --pico-muted-color: #A8A6A0;
+  --pico-muted-border-color: #F2F1EC;
+  --pico-table-border-color: #F2F1EC;
+  --pico-table-row-stripped-background-color: #1A1B17;
+  --pico-card-background-color: #0E0F0D;
+  --pico-card-border-color: #F2F1EC;
+  --pico-card-sectioning-background-color: #1A1B17;
+  --pico-code-background-color: #1A1B17;
+  --pico-code-color: #F2F1EC;
+  --pico-form-element-background-color: #0E0F0D;
+  --pico-form-element-border-color: #F2F1EC;
+  --pico-form-element-color: #F2F1EC;
+  --pico-form-element-active-background-color: #0E0F0D;
+  --pico-form-element-active-border-color: #FF7A47;
+  --pico-form-element-focus-color: #FF7A47;
+  --pico-primary: #FF7A47;
+  --pico-primary-background: #FF7A47;
+  --pico-primary-border: #FF7A47;
+  --pico-primary-hover: #FF8E60;
+  --pico-primary-hover-background: #FF8E60;
+  --pico-primary-hover-border: #FF8E60;
+  --pico-primary-focus: rgba(255, 122, 71, 0.45);
+  --pico-primary-inverse: #0E0F0D;
+  --pico-primary-underline: #FF7A47;
 }
 
 @media only screen and (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --pico-primary: #2dd4bf;
-    --pico-primary-background: #14b8a6;
-    --pico-primary-border: #14b8a6;
-    --pico-primary-hover: #5eead4;
-    --pico-primary-hover-background: #2dd4bf;
-    --pico-primary-hover-border: #2dd4bf;
-    --pico-primary-focus: rgba(45, 212, 191, 0.3);
-    --pico-primary-inverse: #042f2e;
+    --pico-background-color: #0E0F0D;
+    --pico-color: #F2F1EC;
+    --pico-h1-color: #F2F1EC;
+    --pico-h2-color: #F2F1EC;
+    --pico-h3-color: #F2F1EC;
+    --pico-h4-color: #F2F1EC;
+    --pico-h5-color: #F2F1EC;
+    --pico-h6-color: #F2F1EC;
+    --pico-muted-color: #A8A6A0;
+    --pico-muted-border-color: #F2F1EC;
+    --pico-table-border-color: #F2F1EC;
+    --pico-table-row-stripped-background-color: #1A1B17;
+    --pico-card-background-color: #0E0F0D;
+    --pico-card-border-color: #F2F1EC;
+    --pico-card-sectioning-background-color: #1A1B17;
+    --pico-code-background-color: #1A1B17;
+    --pico-code-color: #F2F1EC;
+    --pico-form-element-background-color: #0E0F0D;
+    --pico-form-element-border-color: #F2F1EC;
+    --pico-form-element-color: #F2F1EC;
+    --pico-form-element-active-background-color: #0E0F0D;
+    --pico-form-element-active-border-color: #FF7A47;
+    --pico-form-element-focus-color: #FF7A47;
+    --pico-primary: #FF7A47;
+    --pico-primary-background: #FF7A47;
+    --pico-primary-border: #FF7A47;
+    --pico-primary-hover: #FF8E60;
+    --pico-primary-hover-background: #FF8E60;
+    --pico-primary-hover-border: #FF8E60;
+    --pico-primary-focus: rgba(255, 122, 71, 0.45);
+    --pico-primary-inverse: #0E0F0D;
+    --pico-primary-underline: #FF7A47;
   }
 }
 
-/* Distinct focus ring (a11y - WCAG 2.4.7). */
+/* Mono caps for headings, buttons, nav, table headers. */
+h1, h2, h3, h4, h5, h6,
+button, [role="button"], input[type="submit"], input[type="button"],
+.nav-top, table thead th {
+  font-family: var(--pico-font-family-monospace);
+  font-weight: 700;
+}
+
+/* Uppercase tracking on short labels only - never prose. */
+table thead th,
+.nav-top a,
+[aria-current="page"],
+.chip {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.8125rem;
+}
+
+/* 2px borders for tactile interactive elements. */
+button, [role="button"],
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+select, textarea {
+  border-width: 2px;
+}
+
+/* Focus ring - outset, square-corner safe. */
 :focus-visible {
-  outline: 2px solid var(--pico-primary);
+  outline: var(--pico-outline-width) solid var(--pico-primary);
   outline-offset: 2px;
 }
 
-/* Skip link is rendered by layout shells; style it here so they stay markup-only. */
+/* Skip link - keep accessible, off-screen until focused. */
 .skip-link {
   position: absolute;
-  top: -40px;
+  top: 0;
   left: 0;
   padding: 0.5rem 1rem;
   background: var(--pico-primary-background);
   color: var(--pico-primary-inverse);
   z-index: 1000;
+  transform: translateY(-110%);
 }
-.skip-link:focus {
-  top: 0;
+.skip-link:focus { transform: none; }
+
+/* User menu dropdown summary - clamp width, ellipsize long emails. */
+.user-menu > summary {
+  max-width: 14rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 }
 
 /* base_org layout: left rail visible only when body carries .with-rail. */
@@ -92,7 +241,7 @@ body.with-rail .org-layout {
 }
 body.with-rail .org-layout > .rail { display: block; }
 
-/* Icon sizing helpers - paired with {% icon %}. */
+/* Icon helpers - paired with {% icon %}. */
 svg[aria-hidden] {
   width: 1em;
   height: 1em;
@@ -105,3 +254,427 @@ svg[aria-hidden] {
 }
 .icon-lg { width: 1.5em; height: 1.5em; }
 .icon-xl { width: 2em; height: 2em; }
+
+/* Inline-form utilities - replace inline style="display:inline" attrs. */
+form.inline { display: inline; }
+form.inline-block { display: inline-block; }
+
+/* Chip grid - operator/location toggles. */
+.chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.chip-grid > li { display: inline-block; margin: 0; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  border: 2px solid var(--pico-color);
+  background: var(--pico-background-color);
+  color: var(--pico-color);
+  cursor: pointer;
+  line-height: 1;
+  white-space: nowrap;
+}
+.chip:hover { background: var(--pico-color); color: var(--pico-background-color); }
+.chip-on {
+  background: var(--pico-primary);
+  border-color: var(--pico-primary);
+  color: var(--pico-primary-inverse);
+}
+.chip-on:hover {
+  background: var(--pico-primary-hover);
+  border-color: var(--pico-primary-hover);
+  color: var(--pico-primary-inverse);
+}
+
+/* Flash messages - left bar, no shadow, no radius, mono uppercase prefix. */
+.message {
+  border: 2px solid var(--pico-color);
+  border-left-width: 6px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+  background: var(--pico-background-color);
+}
+.message-info    { border-left-color: var(--pico-color); }
+.message-success { border-left-color: #1F7A3A; }
+.message-warning { border-left-color: #C57A00; }
+.message-error   { border-left-color: #C42A1C; }
+
+/* Empty state card (used by kitchen sink + org_picker). */
+.ks-empty {
+  padding: 2rem;
+  text-align: center;
+  border: 2px dashed var(--pico-color);
+  background: var(--pico-card-sectioning-background-color);
+}
+.ks-empty svg { display: block; margin: 0 auto 0.75rem; }
+
+/* Kitchen sink layout. */
+.kitchen-sink > section {
+  margin-block: 2.5rem;
+  padding-block-start: 1.5rem;
+  border-block-start: 2px solid var(--pico-color);
+}
+.kitchen-sink > section:first-of-type { border-block-start: 0; padding-block-start: 0; }
+.kitchen-sink h2 { margin-block-end: 1rem; }
+.ks-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.ks-forms {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 768px) {
+  .ks-forms { grid-template-columns: repeat(3, 1fr); }
+}
+.ks-icons {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  list-style: none;
+  padding: 0;
+}
+.ks-icons > li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0.5rem;
+  border: 2px solid var(--pico-color);
+  text-align: center;
+}
+.ks-icons span {
+  font-family: var(--pico-font-family-monospace);
+  font-size: 0.75rem;
+  color: var(--pico-muted-color);
+}
+
+/* ─── Industrial datasheet refinements ──────────────────────────────────── */
+
+/* Graph-paper backdrop. 40px grid at 4% ink. Subtle, blueprint feel.
+   Disabled in dark mode (would muddy the page). */
+body {
+  background-color: var(--pico-background-color);
+  background-image:
+    linear-gradient(to right, rgba(14, 15, 13, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(14, 15, 13, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  font-variant-numeric: tabular-nums;
+}
+[data-theme="dark"] body { background-image: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) body { background-image: none; }
+}
+
+/* Selection: safety orange + black ink. */
+::selection {
+  background: var(--pico-primary);
+  color: var(--pico-primary-inverse);
+}
+
+/* Placeholder: muted, italic, mono. Datasheet field hint. */
+::placeholder {
+  font-family: var(--pico-font-family-monospace);
+  font-style: italic;
+  color: var(--pico-form-element-placeholder-color);
+  opacity: 1;
+}
+
+/* Square scrollbars (WebKit). Mono spirit. */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--pico-color);
+  border: 2px solid var(--pico-background-color);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--pico-primary); }
+
+/* Page header: bottom rule under the H1 + subtitle area. */
+main > header {
+  border-bottom: 2px solid var(--pico-color);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+main > header > p {
+  margin: 0.25rem 0 0;
+  color: var(--pico-muted-color);
+  font-family: var(--pico-font-family-monospace);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.8125rem;
+}
+
+/* Body links: quiet. Same ink as text, underline at 2px.
+   Orange is reserved for primary actions, focus, and aria-current.
+   Pico's :where(a) sets --pico-color := --pico-primary on the link, so we
+   reset --pico-color and --pico-underline locally to neutralise it. */
+a:not([role="button"]):not(.skip-link) {
+  --pico-color: #0E0F0D;
+  --pico-underline: #0E0F0D;
+  color: #0E0F0D;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: #0E0F0D;
+}
+[data-theme="dark"] a:not([role="button"]):not(.skip-link) {
+  --pico-color: #F2F1EC;
+  --pico-underline: #F2F1EC;
+  color: #F2F1EC;
+  text-decoration-color: #F2F1EC;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) a:not([role="button"]):not(.skip-link) {
+    --pico-color: #F2F1EC;
+    --pico-underline: #F2F1EC;
+    color: #F2F1EC;
+    text-decoration-color: #F2F1EC;
+  }
+}
+a:not([role="button"]):not(.skip-link):hover {
+  --pico-color: #0E0F0D;
+  --pico-underline: var(--pico-primary);
+  color: #0E0F0D;
+  text-decoration-color: var(--pico-primary);
+}
+/* "← back" navigation links: quieter still, no underline. */
+a.back {
+  color: var(--pico-muted-color);
+  text-decoration: none;
+  font-family: var(--pico-font-family-monospace);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.8125rem;
+}
+a.back:hover { color: var(--pico-color); }
+
+/* aria-current="page": underline in safety orange, 3px. Reads as "you are here". */
+[aria-current="page"] {
+  color: var(--pico-color);
+  text-decoration: none;
+  box-shadow: inset 0 -3px 0 var(--pico-primary);
+  padding-bottom: 0.125rem;
+}
+
+/* Code chips - slugs, ids, tabular data. Square 2px border. */
+code, kbd {
+  border: 2px solid var(--pico-color);
+  background: var(--pico-code-background-color);
+  color: var(--pico-code-color);
+  border-radius: 0;
+  padding: 0.05rem 0.4rem;
+  font-family: var(--pico-font-family-monospace);
+  font-weight: 700;
+  font-size: 0.875em;
+  text-transform: lowercase;
+}
+kbd {
+  background: var(--pico-color);
+  color: var(--pico-background-color);
+  text-transform: uppercase;
+}
+
+/* Tables: heavier underline under thead, tabular numerics. */
+table {
+  font-variant-numeric: tabular-nums;
+  border-collapse: collapse;
+  width: 100%;
+}
+table thead th {
+  border-bottom: 3px solid var(--pico-color);
+  padding-bottom: 0.5rem;
+}
+table tbody td, table tbody th {
+  border-bottom: 1px solid var(--pico-muted-border-color);
+}
+
+/* details/summary (non-dropdown): bracket markers [+] [−], mono caps summary.
+   Excludes Pico's `.dropdown` pattern (used by nav menus) which has its own
+   caret + ARIA semantics. */
+details:not(.dropdown) {
+  border-top: 2px solid var(--pico-color);
+  padding: 0.5rem 0;
+}
+details:not(.dropdown) > summary {
+  list-style: none;
+  cursor: pointer;
+  font-family: var(--pico-font-family-monospace);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.8125rem;
+}
+details:not(.dropdown) > summary::-webkit-details-marker { display: none; }
+details:not(.dropdown) > summary::before {
+  content: "[+] ";
+  color: var(--pico-primary);
+  font-family: var(--pico-font-family-monospace);
+}
+details:not(.dropdown)[open] > summary::before { content: "[−] "; }
+
+/* Flash message bracket prefix - [INFO], [OK], [WARN], [ERR]. */
+.message {
+  font-family: var(--pico-font-family-sans-serif);
+  position: relative;
+  padding-left: 1rem;
+}
+.message::before {
+  font-family: var(--pico-font-family-monospace);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.75rem;
+  margin-right: 0.5rem;
+  display: inline-block;
+}
+.message-info::before    { content: "[ INFO ]";    color: var(--pico-color); }
+.message-success::before { content: "[ OK ]";      color: #1F7A3A; }
+.message-warning::before { content: "[ WARN ]";    color: #C57A00; }
+.message-error::before   { content: "[ ERR ]";     color: #C42A1C; }
+
+/* Empty state: blueprint corner ticks + mono "no data" voice.
+   The corners are drawn via 2 layered linear gradients per pseudo-element. */
+.ks-empty {
+  position: relative;
+  border: none;
+  background: var(--pico-card-sectioning-background-color);
+  --tick: 14px;
+  --ink: var(--pico-color);
+  background-image:
+    linear-gradient(to right, var(--ink) 0, var(--ink) var(--tick), transparent var(--tick)),
+    linear-gradient(to right, var(--ink) 0, var(--ink) var(--tick), transparent var(--tick)),
+    linear-gradient(to right, var(--ink) 0, var(--ink) var(--tick), transparent var(--tick)),
+    linear-gradient(to right, var(--ink) 0, var(--ink) var(--tick), transparent var(--tick)),
+    linear-gradient(to bottom, var(--ink) 0, var(--ink) var(--tick), transparent var(--tick)),
+    linear-gradient(to bottom, var(--ink) 0, var(--ink) var(--tick), transparent var(--tick)),
+    linear-gradient(to bottom, var(--ink) 0, var(--ink) var(--tick), transparent var(--tick)),
+    linear-gradient(to bottom, var(--ink) 0, var(--ink) var(--tick), transparent var(--tick));
+  background-size: var(--tick) 2px, var(--tick) 2px, var(--tick) 2px, var(--tick) 2px,
+                   2px var(--tick), 2px var(--tick), 2px var(--tick), 2px var(--tick);
+  background-position:
+    top    left,  top    right,
+    bottom left,  bottom right,
+    top    left,  top    right,
+    bottom left,  bottom right;
+  background-repeat: no-repeat;
+}
+
+/* Buttons: tight letter-spacing for mono caps button labels. */
+button, [role="button"], input[type="submit"], input[type="button"] {
+  letter-spacing: 0.04em;
+}
+
+/* Top nav: full-bleed border, contents constrained to container width. */
+.nav-top {
+  padding-block: 0.625rem;
+  margin-block-end: 1.25rem;
+  border-block-end: 2px solid var(--pico-color);
+}
+.nav-top-inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  max-width: var(--pico-container-max-width, 1280px);
+  margin-inline: auto;
+  padding-inline: var(--pico-spacing);
+}
+.nav-top .brand {
+  grid-column: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--pico-color);
+}
+.nav-top .brand-mark {
+  display: inline-block;
+  width: 0.5rem;
+  height: 1.25rem;
+  background: var(--pico-primary);
+}
+.nav-top .brand strong {
+  font-family: var(--pico-font-family-monospace);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.nav-top .nav-cluster {
+  grid-column: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nav-top .nav-cluster > * { margin: 0; }
+
+/* Inline dropdowns inside the bar - strip Pico form chrome to chip-like density. */
+.nav-top .org-switcher,
+.nav-top .user-menu .lang-switcher { display: inline-flex; align-items: center; margin: 0; }
+.nav-top .org-switcher select,
+.nav-top .user-menu .lang-switcher select {
+  margin: 0;
+  height: auto;
+  padding-block: 0.4rem;
+}
+.nav-top .org-switcher select { max-width: 16rem; }
+
+/* Hamburger - hidden on tablet+ */
+.nav-top .nav-toggle {
+  grid-column: 3;
+  display: none;
+  background: transparent;
+  border: 2px solid var(--pico-color);
+  color: var(--pico-color);
+  padding: 0.4rem;
+  line-height: 1;
+}
+.nav-top .nav-toggle:hover {
+  background: var(--pico-color);
+  color: var(--pico-background-color);
+}
+
+/* Single-org indicator (no form). */
+.nav-top .nav-org {
+  font-family: var(--pico-font-family-monospace);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.8125rem;
+}
+
+/* User menu summary loses the default chevron offset on a tight bar. */
+.nav-top .user-menu > summary { margin: 0; }
+
+/* Phone fold (< 768px): brand + hamburger row 1, cluster collapses to row 2. */
+@media (max-width: 767px) {
+  .nav-top-inner { grid-template-columns: 1fr auto; grid-template-rows: auto auto; }
+  .nav-top .brand { grid-row: 1; }
+  .nav-top .nav-toggle { display: inline-flex; grid-column: 2; grid-row: 1; }
+  .nav-top .nav-cluster {
+    grid-column: 1 / -1; grid-row: 2;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding-block-start: 0.75rem;
+    border-block-start: 2px solid var(--pico-color);
+    margin-block-start: 0.625rem;
+  }
+  .nav-top .nav-cluster.is-open { display: flex; }
+  .nav-top .org-switcher,
+  .nav-top .org-switcher select,
+  .nav-top .user-menu,
+  .nav-top .user-menu > summary { width: 100%; max-width: none; }
+}
+
+[x-cloak] { display: none !important; }
+

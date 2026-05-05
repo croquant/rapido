@@ -57,10 +57,13 @@ def _render_include(
 # ---------- nav_top ----------
 
 
-def test_nav_top_anonymous_renders_brand_and_lang_switcher() -> None:
+def test_nav_top_anonymous_renders_brand_only() -> None:
     out = _render_include("_partials/nav_top.html", request=_request())
     assert ">rapido<" in out
-    assert "/i18n/setlang/" in out
+    # Anonymous users see no user menu (gated to is_authenticated), and the
+    # language switcher now lives inside the user menu, so the setlang form
+    # is not present in the anonymous render.
+    assert "/i18n/setlang/" not in out
 
 
 @pytest.mark.django_db
