@@ -5,7 +5,11 @@ from django.test import Client
 from django.utils import translation
 
 from core.i18n import resolve_locale
-from tests.factories import OrganizationFactory, UserFactory
+from tests.factories import (
+    OrganizationFactory,
+    OrganizationMembershipFactory,
+    UserFactory,
+)
 
 
 @pytest.mark.django_db
@@ -41,9 +45,48 @@ def test_anonymous_user_no_org_falls_back_to_system_default() -> None:
     assert resolve_locale(AnonymousUser(), None) == settings.LANGUAGE_CODE
 
 
+def test_resolve_locale_returns_default_when_no_preference() -> None:
+    assert resolve_locale(None, None, default=None) is None
+
+
 def test_locale_middleware_honors_accept_language() -> None:
     client = Client()
     response = client.get("/", HTTP_ACCEPT_LANGUAGE="fr-BE")
+    assert response["Content-Language"].lower().startswith("fr")
+
+
+@pytest.mark.django_db
+def test_authenticated_user_preferred_language_activates_on_request() -> None:
+    user = UserFactory(preferred_language="fr-BE", password="pw12345!")
+    client = Client()
+    assert client.login(email=user.email, password="pw12345!")
+    response = client.get("/me/")
+    assert response.status_code == 200
+    assert response["Content-Language"].lower().startswith("fr")
+    assert "modifier le mot de passe" in response.content.decode().lower()
+
+
+@pytest.mark.django_db
+def test_org_default_language_activates_on_org_pages() -> None:
+    membership = OrganizationMembershipFactory(
+        user__preferred_language="",
+        user__password="pw12345!",
+        organization__default_language="nl-BE",
+    )
+    client = Client()
+    assert client.login(email=membership.user.email, password="pw12345!")
+    response = client.get(f"/o/{membership.organization.slug}/")
+    assert response.status_code == 200
+    assert response["Content-Language"].lower().startswith("nl")
+
+
+@pytest.mark.django_db
+def test_user_without_preference_falls_back_to_accept_language() -> None:
+    user = UserFactory(preferred_language="", password="pw12345!")
+    client = Client()
+    assert client.login(email=user.email, password="pw12345!")
+    response = client.get("/me/", HTTP_ACCEPT_LANGUAGE="fr-BE")
+    assert response.status_code == 200
     assert response["Content-Language"].lower().startswith("fr")
 
 
